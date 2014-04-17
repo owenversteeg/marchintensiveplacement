@@ -88,17 +88,18 @@ while (studentIndex.length < students.length) {
 		studentIndex.push(rand);
 	}
 }
-
+for (var y = 0; y < 2; y++) {
 for (var i = 0; i < studentIndex.length; i++) {
 	var index = studentIndex[i];
 	var placed = false;
 	for (var n = 0; n < students[index].choices.length; n++) {
 		if (placeStudent(students[index].name,students[index].choices[n])) {
 			placed = true;
+                        students.splice(index,1);
 			break;
 		}
 	};
-	if (!placed) {
+	if (!placed && y !== 0) {
 		for (var n = 0; n < Object.keys(classes).length; n++) {
 			var key = Object.keys(classes)[n];
 			if (classes[key].type == 'FULL') {
@@ -109,9 +110,10 @@ for (var i = 0; i < studentIndex.length; i++) {
 			}
 		};
 	}
-	if (!placed) {
+	if (!placed && y !== 0) {
 		studentUnplaceableIndex.push(index);
 	}
+};
 };
 var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
 console.log(Math.round(percentage)+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
