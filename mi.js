@@ -82,6 +82,10 @@ function placeStudent(s,c) {
 	return true;
 }
 
+for (var i = 0; i < students.length; i++) {
+	students[i].hasClass = false;
+};
+
 while (studentIndex.length < students.length) {
 	var rand = randomIntFromInterval(0,students.length - 1);
 	if (studentIndex.indexOf(rand) === -1) {
@@ -89,31 +93,33 @@ while (studentIndex.length < students.length) {
 	}
 }
 for (var y = 0; y < 2; y++) {
-for (var i = 0; i < studentIndex.length; i++) {
-	var index = studentIndex[i];
-	var placed = false;
-	for (var n = 0; n < students[index].choices.length; n++) {
-		if (placeStudent(students[index].name,students[index].choices[n])) {
-			placed = true;
-                        students.splice(index,1);
-			break;
-		}
-	};
-	if (!placed && y !== 0) {
-		for (var n = 0; n < Object.keys(classes).length; n++) {
-			var key = Object.keys(classes)[n];
-			if (classes[key].type == 'FULL') {
-				if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
+	for (var i = 0; i < studentIndex.length; i++) {
+		var index = studentIndex[i];
+		var placed = false;
+		if (students[index].hasClass !== true) {
+			for (var n = 0; n < students[index].choices.length; n++) {
+				if (placeStudent(students[index].name,students[index].choices[n])) {
 					placed = true;
+					students[index].hasClass = true;
 					break;
 				}
 			}
-		};
-	}
-	if (!placed && y !== 0) {
-		studentUnplaceableIndex.push(index);
-	}
-};
+		}
+		if (!placed && y !== 0) {
+			for (var n = 0; n < Object.keys(classes).length; n++) {
+				var key = Object.keys(classes)[n];
+				if (classes[key].type == 'FULL') {
+					if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
+						placed = true;
+						break;
+					}
+				}
+			};
+		}
+		if (!placed && y !== 0) {
+			studentUnplaceableIndex.push(index);
+		}
+	};
 };
 var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
 console.log(Math.round(percentage)+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
