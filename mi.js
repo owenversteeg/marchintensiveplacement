@@ -58,13 +58,31 @@ function placeStudent(s,c,doPlace) {
 		console.log('Class for '+s+' could not be found!');
 		return false;
 	}
-	if (classes[c].enrolled.length < classes[c].max) {
-		if (doPlace) {
-			classes[c].enrolled.push(s)
+	if (c.FULL !== undefined && c.AM === undefined && c.PM === undefined) {
+		var cF = c.FULL;
+
+		if (classes[cF].enrolled.length < classes[cF].max) {
+			if (doPlace) {
+				classes[cF].enrolled.push(s)
+			}
+		} else {
+			console.log('Class '+cF+' is full! ('+s+')');
+			return false;
 		}
-	} else {
-		console.log('Class '+c+' is full! ('+s+')');
-		return false;
+	} else if (c.FULL === undefined && c.AM !== undefined && c.PM !== undefined) {
+		var cAM = c.AM;
+		var cPM = c.PM;
+
+		if ((classes[cAM].enrolled.length < classes[cAM].max) && (classes[cPM].enrolled.length < classes[cPM].max)) {
+			if (doPlace) {
+				classes[cAM].enrolled.push(s)
+				classes[cPM].enrolled.push(s)
+			}
+		} else {
+			console.log('Class '+cPM+' or '+cAM+' is full! ('+s+')');
+			return false;
+		}
+
 	}
 	console.log(s+' has been placed in '+c);
 	return true;

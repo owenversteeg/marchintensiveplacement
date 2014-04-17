@@ -2,220 +2,72 @@
   "Buzz 101: The Keeping of Bees": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Donovan Vereen",
-      "Trudi Folson",
-      "Omar Trego",
-      "Fernando Mcdonell",
-      "Cathie Kamer",
-      "Jennie Carr",
-      "Martine Samet",
-      "Lupita Percell",
-      "Ilda Poplar",
-      "Joette Hillary"
-    ]
+    "enrolled": []
   },
   "Intensive Book Club": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Leo Charney",
-      "Craig Atilano",
-      "Stefania Manzo",
-      "Glady Rocha",
-      "Stephanie Speakman",
-      "Regan Currence",
-      "Erik Roland",
-      "Drew Trenholm",
-      "Asuncion Cadwell",
-      "Mariam Rushing"
-    ]
+    "enrolled": []
   },
   "Libraries Inside Out: Creating a Little Free Library": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Christia Conroy",
-      "Myron Tarbox",
-      "Shannon Savarese",
-      "Shantelle Dabney",
-      "Alphonso Cooksey",
-      "Colette Jansson",
-      "Elida Lima",
-      "Elin Waldner",
-      "Peggy Eddy",
-      "Macy Rott"
-    ]
+    "enrolled": []
   },
   "Otherness in Film": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Jonathon Barnaby",
-      "Maryln Penton",
-      "Willow Whipkey",
-      "Salley Zack",
-      "Eulalia Packett",
-      "Darren Maron",
-      "Claude Haskell",
-      "Carie Defalco",
-      "Lacresha Mier",
-      "Lacresha Mier"
-    ]
+    "enrolled": []
   },
   "Revolutions in Science": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "June Okelley",
-      "Selene See",
-      "Frederic Estes",
-      "Larue Fomby",
-      "Emerson Crowell",
-      "Ferne Dawley",
-      "Tinisha Parenti",
-      "Samatha Chason",
-      "Juliette Markus",
-      "Christine Bruce"
-    ]
+    "enrolled": []
   },
   "A Simpler Vision: Black and White Films": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Towanda Felkins",
-      "Delana Marten",
-      "Donella Outman",
-      "Mercy Chaney",
-      "Sonia Maury",
-      "Lurlene Asher",
-      "Charmaine Fujii",
-      "Lucrecia Garth",
-      "Arnoldo Stivers",
-      "Mathew Tartaglia"
-    ]
+    "enrolled": []
   },
   "Survival German for Tourists: A Cultural Language Guide": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Gerry Gotto",
-      "Dianna Pascual",
-      "Kirsten Goldston",
-      "Jospeh Stocker",
-      "Amanda Torrence",
-      "Morgan Klaus",
-      "Lisa Keogh",
-      "Nannie Hopf",
-      "Daniel Osofsky",
-      "Viola Dedmon"
-    ]
+    "enrolled": []
   },
   "Taking Control: Self-Defense for Men": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Regena Ogorman",
-      "Henriette Hynek",
-      "Alec Hasty",
-      "Rosena Sitz",
-      "Kevin Leary",
-      "Sandy Havens",
-      "Blaine Pinette",
-      "Evelina Arline",
-      "Alita Raper",
-      "Thomasine Iles"
-    ]
+    "enrolled": []
   },
   "3D Design - Print - CNC Router": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Isreal Grondin",
-      "Reatha Starrett",
-      "Kallie Holquin",
-      "Alica Petters",
-      "Josie Felmlee",
-      "Jestine Kuhn",
-      "Love Krebbs",
-      "Melita Aldridge",
-      "Paulette Hennis",
-      "Betty Chadd"
-    ]
+    "enrolled": []
   },
   "Yoga AM": {
     "max": "10",
     "type": "AM",
-    "enrolled": [
-      "Ezekiel Elin",
-      "Yun Fankhauser",
-      "Glenn Smith",
-      "Lara Hungerford",
-      "Noah Victoria",
-      "Jovita Rabideau",
-      "Yanira Wimberley",
-      "Asia Mccreery",
-      "Kaila Osullivan",
-      "Cedrick Diedrich"
-    ]
+    "enrolled": []
   },
   "Artists in the Real World": {
     "max": "10",
     "type": "PM",
-    "enrolled": [
-      "Londa Beltran",
-      "Mendy Levering",
-      "Cindi Hollin",
-      "Jamey Smolen",
-      "Gavin Lyles",
-      "Lesli Harrold",
-      "Long Slaton",
-      "Cori Sylvia",
-      "Refugia Hardiman",
-      "Nicholas Laforce"
-    ]
+    "enrolled": []
   },
   "Creative Penmanship": {
     "max": "10",
     "type": "PM",
-    "enrolled": [
-      "Telma Zayas",
-      "Darby Recalde",
-      "Janeth Monger",
-      "Michaele Drinkwater",
-      "Chad Thoms",
-      "Eleonor Hickerson",
-      "Trent Alatorre",
-      "Kathleen Creek",
-      "Kiera Needles",
-      "Siobhan Hahn"
-    ]
+    "enrolled": []
   },
   "Flash Fiction": {
     "max": "10",
     "type": "PM",
-    "enrolled": [
-      "Glenda Gregoire",
-      "Beau Arndt",
-      "Theodora Oiler",
-      "Clyde Fetty",
-      "Ha Dan",
-      "Maxwell Sellner",
-      "Lesa Trevino",
-      "Daysi Ferrell",
-      "Delphine Utley",
-      "Leila Tejeda"
-    ]
+    "enrolled": []
   },
   "Ghost Hunting": {
     "max": "10",
     "type": "PM",
-    "enrolled": [
-      "Hisako Mitchell",
-      "Toney Hurless",
-      "Nenita Mccubbin",
-      "Karla Strand"
-    ]
+    "enrolled": []
   },
   "Not so Grimm: A Discovery of Nordic Fairy Tales and Folklore": {
     "max": "10",
@@ -240,18 +92,7 @@
   "Your Money and How to Keep It": {
     "max": "10",
     "type": "PM",
-    "enrolled": [
-      "Kimbery Moffitt",
-      "Trudy Matherne",
-      "Kamilah Chmiel",
-      "Newton Boltz",
-      "Robbi Maez",
-      "Lea Darrah",
-      "Chan Nishioka",
-      "Xavier Delillo",
-      "Marcella Stipe",
-      "Jermaine Sutphin"
-    ]
+    "enrolled": []
   },
   "Adventure Programming": {
     "max": "10",
@@ -281,18 +122,7 @@
   "Behind the Badge": {
     "max": "10",
     "type": "FULL",
-    "enrolled": [
-      "Alvin Dickison",
-      "Karmen Hillebrand",
-      "Sandra Raven",
-      "Jenni Penfold",
-      "Johanne Esker",
-      "Lowell Mckissick",
-      "Margret Krone",
-      "September Vong",
-      "Vena Behnke",
-      "Denis Amend"
-    ]
+    "enrolled": []
   },
   "Caprine Capers": {
     "max": "10",
