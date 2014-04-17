@@ -10,6 +10,10 @@ var studentUnplaceableIndex = [];
 
 var verbose = false;
 
+if (process.argv.indexOf('--verbose') !== -1) {
+	verbose = true;
+}
+
 function shuffle(array) {
 	var currentIndex = array.length
 	, temporaryValue
