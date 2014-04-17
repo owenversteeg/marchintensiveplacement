@@ -3,6 +3,25 @@ March-Intensive-Placement
 
 Creates placement data for March Intensive Classes
 
+### Usage
+Dependencies: `npm install jsonfile`
+
+Running: `node mi.js[ --verbose]`
+
+```
+├── classes.json
+├── mi.js
+├── node_modules
+│   └── jsonfile
+│       ├── CHANGELOG.md
+│       ├── LICENSE
+│       ├── README.md
+│       ├── lib
+│       │   └── jsonfile.js
+│       └── package.json
+└── students.json
+```
+
 ### Data
 This program takes two sets of datas. An array of users and their choices (students.json)
 
