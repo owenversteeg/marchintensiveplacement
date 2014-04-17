@@ -1,7 +1,7 @@
-var jf = require('jsonfile');
+var fs = require('fs');
 
-var classes = jf.readFileSync('classes.json');
-var students = jf.readFileSync('students.json');
+var classes = readFileSync('classes.json');
+var students = readFileSync('students.json');
 
 var studentIndex = []; /*Used to randomly order students*/
 var studentUnplaceableIndex = []; /*Used to track students that were not assigned to a class*/
@@ -11,6 +11,14 @@ var verbose = false; /*Output operations, triggerable with --verbose as well*/
 
 if (process.argv.indexOf('--verbose') !== -1) {
 	verbose = true;
+}
+
+function readFileSync(file) {
+	return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+function writeFileSync(file, obj, options) {
+	var str = JSON.stringify(obj, null, module.exports.spaces);
+	return fs.writeFileSync(file, str, options); //not sure if fs.writeFileSync returns anything, but just in case
 }
 
 function shuffle(array) {
@@ -177,5 +185,5 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
 console.log(Math.round(percentage)+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
 /*write files*/
-jf.writeFileSync('classes-output.json', classes);
-jf.writeFileSync('students-output.json', studentUnplaceableIndex);
+writeFileSync('classes-output.json', classes);
+writeFileSync('students-output.json', studentUnplaceableIndex);

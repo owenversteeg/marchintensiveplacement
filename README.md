@@ -4,22 +4,14 @@ March-Intensive-Placement
 Creates placement data for March Intensive Classes
 
 ### Usage
-Dependencies: `npm install jsonfile`
+Node: `brew install node`
 
 Running: `node mi.js[ --verbose]`
 
 ```
 ├── classes.json
-├── mi.js
-├── node_modules
-│   └── jsonfile
-│       ├── CHANGELOG.md
-│       ├── LICENSE
-│       ├── README.md
-│       ├── lib
-│       │   └── jsonfile.js
-│       └── package.json
-└── students.json
+├── students.json
+└── mi.js
 ```
 
 ### Data
