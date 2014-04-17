@@ -15,7 +15,6 @@ function shuffle(array) {
 	;
 
 	while (0 !== currentIndex) {
-
 		randomIndex = Math.floor(Math.random() * currentIndex);
 		currentIndex -= 1;
 
@@ -102,9 +101,11 @@ for (var i = 0; i < studentIndex.length; i++) {
 	if (!placed) {
 		for (var n = 0; n < Object.keys(classes).length; n++) {
 			var key = Object.keys(classes)[n];
-			if (placeStudent(students[index].name,key)) {
-				placed = true;
-				break;
+			if (classes[key].type == 'FULL') {
+				if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
+					placed = true;
+					break;
+				}
 			}
 		};
 	}
