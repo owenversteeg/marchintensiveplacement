@@ -77,7 +77,7 @@ function placeStudent(s,c) {
 			return false;
 		}
 	} else {
-		console.log(c);
+		console.log('The class data for '+s+' is not valid.');
 	}
 	return true;
 }
