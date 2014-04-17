@@ -39,10 +39,7 @@ function randomIntFromInterval(min,max) {
 	return Math.floor(Math.random()*(max-min+1)+min);
 }
 
-function placeStudent(s,c,doPlace) {
-	if (doPlace == undefined) {
-		var doPlace = true;
-	}
+function placeStudent(s,c) {
 	var si;
 	for (var i = 0; i < students.length; i++) {
 		if (students[i].name = s) {
@@ -58,33 +55,31 @@ function placeStudent(s,c,doPlace) {
 		console.log('Class for '+s+' could not be found!');
 		return false;
 	}
-	if (c.FULL !== undefined && c.AM === undefined && c.PM === undefined) {
+	if (c.FULL !== null && c.AM === null && c.PM === null) {
 		var cF = c.FULL;
 
 		if (classes[cF].enrolled.length < classes[cF].max) {
-			if (doPlace) {
-				classes[cF].enrolled.push(s)
-			}
+			classes[cF].enrolled.push(s);
+			console.log(s+' has been placed in '+cF);
 		} else {
 			console.log('Class '+cF+' is full! ('+s+')');
 			return false;
 		}
-	} else if (c.FULL === undefined && c.AM !== undefined && c.PM !== undefined) {
+	} else if (c.FULL === null && c.AM !== null && c.PM !== null) {
 		var cAM = c.AM;
 		var cPM = c.PM;
 
 		if ((classes[cAM].enrolled.length < classes[cAM].max) && (classes[cPM].enrolled.length < classes[cPM].max)) {
-			if (doPlace) {
-				classes[cAM].enrolled.push(s)
-				classes[cPM].enrolled.push(s)
-			}
+			classes[cAM].enrolled.push(s)
+			classes[cPM].enrolled.push(s)
+			console.log(s+' has been placed in '+cAM+' & '+cPM);
 		} else {
 			console.log('Class '+cPM+' or '+cAM+' is full! ('+s+')');
 			return false;
 		}
-
+	} else {
+		console.log(c);
 	}
-	console.log(s+' has been placed in '+c);
 	return true;
 }
 
@@ -118,5 +113,5 @@ for (var i = 0; i < studentIndex.length; i++) {
 	}
 };
 var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
-console.log(Math.round(percentage)+'% placement, where '+studentUnplaceableIndex.length+' student(s) could not be placed');
+console.log(Math.round(percentage)+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
 jf.writeFileSync('classes-output.json', classes);
