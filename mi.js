@@ -8,6 +8,8 @@ var studentIndex = [];
 
 var studentUnplaceableIndex = [];
 
+var verbose = false;
+
 function shuffle(array) {
 	var currentIndex = array.length
 	, temporaryValue
@@ -47,37 +49,65 @@ function placeStudent(s,c) {
 		}
 	};
 	if (si == undefined) {
-		console.log('Index for '+s+' could not be found!');
+		if (verbose) {
+			console.log('Index for '+s+' could not be found!');
+		}
 		return false;
 	}
 	if (c == undefined) {
-		console.log('Class for '+s+' could not be found!');
+		if (verbose) {
+			console.log('Class for '+s+' could not be found!');
+		}
 		return false;
 	}
 	if (c.FULL !== null && c.AM === null && c.PM === null) {
 		var cF = c.FULL;
-
-		if (classes[cF].enrolled.length < classes[cF].max) {
-			classes[cF].enrolled.push(s);
-			console.log(s+' has been placed in '+cF);
-		} else {
-			console.log('Class '+cF+' is full! ('+s+')');
-			return false;
+		try {
+			if (classes[cF].enrolled.length < classes[cF].max) {
+				classes[cF].enrolled.push(s);
+				if (verbose) {
+					console.log(s+' has been placed in '+cF);
+				}
+			} else {
+				if (verbose) {
+					console.log('Class '+cF+' is full! ('+s+')');
+				}
+				return false;
+			}
+		} catch (err) {
+			console.log('----');
+			console.log('ERROR:'+err.message);
+			console.log(cAM+', '+cPM);
+			console.log(cF);
+			console.log(s);
 		}
 	} else if (c.FULL === null && c.AM !== null && c.PM !== null) {
 		var cAM = c.AM;
 		var cPM = c.PM;
-
-		if ((classes[cAM].enrolled.length < classes[cAM].max) && (classes[cPM].enrolled.length < classes[cPM].max)) {
-			classes[cAM].enrolled.push(s)
-			classes[cPM].enrolled.push(s)
-			console.log(s+' has been placed in '+cAM+' & '+cPM);
-		} else {
-			console.log('Class '+cPM+' or '+cAM+' is full! ('+s+')');
-			return false;
+		try {
+			if ((classes[cAM].enrolled.length < classes[cAM].max) && (classes[cPM].enrolled.length < classes[cPM].max)) {
+				classes[cAM].enrolled.push(s)
+				classes[cPM].enrolled.push(s)
+				if (verbose) {
+					console.log(s+' has been placed in '+cAM+' & '+cPM);
+				}
+			} else {
+				if (verbose) {
+					console.log('Class '+cPM+' or '+cAM+' is full! ('+s+')');
+				}
+				return false;
+			}
+		} catch (err) {
+			console.log('----');
+			console.log('ERROR:'+err.message);
+			console.log(cAM+', '+cPM);
+			console.log(cF);
+			console.log(s);
 		}
 	} else {
-		console.log('The class data for '+s+' is not valid.');
+		if (verbose) {
+			console.log('The class data for '+s+' is not valid.');
+		}
 	}
 	return true;
 }
@@ -121,6 +151,12 @@ for (var y = 0; y < 2; y++) {
 		}
 	};
 };
+
+for (var i = 0; i < studentUnplaceableIndex.length; i++) {
+	studentUnplaceableIndex[i] = students[studentUnplaceableIndex[i]].name;
+};
+
 var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
 console.log(Math.round(percentage)+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
 jf.writeFileSync('classes-output.json', classes);
+jf.writeFileSync('students-output.json', studentUnplaceableIndex);
