@@ -1,0 +1,464 @@
+{
+    "Buzz 101: The Keeping of Bees": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "Intensive Book Club": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "Libraries Inside Out: Creating a Little Free Library": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "Otherness in Film": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "Revolutions in Science": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "A Simpler Vision: Black and White Films": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "Survival German for Tourists: A Cultural Language Guide": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "Taking Control: Self-Defense for Men": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "3D Design - Print - CNC Router": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "Yoga AM": {
+        "max": "10",
+        "type": "AM",
+        "enrolled": [
+            
+        ]
+    },
+    "Artists in the Real World": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "Creative Penmanship": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "Flash Fiction": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "Ghost Hunting": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "Not so Grimm: A Discovery of Nordic Fairy Tales and Folklore": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "Spokes, Gears, Bars, Chains: Bike Maintenance + the Open Road": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "Taking Control: Self-Defense for Women": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "A Utopian Check on Reality — If Money Isn’t Even Real": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "Your Money and How to Keep It": {
+        "max": "10",
+        "type": "PM",
+        "enrolled": [
+            
+        ]
+    },
+    "Adventure Programming": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Adventures in Photography": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Art of Bead Jewelry": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "The Art of the Musical": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Back to RMS: Adventures in Middle School Education": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Behind the Badge": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Caprine Capers": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Celebration of Cuisine, Culture in our Community": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Cooking up a Business": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Coolest Game on Ice": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "COVER Home Repair": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Documentaries That Inspire": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Ecosystem Management": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Gladiator Style: Arms, Armor, and Technique of Ancient Roman Gladiators": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Good v. Evil: A Study of Superheroes and Supervillains from the Avengers to Zod": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "The Haven: Hidden in Plain Sight": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Holistic Wellness": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Horseback Riding 101": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Let Them Eat Cake": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Let's Dance!": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Lifeguard Certification Course": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Light and Air": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "March Intensive Independent Study Option (MI-ISO)": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Math Madness": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Monoprint Mania": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Music as a Mirror of Society": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "New England Festival Preparation and Arts-Based Projects and Collaboration": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Painting China in the 21st Century: It's Not Just Roses Anymore": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Professor Barbecue Redux": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "The Relationship of Sex and Power": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Rock Climbing": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Running the Show": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Scuba": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Shakefilm": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Spaceflight: Fact and Fiction": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Straight to Hollywood": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Tech in the Real World: A Preview of Hartford's HACTC Program": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "VINS Raptor Program": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Wilderness First Aid in the White Mts. with CPR/AED Certification": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Boston Colleges Tour": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Bridges to Community: Building a Home in Nicaragua": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Dogsledding and Ethics in an Unplugged Community": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "For the Love of Snow": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Freedom and Cheese Steaks": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Money and Banking: Past, Present & Prospective": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Our Friendly Neighbors To The North-Canadian Studies": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    },
+    "Wild Week in the Whites": {
+        "max": "10",
+        "type": "FULL",
+        "enrolled": [
+            
+        ]
+    }
+}

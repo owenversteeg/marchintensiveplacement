@@ -1,0 +1,502 @@
+{
+  "Buzz 101: The Keeping of Bees": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Jovita Rabideau",
+      "Myron Tarbox",
+      "Hisako Mitchell",
+      "Lupita Percell",
+      "Arnoldo Stivers",
+      "Morgan Klaus",
+      "Sonia Maury",
+      "Lowell Mckissick",
+      "Henriette Hynek",
+      "Macy Rott"
+    ]
+  },
+  "Intensive Book Club": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Claude Haskell",
+      "Mariam Rushing",
+      "Blaine Pinette",
+      "Lucrecia Garth",
+      "Karla Strand",
+      "Margret Krone",
+      "Shannon Savarese",
+      "Robbi Maez",
+      "Kirsten Goldston",
+      "Jestine Kuhn"
+    ]
+  },
+  "Libraries Inside Out: Creating a Little Free Library": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Peggy Eddy",
+      "Refugia Hardiman",
+      "Yanira Wimberley",
+      "Jonathon Barnaby",
+      "Kathleen Creek",
+      "Sandra Raven",
+      "Mercy Chaney",
+      "Jennie Carr",
+      "Christine Bruce",
+      "Elida Lima"
+    ]
+  },
+  "Otherness in Film": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Colette Jansson",
+      "Gavin Lyles",
+      "Sandy Havens",
+      "Newton Boltz",
+      "Kimbery Moffitt",
+      "Maxwell Sellner",
+      "Isreal Grondin",
+      "Christia Conroy",
+      "Ferne Dawley",
+      "Lurlene Asher"
+    ]
+  },
+  "Revolutions in Science": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Emerson Crowell",
+      "Jamey Smolen",
+      "Love Krebbs",
+      "Lara Hungerford",
+      "Kiera Needles",
+      "Trudy Matherne",
+      "Cathie Kamer",
+      "Nannie Hopf",
+      "Reatha Starrett",
+      "Donovan Vereen"
+    ]
+  },
+  "A Simpler Vision: Black and White Films": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Vena Behnke",
+      "Evelina Arline",
+      "Lesa Trevino",
+      "Eulalia Packett",
+      "Kevin Leary",
+      "Selene See",
+      "Trent Alatorre",
+      "Long Slaton",
+      "Kaila Osullivan",
+      "Ilda Poplar"
+    ]
+  },
+  "Survival German for Tourists: A Cultural Language Guide": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Beau Arndt",
+      "Willow Whipkey",
+      "Frederic Estes",
+      "Larue Fomby",
+      "Janeth Monger",
+      "Chan Nishioka",
+      "Omar Trego",
+      "Darby Recalde",
+      "Juliette Markus",
+      "Juliette Markus"
+    ]
+  },
+  "Taking Control: Self-Defense for Men": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Jenni Penfold",
+      "Theodora Oiler",
+      "Darren Maron",
+      "Elin Waldner",
+      "Salley Zack",
+      "Glenda Gregoire",
+      "Leila Tejeda",
+      "Charmaine Fujii",
+      "Siobhan Hahn",
+      "Towanda Felkins"
+    ]
+  },
+  "3D Design - Print - CNC Router": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Cori Sylvia",
+      "Asia Mccreery",
+      "Paulette Hennis",
+      "Nicholas Laforce",
+      "Glady Rocha",
+      "Drew Trenholm",
+      "June Okelley",
+      "Delphine Utley",
+      "Marcella Stipe",
+      "Alvin Dickison"
+    ]
+  },
+  "Yoga AM": {
+    "max": "10",
+    "type": "AM",
+    "enrolled": [
+      "Stephanie Speakman",
+      "Kallie Holquin",
+      "Alita Raper",
+      "Gerry Gotto",
+      "Mendy Levering",
+      "Denis Amend",
+      "Stefania Manzo",
+      "Daysi Ferrell",
+      "Ha Dan",
+      "Telma Zayas"
+    ]
+  },
+  "Artists in the Real World": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": [
+      "Shantelle Dabney",
+      "Lisa Keogh",
+      "Erik Roland",
+      "Rosena Sitz",
+      "Daniel Osofsky",
+      "Martine Samet",
+      "Samatha Chason",
+      "Maryln Penton",
+      "Glenn Smith",
+      "Fernando Mcdonell"
+    ]
+  },
+  "Creative Penmanship": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": [
+      "Trudi Folson",
+      "Melita Aldridge",
+      "Betty Chadd",
+      "September Vong",
+      "Noah Victoria",
+      "Viola Dedmon",
+      "Alec Hasty",
+      "Alica Petters",
+      "Cedrick Diedrich",
+      "Jospeh Stocker"
+    ]
+  },
+  "Flash Fiction": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": [
+      "Cindi Hollin",
+      "Delana Marten",
+      "Tinisha Parenti",
+      "Chad Thoms",
+      "Ezekiel Elin",
+      "Xavier Delillo",
+      "Joette Hillary",
+      "Alphonso Cooksey",
+      "Lesli Harrold",
+      "Amanda Torrence"
+    ]
+  },
+  "Ghost Hunting": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": [
+      "Karmen Hillebrand",
+      "Regan Currence",
+      "Londa Beltran",
+      "Lacresha Mier"
+    ]
+  },
+  "Not so Grimm: A Discovery of Nordic Fairy Tales and Folklore": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": []
+  },
+  "Spokes, Gears, Bars, Chains: Bike Maintenance + the Open Road": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": []
+  },
+  "Taking Control: Self-Defense for Women": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": []
+  },
+  "A Utopian Check on Reality — If Money Isn’t Even Real": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": []
+  },
+  "Your Money and How to Keep It": {
+    "max": "10",
+    "type": "PM",
+    "enrolled": [
+      "Dianna Pascual",
+      "Donella Outman",
+      "Kamilah Chmiel",
+      "Jermaine Sutphin",
+      "Craig Atilano",
+      "Nenita Mccubbin",
+      "Michaele Drinkwater",
+      "Mathew Tartaglia",
+      "Carie Defalco",
+      "Thomasine Iles"
+    ]
+  },
+  "Adventure Programming": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Adventures in Photography": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Art of Bead Jewelry": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "The Art of the Musical": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Back to RMS: Adventures in Middle School Education": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Behind the Badge": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": [
+      "Clyde Fetty",
+      "Eleonor Hickerson",
+      "Asuncion Cadwell",
+      "Regena Ogorman",
+      "Johanne Esker",
+      "Josie Felmlee",
+      "Yun Fankhauser",
+      "Lea Darrah",
+      "Leo Charney",
+      "Toney Hurless"
+    ]
+  },
+  "Caprine Capers": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Celebration of Cuisine, Culture in our Community": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Cooking up a Business": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Coolest Game on Ice": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "COVER Home Repair": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Documentaries That Inspire": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Ecosystem Management": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Gladiator Style: Arms, Armor, and Technique of Ancient Roman Gladiators": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Good v. Evil: A Study of Superheroes and Supervillains from the Avengers to Zod": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "The Haven: Hidden in Plain Sight": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Holistic Wellness": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Horseback Riding 101": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Let Them Eat Cake": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Let's Dance!": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Lifeguard Certification Course": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Light and Air": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "March Intensive Independent Study Option (MI-ISO)": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Math Madness": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Monoprint Mania": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Music as a Mirror of Society": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "New England Festival Preparation and Arts-Based Projects and Collaboration": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Painting China in the 21st Century: It's Not Just Roses Anymore": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Professor Barbecue Redux": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "The Relationship of Sex and Power": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Rock Climbing": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Running the Show": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Scuba": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Shakefilm": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Spaceflight: Fact and Fiction": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Straight to Hollywood": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Tech in the Real World: A Preview of Hartford's HACTC Program": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "VINS Raptor Program": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Wilderness First Aid in the White Mts. with CPR/AED Certification": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Boston Colleges Tour": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Bridges to Community: Building a Home in Nicaragua": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Dogsledding and Ethics in an Unplugged Community": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "For the Love of Snow": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Freedom and Cheese Steaks": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Money and Banking: Past, Present & Prospective": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Our Friendly Neighbors To The North-Canadian Studies": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  },
+  "Wild Week in the Whites": {
+    "max": "10",
+    "type": "FULL",
+    "enrolled": []
+  }
+}
