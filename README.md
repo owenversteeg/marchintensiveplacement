@@ -37,5 +37,4 @@ Output is provided in the form of the class list only. For debug reasons the stu
 The steps taken to randomly place people are as follows:
 
 1. A randomly ordered array of indexes is generated. For example, `[ 1, 0, 4, 2, 3 ]` that includes every single student, but has no duplicates and only includes valid student indexes. An index of 0 corresponds to the first user in students.json
-2. 
 2. After the array is generated, a for loop goes through each user and subsequently through their choices array. It tries to place them in their top class, when that fails (i.e. class is full) it goes to second, then third, etc. When the student cannot be placed in any of their choice classes the program loops through every class and finds the first open slot. In future versions, they will happen after every other student has been sent through the first part
