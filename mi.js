@@ -61,7 +61,6 @@ function placeStudent(s,c,doPlace) {
 	if (classes[c].enrolled.length < classes[c].max) {
 		if (doPlace) {
 			classes[c].enrolled.push(s)
-			students[si].class = c;
 		}
 	} else {
 		console.log('Class '+c+' is full! ('+s+')');
@@ -103,4 +102,3 @@ for (var i = 0; i < studentIndex.length; i++) {
 var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
 console.log(Math.round(percentage)+'% placement, where '+studentUnplaceableIndex.length+' student(s) could not be placed');
 jf.writeFileSync('classes-output.json', classes);
-jf.writeFileSync('students-output.json', students);
