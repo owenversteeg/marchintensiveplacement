@@ -4,20 +4,24 @@ March-Intensive-Placement
 Creates placement data for March Intensive Classes
 
 ### Data
-This program takes two sets of datas. An array of users and their choices
+This program takes two sets of datas. An array of users and their choices (students.json)
 
 ```
 [
 	{
 		"name": "John Smith",
 		"choices": [
-			"Example Class"
+			{
+				"AM": "Example AM Class",
+				"PM": "Example PM Class",
+				"FULL": null
+			}
 		]
 	},
 	...
 ]
 ```
-and an array of classes
+and an array of classes (classes.json)
 ```
 {
 	"Buzz 101: The Keeping of Bees": {
@@ -31,7 +35,7 @@ and an array of classes
 You can supply data in the enrolled field (strings, full name: i.e. `[ "John Smith" ]` and it will not be overwritten and the class will fill up around it.
 
 ### Output
-Output is provided in the form of the class list only. For debug reasons the student data may also be exported but that isn't production functionality
+Output is provided in the form of the class list (classes-output.json)
 
 ### Method
 The steps taken to randomly place people are as follows:
