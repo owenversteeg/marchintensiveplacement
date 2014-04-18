@@ -8,22 +8,22 @@ var verbose = false; /*Output operations, triggerable with --verbose as well*/
 var classFile = 'classes.json';
 var studentsFile = 'students.json';
 var outputClassesFile = 'classes-output.json';
-var outputStudentsNotPlaced = 'classes-output.json';
+var outputStudentsNotPlaced = 'students-output.json';
 
 if (process.argv.indexOf('--verbose') !== -1) {
 	verbose = true;
 }
 if (process.argv.indexOf('--classes') !== -1) {
-	classFile = process.argv.indexOf('--classes') + 1;
+	classFile = process.argv[process.argv.indexOf('--classes') + 1];
 }
 if (process.argv.indexOf('--students') !== -1) {
-	studentsFile = process.argv.indexOf('--students') + 1;
+	studentsFile = process.argv[process.argv.indexOf('--students') + 1];
 }
 if (process.argv.indexOf('--output-classes') !== -1) {
-	outputClassesFile = process.argv.indexOf('--output-classes') + 1;
+	outputClassesFile = process.argv[process.argv.indexOf('--output-classes') + 1];
 }
 if (process.argv.indexOf('--output-studentsNotPlaced') !== -1) {
-	outputStudentsNotPlaced = process.argv.indexOf('--output-studentsNotPlaced') + 1;
+	outputStudentsNotPlaced = process.argv[process.argv.indexOf('--output-studentsNotPlaced') + 1];
 }
 
 if (process.argv.indexOf('--help') !== -1) {
