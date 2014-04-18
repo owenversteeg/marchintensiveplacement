@@ -309,4 +309,4 @@ for (var i = 0; i < happyness.length; i++) {
 console.log(total/happyness.length);
 /*write files*/
 writeFileSync(outputClassesFile, classes);
-writeFileSync(outputStudentsNotPlaced, students);
+writeFileSync(outputStudentsNotPlaced, studentUnplaceableIndex);
