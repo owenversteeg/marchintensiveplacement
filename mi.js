@@ -2,16 +2,21 @@ var fs = require('fs');
 
 var studentIndex = []; /*Used to randomly order students*/
 var studentUnplaceableIndex = []; /*Used to track students that were not assigned to a class*/
-
+var happyness = []; /*Used to track how happy students are with their seleciton*/
+var grades = [ 12, 11, 10, 9 ];
 var doNotAssignClassesWhenNoneAreRequested = true; /*If a user doesn't request any classes, they will not be given one and no error will be output*/
 var verbose = false; /*Output operations, triggerable with --verbose as well*/
 var classFile = 'classes.json';
 var studentsFile = 'students.json';
 var outputClassesFile = 'classes-output.json';
 var outputStudentsNotPlaced = 'students-output.json';
+var useGrades = true;
 
 if (process.argv.indexOf('--verbose') !== -1) {
 	verbose = true;
+}
+if (process.argv.indexOf('--ignore-grades') !== -1) {
+	useGrades = false;
 }
 if (process.argv.indexOf('--classes') !== -1) {
 	classFile = process.argv[process.argv.indexOf('--classes') + 1];
@@ -37,6 +42,8 @@ if (process.argv.indexOf('--help') !== -1) {
 	console.log('	--output-classes [file.json]');
 	console.log('Students Not Placed Output File');
 	console.log('	--output-studentsNotPlaced [file.json]');
+	console.log('Ignore .grade field');
+	console.log('	--ignore-grades');
 	process.kill()
 }
 
@@ -188,61 +195,73 @@ while (studentIndex.length < students.length) {
 		studentIndex.push(rand);
 	}
 }
-/*two loops, first time won't assign classes not requests*/
-for (var y = 0; y < 2; y++) {
-	/*go through random student array*/
-	for (var i = 0; i < studentIndex.length; i++) {
-		var index = studentIndex[i];
-		/*if the student has no class, try to assing their requests*/
-		if (students[index].hasClass !== true) {
-			/*going from request 1, to last request*/
-			for (var n = 0; n < students[index].choices.length; n++) {
-				if (placeStudent(students[index].name,students[index].choices[n],index)) {
-					break;
-				}
-			}
-		}
-		/*if the student has no class, and not the first loop, assign to random class*/
-		if (students[index].hasClass !== true && y !== 0) {
-			/*loop classes*/
-			for (var n = 0; n < Object.keys(classes).length; n++) {
-				var key = Object.keys(classes)[n];
-				/*find first FULLDAY type class that isn't empty.*/
-				if (classes[key].type == 'FULL') {
-					if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null},index)) {
-						placed = true;
-						break;
+/*four loops, one for each grade*/
+for (var x = 0; x < grades.length; x++) {
+	/*two loops, first time won't assign classes not requests*/
+	for (var y = 0; y < 2; y++) {
+		/*go through random student array*/
+		for (var i = 0; i < studentIndex.length; i++) {
+			var index = studentIndex[i];
+			if (students[index].grade == grades[x] || !useGrades) {
+				/*if the student has no class, try to assing their requests*/
+				if (students[index].hasClass !== true) {
+					/*going from request 1, to last request*/
+					for (var n = 0; n < students[index].choices.length; n++) {
+						if (placeStudent(students[index].name,students[index].choices[n],index)) {
+							happyness.push(n);
+							break;
+						}
 					}
 				}
-			}
-		}
-		if (students[index].hasClass !== true && y !== 0) {
-			/*loop classes*/
-			for (var n = 0; n < Object.keys(classes).length; n++) {
-				var keyAM = Object.keys(classes)[n];
-				/*find first AM type class that isn't empty.*/
-				if (classes[keyAM].type == 'AM') {
-					for (var z = 0; z < Object.keys(classes).length; z++) {
-						var keyPM = Object.keys(classes)[z];
-						/*find first PM type class that isn't empty.*/
-						if (classes[keyPM].type == 'PM') {
-							if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM},index)) {
-								if (verbose) {
-									console.log('Placed AM/PM Random Class!');
-								}
+				/*if the student has no class, and not the first loop, assign to random class*/
+				if (students[index].hasClass !== true && y !== 0) {
+					/*loop classes*/
+					for (var n = 0; n < Object.keys(classes).length; n++) {
+						var key = Object.keys(classes)[n];
+						/*find first FULLDAY type class that isn't empty.*/
+						if (classes[key].type == 'FULL') {
+							if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null},index)) {
+								placed = true;
+								happyness.push(students[index].choices.length);
 								break;
 							}
 						}
 					}
 				}
+				if (students[index].hasClass !== true && y !== 0) {
+					/*loop classes*/
+					for (var n = 0; n < Object.keys(classes).length; n++) {
+						var keyAM = Object.keys(classes)[n];
+						/*find first AM type class that isn't empty.*/
+						if (classes[keyAM].type == 'AM') {
+							for (var z = 0; z < Object.keys(classes).length; z++) {
+								var keyPM = Object.keys(classes)[z];
+								/*find first PM type class that isn't empty.*/
+								if (classes[keyPM].type == 'PM') {
+									if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM},index)) {
+										happyness.push(students[index].choices.length);
+										if (verbose) {
+											console.log('Placed AM/PM Random Class!');
+										}
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+				/*If unable to place the student, put them on the unplaceable list*/
+				if (students[index].hasClass !== true && y !== 0) {
+					studentUnplaceableIndex.push(index);
+				}
+			} else {
+				if (verbose) {
+					console.log('Denied '+students[index].name+' due to '+students[index].grade+' ≠ '+grades[x]);
+				}
 			}
 		}
-		/*If unable to place the student, put them on the unplaceable list*/
-		if (students[index].hasClass !== true && y !== 0) {
-			studentUnplaceableIndex.push(index);
-		}
-	};
-};
+	}
+}
 /*look through the student unplaceable index, and replace it with names so that it can be read easier*/
 for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 	studentUnplaceableIndex[i] = students[studentUnplaceableIndex[i]].name;
@@ -250,6 +269,11 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 /*print the success percentage*/
 var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
 console.log(Math.round(percentage)+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
+var total = 0;
+for (var i = 0; i < happyness.length; i++) {
+	total += happyness[i]
+};
+console.log(total/happyness.length);
 /*write files*/
 writeFileSync(outputClassesFile, classes);
 writeFileSync(outputStudentsNotPlaced, studentUnplaceableIndex);
