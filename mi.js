@@ -252,7 +252,7 @@ for (var x = 0; x < grades.length; x++) {
 							/*find first FULLDAY type class that isn't empty.*/
 							if (classes[key].type == 'FULL') {
 								if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
-									happyness.push(9);
+									happyness.push(8);
 									break;
 								}
 							}
@@ -271,7 +271,7 @@ for (var x = 0; x < grades.length; x++) {
 									/*find first PM type class that isn't empty.*/
 									if (classes[keyPM].type == 'PM') {
 										if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM})) {
-											happyness.push(9);
+											happyness.push(8);
 											if (verbose) {
 												console.log('Placed AM/PM Random Class!');
 											}
@@ -306,7 +306,7 @@ var total = 0;
 for (var i = 0; i < happyness.length; i++) {
 	total += happyness[i]
 };
-console.log(total/happyness.length);
+console.log(Math.round(100-((total/happyness.length)/8*100))+'%');
 /*write files*/
 writeFileSync(outputClassesFile, classes);
 writeFileSync(outputStudentsNotPlaced, studentUnplaceableIndex);
