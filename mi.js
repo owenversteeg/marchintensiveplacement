@@ -126,7 +126,10 @@ function placeStudent(s,c) {
 		/*IF AM/PM and not FULLDAY assign AM/PM if both are not full*/
 	} else if (c.FULL === null && c.AM !== null) {
 		if (c.PM === null && verbose) {
-			console.log('Placed AM only Class. Should check for Ford Sayer here before allowing'); /*TODO*/
+			if (students[si].fordSayre !== true) {
+				console.log('AM only class detected, Ford Sayre not checked ('+s+')');
+				return false;
+			}
 		}
 		var cAM = c.AM;
 		var cPM = c.PM;
