@@ -6,7 +6,7 @@ Creates placement data for March Intensive Classes
 ### Usage
 Node: `brew install node`
 
-Running: `node mi.js[ --verbose]`
+Running: `node mi.js[ --help]`
 
 ```
 ├── classes.json
@@ -64,4 +64,5 @@ Make sure to put a newline at the end of the file, or the last one one be counte
 Remember to put a newline on the last line so that you don't have to properly do
 
 `:""` -> `:null`
-` \(T\)` -> ``
+
+` \(T\)` -> ` `
