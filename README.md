@@ -21,6 +21,8 @@ This program takes two sets of datas. An array of users and their choices (stude
 [
 	{
 		"name": "John Smith",
+		"grade": 10,
+		"fordSayre": true,
 		"choices": [
 			{
 				"AM": "Example AM Class",
