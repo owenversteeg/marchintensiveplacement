@@ -176,7 +176,6 @@ while (studentIndex.length < students.length) {
 }
 /*two loops, first time won't assign classes not requests*/
 for (var y = 0; y < 2; y++) {
-	var placed = false;
 	/*go through random student array*/
 	for (var i = 0; i < studentIndex.length; i++) {
 		var index = studentIndex[i];
@@ -185,13 +184,12 @@ for (var y = 0; y < 2; y++) {
 			/*going from request 1, to last request*/
 			for (var n = 0; n < students[index].choices.length; n++) {
 				if (placeStudent(students[index].name,students[index].choices[n],index)) {
-					placed = true;
 					break;
 				}
 			}
 		}
 		/*if the student has no class, and not the first loop, assign to random class*/
-		if (!placed && y !== 0) {
+		if (students[index].hasClass !== true && y !== 0) {
 			/*loop classes*/
 			for (var n = 0; n < Object.keys(classes).length; n++) {
 				var key = Object.keys(classes)[n];
@@ -204,7 +202,7 @@ for (var y = 0; y < 2; y++) {
 				}
 			}
 		}
-		if (!placed && y !== 0) {
+		if (students[index].hasClass !== true && y !== 0) {
 			/*loop classes*/
 			for (var n = 0; n < Object.keys(classes).length; n++) {
 				var keyAM = Object.keys(classes)[n];
@@ -218,7 +216,6 @@ for (var y = 0; y < 2; y++) {
 								if (verbose) {
 									console.log('Placed AM/PM Random Class!');
 								}
-								placed = true;
 								break;
 							}
 						}
@@ -227,7 +224,7 @@ for (var y = 0; y < 2; y++) {
 			}
 		}
 		/*If unable to place the student, put them on the unplaceable list*/
-		if (!placed && y !== 0) {
+		if (students[index].hasClass !== true && y !== 0) {
 			studentUnplaceableIndex.push(index);
 		}
 	};
