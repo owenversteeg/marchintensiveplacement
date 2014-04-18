@@ -1,17 +1,47 @@
 var fs = require('fs');
 
-var classes = readFileSync('classes.json');
-var students = readFileSync('students.json');
-
 var studentIndex = []; /*Used to randomly order students*/
 var studentUnplaceableIndex = []; /*Used to track students that were not assigned to a class*/
 
 var doNotAssignClassesWhenNoneAreRequested = true; /*If a user doesn't request any classes, they will not be given one and no error will be output*/
 var verbose = false; /*Output operations, triggerable with --verbose as well*/
+var classFile = 'classes.json';
+var studentsFile = 'students.json';
+var outputClassesFile = 'classes-output.json';
+var outputStudentsNotPlaced = 'classes-output.json';
 
 if (process.argv.indexOf('--verbose') !== -1) {
 	verbose = true;
 }
+if (process.argv.indexOf('--classes') !== -1) {
+	classFile = process.argv.indexOf('--classes') + 1;
+}
+if (process.argv.indexOf('--students') !== -1) {
+	studentsFile = process.argv.indexOf('--students') + 1;
+}
+if (process.argv.indexOf('--output-classes') !== -1) {
+	outputClassesFile = process.argv.indexOf('--output-classes') + 1;
+}
+if (process.argv.indexOf('--output-studentsNotPlaced') !== -1) {
+	outputStudentsNotPlaced = process.argv.indexOf('--output-studentsNotPlaced') + 1;
+}
+
+if (process.argv.indexOf('--help') !== -1) {
+	console.log('Show all actions');
+	console.log('	--verbose');
+	console.log('Classes Input File');
+	console.log('	--classes [file.json]');
+	console.log('Students Input File');
+	console.log('	--students [file.json]');
+	console.log('Classes Output File');
+	console.log('	--output-classes');
+	console.log('Students Not Placed Output File');
+	console.log('	--output-studentsNotPlaced');
+	process.kill()
+}
+
+var classes = readFileSync(classFile);
+var students = readFileSync(studentsFile);
 
 function readFileSync(file) {
 	return JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -185,5 +215,5 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
 console.log(Math.round(percentage)+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
 /*write files*/
-writeFileSync('classes-output.json', classes);
-writeFileSync('students-output.json', studentUnplaceableIndex);
+writeFileSync(outputClassesFile, classes);
+writeFileSync(outputStudentsNotPlaced, studentUnplaceableIndex);
