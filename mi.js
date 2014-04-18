@@ -126,7 +126,7 @@ function placeStudent(s,c) {
 		/*IF AM/PM and not FULLDAY assign AM/PM if both are not full*/
 	} else if (c.FULL === null && c.AM !== null) {
 		if (c.PM === null && verbose) {
-			console.log('Placed AM only Class. Should check for Ford Sayer here!!');
+			console.log('Placed AM only Class. Should check for Ford Sayer here before allowing'); /*TODO*/
 		}
 		var cAM = c.AM;
 		var cPM = c.PM;
@@ -176,10 +176,10 @@ while (studentIndex.length < students.length) {
 }
 /*two loops, first time won't assign classes not requests*/
 for (var y = 0; y < 2; y++) {
+	var placed = false;
 	/*go through random student array*/
 	for (var i = 0; i < studentIndex.length; i++) {
 		var index = studentIndex[i];
-		var placed = false;
 		/*if the student has no class, try to assing their requests*/
 		if (students[index].hasClass !== true) {
 			/*going from request 1, to last request*/
