@@ -124,7 +124,10 @@ function placeStudent(s,c) {
 			console.log(s);
 		}
 		/*IF AM/PM and not FULLDAY assign AM/PM if both are not full*/
-	} else if (c.FULL === null && c.AM !== null && c.PM !== null) {
+	} else if (c.FULL === null && c.AM !== null) {
+		if (c.PM === null && verbose) {
+			console.log('Placed AM only Class. Should check for Ford Sayer here!!');
+		}
 		var cAM = c.AM;
 		var cPM = c.PM;
 		try {
@@ -192,14 +195,36 @@ for (var y = 0; y < 2; y++) {
 			/*loop classes*/
 			for (var n = 0; n < Object.keys(classes).length; n++) {
 				var key = Object.keys(classes)[n];
-				/*find first FULLDAY type class that isn't empty. This will change in the future*/
+				/*find first FULLDAY type class that isn't empty.*/
 				if (classes[key].type == 'FULL') {
 					if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null},index)) {
 						placed = true;
 						break;
 					}
 				}
-			};
+			}
+		}
+		if (!placed && y !== 0) {
+			/*loop classes*/
+			for (var n = 0; n < Object.keys(classes).length; n++) {
+				var keyAM = Object.keys(classes)[n];
+				/*find first AM type class that isn't empty.*/
+				if (classes[keyAM].type == 'AM') {
+					for (var z = 0; z < Object.keys(classes).length; z++) {
+						var keyPM = Object.keys(classes)[z];
+						/*find first PM type class that isn't empty.*/
+						if (classes[keyPM].type == 'PM') {
+							if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM},index)) {
+								if (verbose) {
+									console.log('Placed AM/PM Random Class!');
+								}
+								placed = true;
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 		/*If unable to place the student, put them on the unplaceable list*/
 		if (!placed && y !== 0) {
