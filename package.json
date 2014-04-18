@@ -1,0 +1,1 @@
+{"author":"Ezekiel Elin <ezekielelin@dresden.us>","contributors":[{"name":"Ezekiel Elin","email":"ezekielelin@dresden.us"}],"repository":{"type":"git","url":"https://github.com/ezfe/March-Intensive-Placement"},"version":"0.0.1","description":"march intensive placement server and program","dependencies":{"express":"3.x"},"name":"March-Intensive-Placement"}
