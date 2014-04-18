@@ -34,9 +34,9 @@ if (process.argv.indexOf('--help') !== -1) {
 	console.log('Students Input File');
 	console.log('	--students [file.json]');
 	console.log('Classes Output File');
-	console.log('	--output-classes');
+	console.log('	--output-classes [file.json]');
 	console.log('Students Not Placed Output File');
-	console.log('	--output-studentsNotPlaced');
+	console.log('	--output-studentsNotPlaced [file.json]');
 	process.kill()
 }
 
@@ -100,8 +100,7 @@ function placeStudent(s,c) {
 		}
 		return false;
 	}
-	/*if FULLDAY and not AM/PM, assign FULLDAY class if not full etc.*/
-	if (c.FULL !== null && c.AM === null && c.PM === null) {
+	if (c.FULL !== null && c.AM === null && c.PM === null) {/*if FULLDAY and not AM/PM, assign FULLDAY class if not full etc.*/
 		var cF = c.FULL;
 		try {
 			if (classes[cF].enrolled.length < classes[cF].max) {
@@ -119,18 +118,10 @@ function placeStudent(s,c) {
 		} catch (err) {
 			console.log('----');
 			console.log('ERROR:'+err.message);
-			console.log(cAM+', '+cPM);
 			console.log(cF);
 			console.log(s);
 		}
-		/*IF AM/PM and not FULLDAY assign AM/PM if both are not full*/
-	} else if (c.FULL === null && c.AM !== null) {
-		if (c.PM === null && verbose) {
-			if (students[si].fordSayre !== true) {
-				console.log('AM only class detected, Ford Sayre not checked ('+s+')');
-				return false;
-			}
-		}
+	} else if (c.FULL === null && c.AM !== null && c.PM !== null) {/*IF AM/PM and not FULLDAY assign AM/PM if both are not full*/ 
 		var cAM = c.AM;
 		var cPM = c.PM;
 		try {
@@ -151,10 +142,30 @@ function placeStudent(s,c) {
 			console.log('----');
 			console.log('ERROR:'+err.message);
 			console.log(cAM+', '+cPM);
-			console.log(cF);
 			console.log(s);
 		}
 		/*terminate, throw error if verbose=true, also used to mark a user as having a class based on settings*/
+	} else if (c.PM === null && students[si].fordSayre === true) {
+		var cAM = c.AM;
+		try {
+			if ((classes[cAM].enrolled.length < classes[cAM].max)) {
+				classes[cAM].enrolled.push(s)
+				students[index].hasClass = true;
+				if (verbose) {
+					console.log(s+' has been placed in '+cAM+' (Ford Sayre)');
+				}
+			} else {
+				if (verbose) {
+					console.log('Class '+cAM+' is full! ('+s+' Ford Sayre)');
+				}
+				return false;
+			}
+		} catch (err) {
+			console.log('----');
+			console.log('ERROR:'+err.message);
+			console.log(cAM);
+			console.log(s);
+		}
 	} else {
 		if (verbose) {
 			console.log('The class data for '+s+' is not valid.');
