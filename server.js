@@ -27,10 +27,6 @@ if (process.argv.indexOf('--output-classes') !== -1) {
 if (process.argv.indexOf('--output-studentsNotPlaced') !== -1) {
 	outputStudentsNotPlaced = process.argv[process.argv.indexOf('--output-studentsNotPlaced') + 1];
 }
-
-app.set('title', 'March Intensive Listings');
-app.get('/', function(req, res){
-  res.send('hello world');
-});
-
+app.use(express.directory('public'))
+app.use(express.static('public'))
 app.listen(3000);
