@@ -22,17 +22,36 @@ function getStudentHasClass(i) {
 	return studentClassData[i];
 }
 
-function readFileSync(file) {
-	return JSON.parse(fs.readFileSync(file, 'utf8'));
+function readJSONSync(file) {
+	try {
+		return JSON.parse(fs.readJSONSync(file, 'utf8'));
+	} catch (err) {
+		console.log('ERROR:'+err.message);
+		return false;
+	}
 }
-function writeFileSync(file, obj, options) {
-	var str = JSON.stringify(obj, null, module.exports.spaces);
-	return fs.writeFileSync(file, str, options); //not sure if fs.writeFileSync returns anything, but just in case
+
+function readCSVSync(file) {
+	try {
+		return fs.readFileSync(file, 'utf8');
+	} catch (err) {
+		console.log('ERROR:'+err.message);
+		return false;
+	}
+}
+function writeJSONSync(file, obj, options) {
+	try {
+		var str = JSON.stringify(obj, null, module.exports.spaces);
+		return fs.writeFileSync(file, str, options);
+	} catch (err) {
+		console.log('ERROR:'+err.message);
+		return false;
+	}
 }
 
 function getIndexOfStudentName(name) {
 	for (var i = 0; i < students.length; i++) {
-		if (students[i].name == name) {
+		if (students[i].name === name) {
 			return i;
 		}
 	};
@@ -66,7 +85,7 @@ function placeStudent(s,c) {
 	/*places student s in class c, where possible. c is an object, with keys FULL, AM, and PM, s is a string*/	
 	/*terminate if student doesn't exist, throw error if verbose=true*/
 	var si = getIndexOfStudentName(s);
-	if (si == undefined) {
+	if (si === undefined) {
 		if (verbose) {
 			console.log('Index for '+s+' could not be found!');
 		}
@@ -76,7 +95,7 @@ function placeStudent(s,c) {
 		return false;
 	}
 	/*terminate if class doesn't exist, throw error if verbose=true*/
-	if (c == undefined) {
+	if (c === undefined) {
 		if (verbose) {
 			console.log('Class for '+s+' could not be found!');
 		}
@@ -160,6 +179,75 @@ function placeStudent(s,c) {
 	return true;
 }
 
+function convertRowToJSON(row,head) {
+	obj = {"name":"","fordSayre":false,"hartfordTechAM":false,"hartfordTechPM":false,"grade":9,"choices":[{},{},{},{},{},{},{},{}]};
+	var row = row.split(',');
+	var head = head.split(',');
+	for (var i = 0; i < row.length; i++) {
+		if (head[i] === 'name') {
+			obj.name = row[i];
+		}
+		if (head[i] === 'hartfordTech') {
+			if (row[i] === 'AM') {
+				obj.hartfordTechAM = true;
+				obj.hartfordTechPM = false;
+			} else if (row[i] === 'PM') {
+				obj.hartfordTechPM = true;
+				obj.hartfordTechAM = false;
+			} else {
+				obj.hartfordTechPM = false;
+				obj.hartfordTechAM = false;
+			}
+		}
+		if (head[i] === 'fordSayre') {
+			if (row[i] === "false") {
+				obj.fordSayre === false;
+			}
+			if (row[i] === "true") {
+				obj.fordSayre === true;
+			}
+		}
+		if (head[i] === 'commonGround') {
+			obj.commonGround = row[i];
+		}
+		if (head[i] === 'grade') {
+			if (row[i].indexOf(9) !== -1) {
+				obj.grade = 9;
+			} else if (row[i].indexOf(10) !== -1) {
+				obj.grade = 10;
+			} else if (row[i].indexOf(11) !== -1) {
+				obj.grade = 11;
+			} else if (row[i].indexOf(12) !== -1) {
+				obj.grade = 12;
+			} else {
+				obj.grade = 9;
+			}
+		}
+		for (var x = 1; x < 9; x++) {
+			if (head[i] === x+'FULL') {
+				if (row[i] === "") {
+					obj.choices[x-1].FULL = null;
+				} else {
+					obj.choices[x-1].FULL = row[i];					
+				}
+			} else if (head[i] === x+'AM') {
+				if (row[i] === "") {
+					obj.choices[x-1].AM = null;
+				} else {
+					obj.choices[x-1].AM = row[i];					
+				}
+			} else if (head[i] === x+'PM') {
+				if (row[i] === "") {
+					obj.choices[x-1].PM = null;
+				} else {
+					obj.choices[x-1].PM = row[i];					
+				}
+			}
+		}
+	}
+	return obj;
+}
+
 if (process.argv.indexOf('--verbose') !== -1) {
 	verbose = true;
 }
@@ -183,20 +271,59 @@ if (process.argv.indexOf('--help') !== -1) {
 	console.log('Show all actions');
 	console.log('	--verbose');
 	console.log('Classes Input File');
-	console.log('	--classes [file.json]');
+	console.log('	--classes [classes.json]');
 	console.log('Students Input File');
-	console.log('	--students [file.json]');
+	console.log('	--students [students.json]');
 	console.log('Classes Output File');
-	console.log('	--output-classes [file.json]');
+	console.log('	--output-classes [classes-output.json]');
 	console.log('Students Not Placed Output File');
-	console.log('	--output-studentsNotPlaced [file.json]');
+	console.log('	--output-studentsNotPlaced [students-output.json]');
+	console.log('Convert CSV to JSON');
+	console.log('	--convert-csv-json [OPTIONAL students.csv] [OPTIONAL students.json]');
 	console.log('Ignore .grade field');
 	console.log('	--ignore-grades');
 	process.kill()
 }
 
-var classes = readFileSync(classFile);
-var students = readFileSync(studentsFile);
+if (process.argv.indexOf('--convert-csv-json') !== -1) {
+	var csv = "";
+	if (process.argv[process.argv.indexOf('--convert-csv-json')+1] !== undefined) {
+		csv = readCSVSync(process.argv[process.argv.indexOf('--convert-csv-json')+1]);
+	} else {
+		csv = readCSVSync('students.csv');
+	}
+	var csvOutputJsonFileName = 'students.json';
+	if (process.argv[process.argv.indexOf('--convert-csv-json')+2] !== undefined) {
+		csvOutputJsonFileName = process.argv[process.argv.indexOf('--convert-csv-json')+2];
+	}
+	var csvAsJSON = [];
+
+	if (csv.length === 0 || !csv) {
+		console.log('The provided CSV file is empty, corrupt, or doesn\'t exist');
+		process.kill();
+	}
+
+	csv = csv.split('\n');
+
+	
+	for (var i = 0; i < csv.length; i++) {
+		if (i === 0) {
+			console.log('Skipping row 1, assuming header row');
+		} else {
+			var row = convertRowToJSON(csv[i],csv[0]);
+			if (row !== false) {
+				csvAsJSON.push(row);
+			}
+		}
+	}
+
+	writeJSONSync(csvOutputJsonFileName,csvAsJSON);
+	console.log('Wrote file '+csvOutputJsonFileName+' based on data from provided CSV file');
+	process.kill();
+}
+
+var classes = readJSONSync(classFile);
+var students = readJSONSync(studentsFile);
 
 var studentRecordsForDuplicates = [];
 for (var i = 0; i < students.length; i++) {
@@ -231,7 +358,7 @@ for (var x = 0; x < grades.length; x++) {
 		/*go through random student array*/
 		for (var i = 0; i < studentIndex.length; i++) {
 			var index = studentIndex[i];
-			if (students[index].grade == grades[x] || !useGrades) {
+			if (students[index].grade === grades[x] || !useGrades) {
 				/*if the student has no class, try to assing their requests*/
 				if (getStudentHasClass(index) !== true) {
 					/*going from request 1, to last request*/
@@ -250,7 +377,7 @@ for (var x = 0; x < grades.length; x++) {
 						for (var n = 0; n < Object.keys(classes).length; n++) {
 							var key = Object.keys(classes)[n];
 							/*find first FULLDAY type class that isn't empty.*/
-							if (classes[key].type == 'FULL') {
+							if (classes[key].type === 'FULL') {
 								if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
 									happyness.push(8);
 									break;
@@ -265,11 +392,11 @@ for (var x = 0; x < grades.length; x++) {
 						for (var n = 0; n < Object.keys(classes).length; n++) {
 							var keyAM = Object.keys(classes)[n];
 							/*find first AM type class that isn't empty.*/
-							if (classes[keyAM].type == 'AM') {
+							if (classes[keyAM].type === 'AM') {
 								for (var z = 0; z < Object.keys(classes).length; z++) {
 									var keyPM = Object.keys(classes)[z];
 									/*find first PM type class that isn't empty.*/
-									if (classes[keyPM].type == 'PM') {
+									if (classes[keyPM].type === 'PM') {
 										if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM})) {
 											happyness.push(8);
 											if (verbose) {
@@ -308,5 +435,5 @@ for (var i = 0; i < happyness.length; i++) {
 };
 console.log(Math.round(100-((total/happyness.length)/8*100))+'%');
 /*write files*/
-writeFileSync(outputClassesFile, classes);
-writeFileSync(outputStudentsNotPlaced, studentUnplaceableIndex);
+writeJSONSync(outputClassesFile, classes);
+writeJSONSync(outputStudentsNotPlaced, studentUnplaceableIndex);
