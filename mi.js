@@ -48,6 +48,14 @@ function writeJSONSync(file, obj, options) {
 		return false;
 	}
 }
+function writeCSVSync(file, str, options) {
+	try {
+		return fs.writeFileSync(file, str, options);
+	} catch (err) {
+		console.log('ERROR:'+err.message);
+		return false;
+	}
+}
 
 function getIndexOfStudentName(name) {
 	for (var i = 0; i < students.length; i++) {
@@ -179,9 +187,43 @@ function placeStudent(s,c) {
 	return true;
 }
 
+function splitCSVRow(row) {
+	var deleteIndexes = [];
+
+	row = row.replace(/,,/g,',"",').replace(/,,/g,',"",').replace(/,,/g,',"",');
+
+	if (row.substr(row.length - 1) == ',') {
+		row = row + '""';
+	}
+
+	if (row.charAt(0) == ',') {
+		row = '""' + row;
+	}
+
+
+	row = row.match(/"([^"]|"")*"|[^,\n]*/g);/*"*/
+
+	for (var i = 0; i < row.length; i++) {
+		if (row[i].charAt(0) == '"') {
+			row[i] = row[i].substr(1);
+		}
+		if (row[i].charAt(row[i].length-1) == '"') {
+			row[i] = row[i].substr(0,row[i].length-1);
+		}
+		if (i%2) {
+			deleteIndexes.push(i);
+		}
+	}
+
+	for (var i = deleteIndexes.length - 1; i >= 0 ; i--) {
+		row.splice(deleteIndexes[i],1);
+	}
+	return row;
+}
+
 function convertRowToJSON(row,head) {
 	obj = {"name":"","fordSayre":false,"hartfordTechAM":false,"hartfordTechPM":false,"grade":9,"choices":[{},{},{},{},{},{},{},{}]};
-	var row = row.split(',');
+	var row = splitCSVRow(row);
 	var head = head.split(',');
 	for (var i = 0; i < row.length; i++) {
 		if (head[i] === 'name') {
@@ -223,7 +265,7 @@ function convertRowToJSON(row,head) {
 				obj.grade = 9;
 			}
 		}
-		for (var x = 1; x < 9; x++) {
+		for (var x = 1; x < 10; x++) {
 			if (head[i] === x+'FULL') {
 				if (row[i] === "") {
 					obj.choices[x-1].FULL = null;
@@ -240,7 +282,7 @@ function convertRowToJSON(row,head) {
 				if (row[i] === "") {
 					obj.choices[x-1].PM = null;
 				} else {
-					obj.choices[x-1].PM = row[i];					
+					obj.choices[x-1].AM = row[i];
 				}
 			}
 		}
@@ -303,8 +345,8 @@ if (process.argv.indexOf('--convert-csv-json') !== -1) {
 		process.kill();
 	}
 
+	//csv = csv.replace(/,,/g,',"",').replace(/,,/g,',"",').replace(/,,/g,',"",');/*To prevent overlaps from causing issues*/
 	csv = csv.split('\n');
-
 	
 	for (var i = 0; i < csv.length; i++) {
 		if (i === 0) {
@@ -316,7 +358,6 @@ if (process.argv.indexOf('--convert-csv-json') !== -1) {
 			}
 		}
 	}
-
 	writeJSONSync(csvOutputJsonFileName,csvAsJSON);
 	console.log('Wrote file '+csvOutputJsonFileName+' based on data from provided CSV file');
 	process.kill();
