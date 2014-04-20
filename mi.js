@@ -19,12 +19,41 @@ function setStudentHasClass(i,s) {
 }
 
 function getStudentHasClass(i) {
-	return studentClassData[i];
+	return verifyStudentHasClass(i);
+	//return studentClassData[i];
+}
+
+function verifyStudentHasClass(i) {
+	var name = students[i].name;
+
+	var hasAM = false;
+	var hasFULL = false;
+	var hasPM = false;
+	for (var i = 0; i < classes.length; i++) {
+		if (classes[i].choices.indexOf(name) !== undefined) {
+			if (classes[i].type === 'FULL') {
+				hasFULL = true;
+			}
+			if (classes[i].type === 'AM') {
+				hasAM = true;
+			}
+			if (classes[i].type === 'PM') {
+				hasPM = true;
+			}
+		}
+		if (hasAM && hasPM) {
+			return true;
+		}
+		if (hasFULL) {
+			return true;
+		}
+	};
+	return false;
 }
 
 function readJSONSync(file) {
 	try {
-		return JSON.parse(fs.readJSONSync(file, 'utf8'));
+		return JSON.parse(fs.readFileSync(file, 'utf8'));
 	} catch (err) {
 		console.log('ERROR:'+err.message);
 		return false;
