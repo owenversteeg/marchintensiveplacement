@@ -306,7 +306,7 @@ var total = 0;
 for (var i = 0; i < happyness.length; i++) {
 	total += happyness[i]
 };
-console.log(Math.round(100-((total/happyness.length)/8*100))+'%');
+console.log(Math.round(100-((total/happyness.length)/8*100))+'% Happyness');
 /*write files*/
 writeFileSync(outputClassesFile, classes);
 writeFileSync(outputStudentsNotPlaced, studentUnplaceableIndex);
