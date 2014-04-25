@@ -14,39 +14,18 @@ var useGrades = true;
 var studentRandomData = {};
 var studentClassData = {};
 
-function readJSONSync(file) {
-	try {
-		return JSON.parse(fs.readFileSync(file, 'utf8'));
-	} catch (err) {
-		console.log('ERROR:'+err.message);
-		return false;
-	}
+function readJSON(file) {
+	return JSON.parse(readFile(file));
 }
-
-function readCSVSync(file) {
-	try {
-		return fs.readFileSync(file, 'utf8');
-	} catch (err) {
-		console.log('ERROR:'+err.message);
-		return false;
-	}
+function readFile(file) {
+	return fs.readFileSync(file, 'utf8');
 }
-function writeJSONSync(file, obj, options) {
-	try {
-		var str = JSON.stringify(obj, null, module.exports.spaces);
-		return fs.writeFileSync(file, str, options);
-	} catch (err) {
-		console.log('ERROR:'+err.message);
-		return false;
-	}
+function writeJSON(file, obj, options) {
+	var str = JSON.stringify(obj, null, module.exports.spaces);
+	return writeFile(file, str, options); //not sure if fs.writeJSON returns anything, but just in case
 }
-function writeCSVSync(file, str, options) {
-	try {
-		return fs.writeFileSync(file, str, options);
-	} catch (err) {
-		console.log('ERROR:'+err.message);
-		return false;
-	}
+function writeFile(file, contents, options) {
+	return fs.writeFileSync(file, contents, options);
 }
 
 function shuffle(array) {
@@ -216,9 +195,9 @@ if (process.argv.indexOf('--help') !== -1) {
 if (process.argv.indexOf('--convert-csv-json') !== -1) {
 	var csv = "";
 	if (process.argv[process.argv.indexOf('--convert-csv-json')+1] !== undefined) {
-		csv = readCSVSync(process.argv[process.argv.indexOf('--convert-csv-json')+1]);
+		csv = readFile(process.argv[process.argv.indexOf('--convert-csv-json')+1]);
 	} else {
-		csv = readCSVSync('students.csv');
+		csv = readFile('students.csv');
 	}
 	var csvOutputJsonFileName = 'students.json';
 	if (process.argv[process.argv.indexOf('--convert-csv-json')+2] !== undefined) {
