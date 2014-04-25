@@ -191,6 +191,9 @@ if (config.files.output.studentsNotPlaced !== undefined) {
 if (config.files.output.students !== undefined) {
 	outputStudents = config.files.output.students;
 }
+if (config.doNotAssignClassesWhenNoneAreRequested !== undefined) {
+	doNotAssignClassesWhenNoneAreRequested = config.doNotAssignClassesWhenNoneAreRequested;
+}
 
 if (process.argv.indexOf('--help') !== -1) {
 	console.log('Show all actions');

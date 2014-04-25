@@ -1,1 +1,1 @@
-{"files":{"input":{"classes":"resources/classes.json","students":"resources/students.json"},"output":{"classes":"output/classes.json","studentsNotPlaced":"output/studentsNotPlaced.json","students":"output/students.json"}},"useGrades":true}
+{"files":{"input":{"classes":"resources/classes.json","students":"resources/students.json"},"output":{"classes":"output/classes.json","studentsNotPlaced":"output/studentsNotPlaced.json","students":"output/students.json"}},"useGrades":true,"doNotAssignClassesWhenNoneAreRequested":true}
