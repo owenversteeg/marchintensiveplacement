@@ -192,16 +192,8 @@ if (config.files.output.students !== undefined) {
 if (process.argv.indexOf('--help') !== -1) {
 	console.log('Show all actions');
 	console.log('	--verbose');
-	console.log('Classes Input File');
-	console.log('	--classes [file.json]');
-	console.log('Students Input File');
-	console.log('	--students [file.json]');
-	console.log('Classes Output File');
-	console.log('	--output-classes [file.json]');
-	console.log('Students Not Placed Output File');
-	console.log('	--output-studentsNotPlaced [file.json]');
-	console.log('Ignore .grade field');
-	console.log('	--ignore-grades');
+	console.log('Custom Config Path');
+	console.log('	--config [file.json]');
 	process.kill()
 }
 
