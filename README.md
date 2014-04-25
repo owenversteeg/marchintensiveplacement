@@ -8,10 +8,20 @@ Node: `brew install node`
 
 Running: `node mi.js[ --help]`
 
+Environment (*=required file)
 ```
-├── classes.json
-├── students.json
-└── mi.js
+.
+├── README.md
+├── config.json *
+├── conversion.js
+├── mi.js *
+├── output
+│   ├── classes.json
+│   └── students.json
+└── resources *
+    ├── classes.json *
+    ├── students.csv
+    └── students.json *
 ```
 
 ### Data
@@ -20,14 +30,15 @@ This program takes two sets of datas. An array of users and their choices (stude
 ```
 [
 	{
-		"name": "John Smith",
-		"grade": 10,
-		"fordSayre": true,
+		"name": ["String"],
+		"grade": [9|10|11|12],
+		"fordSayre": [true|false],
+		"hartfordTech": [false|"AM"|"PM"]
 		"choices": [
 			{
-				"AM": "Example AM Class",
-				"PM": "Example PM Class",
-				"FULL": null
+				"AM": ["String"|null],
+				"PM": ["String"|null],
+				"FULL": ["String"|null]
 			}
 		]
 	},
@@ -37,10 +48,12 @@ This program takes two sets of datas. An array of users and their choices (stude
 and an array of classes (classes.json)
 ```
 {
-	"Buzz 101: The Keeping of Bees": {
-		"max": "10",
-		"type": "AM",
-		"enrolled": []
+	["String"]: {
+		"max": [1-∞],
+		"type": ["AM"|"PM"|"FULL"],
+		"enrolled": [
+
+		]
 	},
 	...
 }
@@ -69,6 +82,23 @@ Remember to put a newline on the last line so that you don't have to properly do
 
 ` \(T\)` -> ` `
 
-### Webserver
+### Config
 
-The web server is a work in progress and not ready at this time
+The config file allows manipulating of the way the program runs
+
+Default:
+```
+{
+    "files": {
+        "input": {
+            "classes": "resources/classes.json",
+            "students": "resources/students.json"
+        },
+        "output": {
+            "classes": "output/classes.json",
+            "students": "output/students.json"
+        }
+    },
+    "useGrades": true
+}
+```

@@ -1,1 +1,13 @@
-{"files":{"input":{"classes":"resources/classes.json","students":"resources/students.json"},"output":{"classes":"output/classes.json","students":"output/students.json"}},"useGrades":true}
+{
+    "files": {
+        "input": {
+            "classes": "resources/classes.json",
+            "students": "resources/students.json"
+        },
+        "output": {
+            "classes": "output/classes.json",
+            "students": "output/students.json"
+        }
+    },
+    "useGrades": true
+}
