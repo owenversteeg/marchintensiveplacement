@@ -2,7 +2,7 @@ var fs = require('fs');
 
 var studentIndex = []; /*Used to randomly order students*/
 var studentUnplaceableIndex = []; /*Used to track students that were not assigned to a class*/
-var happyness = []; /*Used to track how happy students are with their seleciton*/
+var happiness = []; /*Used to track how happy students are with their seleciton*/
 var grades = [ 12, 11, 10, 9 ];
 var doNotAssignClassesWhenNoneAreRequested = true; /*If a user doesn't request any classes, they will not be given one and no error will be output*/
 var verbose = false; /*Output operations, triggerable with --verbose as well*/
@@ -247,7 +247,7 @@ for (var x = 0; x < grades.length; x++) {
 					/*going from request 1, to last request*/
 					for (var n = 0; n < students[index].choices.length; n++) {
 						if (placeStudent(students[index].name,students[index].choices[n])) {
-							happyness.push(n);
+							happiness.push(n);
 							break;
 						}
 					}
@@ -262,7 +262,7 @@ for (var x = 0; x < grades.length; x++) {
 							/*find first FULLDAY type class that isn't empty.*/
 							if (classes[key].type == 'FULL') {
 								if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
-									happyness.push(8);
+									happiness.push(8);
 									break;
 								}
 							}
@@ -281,7 +281,7 @@ for (var x = 0; x < grades.length; x++) {
 									/*find first PM type class that isn't empty.*/
 									if (classes[keyPM].type == 'PM') {
 										if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM})) {
-											happyness.push(8);
+											happiness.push(8);
 											if (verbose) {
 												console.log('Placed AM/PM Random Class!');
 											}
@@ -310,13 +310,16 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 	studentUnplaceableIndex[i] = students[studentUnplaceableIndex[i]].name;
 };
 /*print the success percentage*/
-var percentage = (studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100;
-console.log(Math.round(percentage)+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
+var percentage = Math.round((studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100);
+if (studentUnplaceableIndex !== 0 && percentage == 100) {
+	percentage = 99;
+}
+console.log(percentage+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
 var total = 0;
-for (var i = 0; i < happyness.length; i++) {
-	total += happyness[i]
+for (var i = 0; i < happiness.length; i++) {
+	total += happiness[i]
 };
-console.log(Math.round(100-((total/happyness.length)/8*100))+'% Happyness');
+console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
 /*write files*/
 writeJSON(outputClassesFile, classes);
 writeJSON(outputStudentsNotPlaced, studentUnplaceableIndex);
