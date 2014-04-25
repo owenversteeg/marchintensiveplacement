@@ -96,6 +96,7 @@ Default:
         },
         "output": {
             "classes": "output/classes.json",
+            "studentsNotPlaced": "output/studentsNotPlaced.json",
             "students": "output/students.json"
         }
     },

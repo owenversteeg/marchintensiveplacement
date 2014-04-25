@@ -185,8 +185,11 @@ if (config.files.input.students !== undefined) {
 if (config.files.output.classes !== undefined) {
 	outputClassesFile = config.files.output.classes;
 }
+if (config.files.output.studentsNotPlaced !== undefined) {
+	outputStudentsNotPlaced = config.files.output.studentsNotPlaced;
+}
 if (config.files.output.students !== undefined) {
-	outputStudentsNotPlaced = config.files.output.students;
+	outputStudents = config.files.output.students;
 }
 
 if (process.argv.indexOf('--help') !== -1) {
@@ -213,6 +216,21 @@ for (var i = 0; i < students.length; i++) {
 	} else {
 		studentRecordsForDuplicates.push(students[i].name);
 	}
+};
+
+for (var i = 0; i < students.length; i++) {
+	/*Set ford sayre values*/
+	if (students[i].fordSayre !== true) {
+		students[i].fordSayre = false;
+		if (verbose) {
+			console.log(students[i].name+' fordSayre=false');
+		}
+	}
+	for (var x = 0; x < students[i].choices.length; x++) {
+		if (JSON.stringify(students[i].choices[x]) == JSON.stringify({"FULL":null,"AM":null,"PM":null})) {
+			//TODO: Delete request to prevent potential program errors: students[i].choices.splice(x,1);
+		}
+	};
 };
 
 /*prepares data, hasClass, shouldn't be passed, will be overritten*/
@@ -314,4 +332,5 @@ for (var i = 0; i < happiness.length; i++) {
 console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
 /*write files*/
 writeJSON(outputClassesFile, classes);
+writeJSON(outputStudents, students);
 writeJSON(outputStudentsNotPlaced, studentUnplaceableIndex);
