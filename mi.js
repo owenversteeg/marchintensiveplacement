@@ -22,14 +22,19 @@ function getStudentHasClass(i) {
 	return studentClassData[i];
 }
 
-function readFileSync(file) {
-	return JSON.parse(fs.readFileSync(file, 'utf8'));
+function readJSON(file) {
+	return JSON.parse(readFile(file));
 }
-function writeFileSync(file, obj, options) {
+function readFile(file) {
+	return fs.readFileSync(file, 'utf8');
+}
+function writeJSON(file, obj, options) {
 	var str = JSON.stringify(obj, null, module.exports.spaces);
-	return fs.writeFileSync(file, str, options); //not sure if fs.writeFileSync returns anything, but just in case
+	return writeFile(file, str, options); //not sure if fs.writeJSON returns anything, but just in case
 }
-
+function writeFile(file, contents, options) {
+	return fs.writeFileSync(file, contents, options);
+}
 function getIndexOfStudentName(name) {
 	for (var i = 0; i < students.length; i++) {
 		if (students[i].name == name) {
@@ -163,20 +168,25 @@ function placeStudent(s,c) {
 if (process.argv.indexOf('--verbose') !== -1) {
 	verbose = true;
 }
-if (process.argv.indexOf('--ignore-grades') !== -1) {
-	useGrades = false;
+if (process.argv.indexOf('--config') !== -1) {
+	var config = readJSON(process.argv[process.argv.indexOf('--classes') + 1]);
+} else {
+	var config = readJSON('config.json');
 }
-if (process.argv.indexOf('--classes') !== -1) {
-	classFile = process.argv[process.argv.indexOf('--classes') + 1];
+if (config.useGrades !== undefined) {
+	useGrades = config.useGrades;
 }
-if (process.argv.indexOf('--students') !== -1) {
-	studentsFile = process.argv[process.argv.indexOf('--students') + 1];
+if (config.files.input.classes !== undefined) {
+	classFile = config.files.input.classes;
 }
-if (process.argv.indexOf('--output-classes') !== -1) {
-	outputClassesFile = process.argv[process.argv.indexOf('--output-classes') + 1];
+if (config.files.input.students !== undefined) {
+	studentsFile = config.files.input.students;
 }
-if (process.argv.indexOf('--output-studentsNotPlaced') !== -1) {
-	outputStudentsNotPlaced = process.argv[process.argv.indexOf('--output-studentsNotPlaced') + 1];
+if (config.files.output.classes !== undefined) {
+	outputClassesFile = config.files.output.classes;
+}
+if (config.files.output.students !== undefined) {
+	outputStudentsNotPlaced = config.files.output.students;
 }
 
 if (process.argv.indexOf('--help') !== -1) {
@@ -195,8 +205,8 @@ if (process.argv.indexOf('--help') !== -1) {
 	process.kill()
 }
 
-var classes = readFileSync(classFile);
-var students = readFileSync(studentsFile);
+var classes = readJSON(classFile);
+var students = readJSON(studentsFile);
 
 var studentRecordsForDuplicates = [];
 for (var i = 0; i < students.length; i++) {
@@ -308,5 +318,5 @@ for (var i = 0; i < happyness.length; i++) {
 };
 console.log(Math.round(100-((total/happyness.length)/8*100))+'% Happyness');
 /*write files*/
-writeFileSync(outputClassesFile, classes);
-writeFileSync(outputStudentsNotPlaced, studentUnplaceableIndex);
+writeJSON(outputClassesFile, classes);
+writeJSON(outputStudentsNotPlaced, studentUnplaceableIndex);
