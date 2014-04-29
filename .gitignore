@@ -2,3 +2,5 @@ node_modules
 output
 
 output/studentsNotPlaced.json
+output/classes.json
+output/students.json
