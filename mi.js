@@ -173,23 +173,27 @@ if (process.argv.indexOf('--config') !== -1) {
 } else {
 	var config = readJSON('config.json');
 }
+
+if (!fs.existsSync('output/')) {
+	fs.mkdir('output');
+}
 if (config.useGrades !== undefined) {
 	useGrades = config.useGrades;
 }
 if (config.files.input.classes !== undefined) {
-	classFile = config.files.input.classes;
+	classFile = 'resources/'+config.files.input.classes;
 }
 if (config.files.input.students !== undefined) {
-	studentsFile = config.files.input.students;
+	studentsFile = 'resources/'+config.files.input.students;
 }
 if (config.files.output.classes !== undefined) {
-	outputClassesFile = config.files.output.classes;
+	outputClassesFile = 'output/'+config.files.output.classes;
 }
 if (config.files.output.studentsNotPlaced !== undefined) {
-	outputStudentsNotPlaced = config.files.output.studentsNotPlaced;
+	outputStudentsNotPlaced = 'output/'+config.files.output.studentsNotPlaced;
 }
 if (config.files.output.students !== undefined) {
-	outputStudents = config.files.output.students;
+	outputStudents = 'output/'+config.files.output.students;
 }
 if (config.doNotAssignClassesWhenNoneAreRequested !== undefined) {
 	doNotAssignClassesWhenNoneAreRequested = config.doNotAssignClassesWhenNoneAreRequested;
