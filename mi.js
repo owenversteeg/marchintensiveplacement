@@ -67,6 +67,27 @@ function randomIntFromInterval(min,max) {
 	return Math.floor(Math.random()*(max-min+1)+min);
 }
 
+function removeDuplicatesFromArray(arr) {
+	for (var i = 0; i < arr.length; i++) {
+		for (var y = 0; y < arr.length; y++) {
+			if (arr[i] === arr[y] && i !== y) {
+				arr.splice(y,1);
+			}
+		}
+	}
+	return arr;
+}
+
+function classRequestDetails(det,cl) {
+	if (det == 'type') {
+		if (cl.AM !== null && cl.PM !== null) {
+			return 'AMPM';
+		} else if (cl.FULL !== null) {
+			return 'FULL';
+		}
+	}
+}
+
 function placeStudent(s,c) {
 	/*places student s in class c, where possible. c is an object, with keys FULL, AM, and PM, s is a string*/	
 	/*terminate if student doesn't exist, throw error if verbose=true*/
@@ -266,50 +287,66 @@ for (var x = 0; x < grades.length; x++) {
 						if (placeStudent(students[index].name,students[index].choices[n])) {
 							happiness.push(n);
 							break;
-						}
-					}
-				}
-				if ((randomIntFromInterval(1,2) === 1 || studentRandomData[index] === 2) && studentRandomData[index] !== 1) {
-					studentRandomData[index] = 1;
-					/*if the student has no class, and not the first loop, assign to random class*/
-					if (getStudentHasClass(index) !== true && y !== 0) {
-						/*loop classes*/
-						for (var n = 0; n < Object.keys(classes).length; n++) {
-							var key = Object.keys(classes)[n];
-							/*find first FULLDAY type class that isn't empty.*/
-							if (classes[key].type == 'FULL') {
-								if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
-									happiness.push(8);
-									break;
+						} else {
+							if (classRequestDetails('type',students[index].choices[n]) == 'AMPM') {
+								if (classes[students[index].choices[n].AM].waitlist == undefined) {
+									classes[students[index].choices[n].AM].waitlist = [];
 								}
-							}
-						}
-					}					
-				} else {
-					studentRandomData[index] = 2;
-					if (getStudentHasClass(index) !== true && y !== 0) {
-						/*loop classes*/
-						for (var n = 0; n < Object.keys(classes).length; n++) {
-							var keyAM = Object.keys(classes)[n];
-							/*find first AM type class that isn't empty.*/
-							if (classes[keyAM].type == 'AM') {
-								for (var z = 0; z < Object.keys(classes).length; z++) {
-									var keyPM = Object.keys(classes)[z];
-									/*find first PM type class that isn't empty.*/
-									if (classes[keyPM].type == 'PM') {
-										if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM})) {
-											happiness.push(8);
-											if (verbose) {
-												console.log('Placed AM/PM Random Class!');
-											}
-											break;
-										}
-									}
+								classes[students[index].choices[n].AM].waitlist.push(students[index].name);
+								if (classes[students[index].choices[n].PM].waitlist == undefined) {
+									classes[students[index].choices[n].PM].waitlist = [];
 								}
+								classes[students[index].choices[n].PM].waitlist.push(students[index].name);
+							} else if (classRequestDetails('type',students[index].choices[n]) == 'FULL') {
+								if (classes[students[index].choices[n].FULL].waitlist == undefined) {
+									classes[students[index].choices[n].FULL].waitlist = [];
+								}
+								classes[students[index].choices[n].FULL].waitlist.push(students[index].name);	
 							}
 						}
 					}
 				}
+				//if ((randomIntFromInterval(1,2) === 1 || studentRandomData[index] === 2) && studentRandomData[index] !== 1) {
+				//	studentRandomData[index] = 1;
+				//	/*if the student has no class, and not the first loop, assign to random class*/
+				//	if (getStudentHasClass(index) !== true && y !== 0) {
+				//		/*loop classes*/
+				//		for (var n = 0; n < Object.keys(classes).length; n++) {
+				//			var key = Object.keys(classes)[n];
+				//			/*find first FULLDAY type class that isn't empty.*/
+				//			if (classes[key].type == 'FULL') {
+				//				if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
+				//					happiness.push(8);
+				//					break;
+				//				}
+				//			}
+				//		}
+				//	}					
+				//} else {
+				//	studentRandomData[index] = 2;
+				//	if (getStudentHasClass(index) !== true && y !== 0) {
+				//		/*loop classes*/
+				//		for (var n = 0; n < Object.keys(classes).length; n++) {
+				//			var keyAM = Object.keys(classes)[n];
+				//			/*find first AM type class that isn't empty.*/
+				//			if (classes[keyAM].type == 'AM') {
+				//				for (var z = 0; z < Object.keys(classes).length; z++) {
+				//					var keyPM = Object.keys(classes)[z];
+				//					/*find first PM type class that isn't empty.*/
+				//					if (classes[keyPM].type == 'PM') {
+				//						if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM})) {
+				//							happiness.push(8);
+				//							if (verbose) {
+				//								console.log('Placed AM/PM Random Class!');
+				//							}
+				//							break;
+				//						}
+				//					}
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
 				/*If unable to place the student, put them on the unplaceable list*/
 				if (getStudentHasClass(index) !== true && y !== 0) {
 					studentUnplaceableIndex.push(index);
@@ -325,6 +362,13 @@ for (var x = 0; x < grades.length; x++) {
 /*look through the student unplaceable index, and replace it with names so that it can be read easier*/
 for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 	studentUnplaceableIndex[i] = students[studentUnplaceableIndex[i]].name;
+};
+/*remove dupe waitlists*/
+for (var i = 0; i < Object.keys(classes).length; i++) {
+	if (classes[Object.keys(classes)[i]].waitlist != undefined) {
+		classes[Object.keys(classes)[i]].waitlist = removeDuplicatesFromArray(classes[Object.keys(classes)[i]].waitlist);
+		console.log(Object.keys(classes)[i]);
+	}
 };
 /*print the success percentage*/
 var percentage = Math.round((studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100);
