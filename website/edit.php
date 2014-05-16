@@ -2,10 +2,10 @@
 <html>
 <head>
 	<title>March Intensive</title>
-	<link rel="stylesheet" href="/marchintensive/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/marchintensive/css/bootstrap.min.css">
-	<script type="text/javascript" src="/marchintensive/js/jquery.min.js"></script>
-	<script type="text/javascript" src="/marchintensive/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div id="container" style="margin-top:50px" class="container">

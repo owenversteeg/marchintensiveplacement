@@ -1,18 +1,9 @@
 <?php
-
-define("MINIMIZE", false);
-
-ob_start();
-
 //# of choices, hardcoded because oh well
 $choices = 8;
 
 //List of intensives, nab this from ezekiel's weirdly laid out files
-$list = array(
-				"full" => array(""),	
-				"am" => array(""),
-				"pm" => array("")
-			);
+$list = array( "full" => array(""),	 "am" => array(""), "pm" => array("") );
 
 $classes = json_decode(file_get_contents("../input/classes.json"), true);
 
@@ -74,108 +65,109 @@ if (array_key_exists("submitting", $_POST)) {
 		<?php
 	}
 } else {
-	/*Rest of the page*/
-	?>
-<html>
+	/*Rest of the page*/ ?>
+	<html>
 	<head>
 		<?php /*JQuery*/ ?>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
-			
-/*Spit out the intensive list*/
-var intensives = <?php echo(json_encode($list)); ?>;
+			var choices = <?php echo $choices; ?>;
+			function updateSubmit() {
+				/*Check all inputs*/
+				var good = true;
+				for (var i = 0; i < <?php echo($choices);?>; i ++) {
+					/*You need to have either a full-day or both half-days*/
+					if ($("#select-full-" + i).val() == "" && ($("#select-am-" + i).val() == "" || $("#select-pm-" + i).val() == "")) {
+						good = false;
+						break;
+					}
+				}
 
-/*On ready, load up all the selector checkers*/
-$(document).ready(function() {
-	/*Loop for each choice*/
-	for (var i = 0; i < <?php echo($choices);?>; i ++) {
-		/*Add to the list*/
-		for (var intensive in intensives["full"]) {
-			$("<option name=\"" + intensives["full"][intensive] + "\">" + intensives["full"][intensive] + "</option>").appendTo($("#select-full-" + i));
-		}
-		for (var intensive in intensives["am"]) {
-			$("<option name=\"" + intensives["am"][intensive] + "\">" + intensives["am"][intensive] + "</option>").appendTo($("#select-am-" + i));
-		}
-		for (var intensive in intensives["pm"]) {
-			$("<option name=\"" + intensives["pm"][intensive] + "\">" + intensives["pm"][intensive] + "</option>").appendTo($("#select-pm-" + i));
-		}
+				if ($("#firstname").val() == "" || $("#lastname").val() == "" || $("#id").val() == "" || $("#studentid").val() == "") {
+					good = false;
+				}
 
-		/*If you select full-day, you don't get to choose any half-days*/
-		$("#select-full-" + i).change(function(event) {
-			var num = $(this).attr("select-num");
-			$("#select-am-" + num).val("");
-			$("#select-pm-" + num).val("");
-			updateSubmit();
-		});
-		/*If you select half-day, you don't get to choose a full-day*/
-		$("#select-am-" + i).change(function(event) {
-			var num = $(this).attr("select-num");
-			$("#select-full-" + num).val("");
-			updateSubmit();
-		});
-		$("#select-pm-" + i).change(function(event) {
-			var num = $(this).attr("select-num");
-			$("#select-full-" + num).val("");
-			updateSubmit();
-		});
-	}
-
-	$("#hartford").change(function(event) {
-		alert("TODO: This button (ask the MI people)");
-		return;
-		var selected = $(this).is(":checked");
-		for (var i = 0; i < <?php echo($choices);?>; i ++) {
-			if (selected) {
-				$("#select-am-" + i).attr("disabled", "disabled");
-				$("#select-pm-" + i).attr("disabled", "disabled");
-				$("#select-am-" + i).val("");
-				$("#select-pm-" + i).val("");
-			} else {
-				$("#select-am-" + i).attr("disabled", null);
-				$("#select-pm-" + i).attr("disabled", null);
+				/*Update the button*/
+				if (good)
+					$("#form-submit").attr("disabled", null);
+				else
+					$("#form-submit").attr("disabled", "disabled");
 			}
-		}
-	});
 
-	$("#firstname").keydown(function(event) {
-		updateSubmit();
-	});
-	$("#lastname").keydown(function(event) {
-		updateSubmit();
-	});
-	$("#cg").keydown(function(event) {
-		updateSubmit();
-	});
-	$("#studentid").keydown(function(event) {
-		updateSubmit();
-	});
+			/*Spit out the intensive list*/
+			var intensives = <?php echo(json_encode($list)); ?>;
 
-	/*Make sure they've filled all their choices*/
-	updateSubmit();
-});
-function updateSubmit() {
-	/*Check all inputs*/
-	var good = true;
-	for (var i = 0; i < <?php echo($choices);?>; i ++) {
-		/*You need to have either a full-day or both half-days*/
-		if ($("#select-full-" + i).val() == "" &&
-			($("#select-am-" + i).val() == "" ||
-			 $("#select-pm-" + i).val() == "")) {
-			good = false;
-			break;
-		}
-	}	
+			/*On ready, load up all the selector checkers*/
+			$(document).ready(function() {
+				/*Loop for each choice*/
+				for (var i = 0; i < 8; i++) {
+					/*Add to the list*/
+					for (var intensive in intensives["full"]) {
+						$("<option name=\"" + intensives["full"][intensive] + "\">" + intensives["full"][intensive] + "</option>").appendTo($("#select-full-" + i));
+					}
+					for (var intensive in intensives["am"]) {
+						$("<option name=\"" + intensives["am"][intensive] + "\">" + intensives["am"][intensive] + "</option>").appendTo($("#select-am-" + i));
+					}
+					for (var intensive in intensives["pm"]) {
+						$("<option name=\"" + intensives["pm"][intensive] + "\">" + intensives["pm"][intensive] + "</option>").appendTo($("#select-pm-" + i));
+					}
 
-	if ($("#firstname").val() == "" || $("#lastname").val() == "" || $("#id").val() == "" || $("#studentid").val() == "") {
-		good = false;
-	}
+					/*If you select full-day, you don't get to choose any half-days*/
+					$("#select-full-" + i).change(function(event) {
+						var num = $(this).attr("select-num");
+						$("#select-am-" + num).val("");
+						$("#select-pm-" + num).val("");
+						updateSubmit();
+					});
+					/*If you select half-day, you don't get to choose a full-day*/
+					$("#select-am-" + i).change(function(event) {
+						var num = $(this).attr("select-num");
+						$("#select-full-" + num).val("");
+						updateSubmit();
+					});
+					$("#select-pm-" + i).change(function(event) {
+						var num = $(this).attr("select-num");
+						$("#select-full-" + num).val("");
+						updateSubmit();
+					});
+				};
 
-	/*Update the button*/
-	if (good)
-		$("#form-submit").attr("disabled", null);
-	else
-		$("#form-submit").attr("disabled", "disabled");
-}
+				$("#hartford").change(function(event) {
+					alert("TODO: This button (ask the MI people)");
+					return;
+					var selected = $(this).is(":checked");
+					for (var i = 0; i < <?php echo($choices);?>; i ++) {
+						if (selected) {
+							$("#select-am-" + i).attr("disabled", "disabled");
+							$("#select-pm-" + i).attr("disabled", "disabled");
+							$("#select-am-" + i).val("");
+							$("#select-pm-" + i).val("");
+						} else {
+							$("#select-am-" + i).attr("disabled", null);
+							$("#select-pm-" + i).attr("disabled", null);
+						}
+					}
+				});
+
+				$("#firstname").keydown(function(event) {
+					updateSubmit();
+				});
+				$("#lastname").keydown(function(event) {
+					updateSubmit();
+				});
+				$("#cg").keydown(function(event) {
+					updateSubmit();
+				});
+				$("#studentid").keydown(function(event) {
+					updateSubmit();
+				});
+
+				/*Make sure they've filled all their choices*/
+				updateSubmit();
+			});
 </script>
 </head>
 <body>
