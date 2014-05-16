@@ -58,12 +58,10 @@ function shuffle(array) {
 
 	return array;
 }
-
 function randomIntFromInterval(min,max) {
 	/*Generates a random number from min to max, including*/
 	return Math.floor(Math.random()*(max-min+1)+min);
 }
-
 function removeDuplicatesFromArray(arr) {
 	for (var i = 0; i < arr.length; i++) {
 		for (var y = 0; y < arr.length; y++) {
@@ -74,7 +72,6 @@ function removeDuplicatesFromArray(arr) {
 	}
 	return arr;
 }
-
 function classRequestDetails(det,cl) {
 	if (det == 'type') {
 		if (cl.AM !== null && cl.PM !== null) {
@@ -84,7 +81,6 @@ function classRequestDetails(det,cl) {
 		}
 	}
 }
-
 function placeStudent(s,c) {
 	/*places student s in class c, where possible. c is an object, with keys FULL, AM, and PM, s is a string*/	
 	/*terminate if student doesn't exist, throw error if verbose=true*/
@@ -260,7 +256,7 @@ for (var i = 0; i < students.length; i++) {
 		}
 	};
 };
-/*prepares data, hasClass, shouldn't be passed, will be overritten*/
+/*prepares data, hasClass*/
 for (var i = 0; i < students.length; i++) {
 	setStudentHasClass(i,false);
 };
