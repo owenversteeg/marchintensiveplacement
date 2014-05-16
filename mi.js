@@ -8,8 +8,6 @@ var doNotAssignClassesWhenNoneAreRequested = true; /*If a user doesn't request a
 var verbose = false; /*Output operations, triggerable with --verbose as well*/
 var classFile = 'classes.json';
 var studentsFile = 'students.json';
-var outputClassesFile = 'classes-output.json';
-var outputStudentsNotPlaced = 'students-output.json';
 var useGrades = true;
 var studentRandomData = {};
 var studentClassData = {};
@@ -106,7 +104,7 @@ function placeStudent(s,c) {
 		try {
 			if (classes[cF].enrolled.length < classes[cF].max) {
 				classes[cF].enrolled.push(s);
-				setStudentHasClass(index,true);
+				setStudentHasClass(si,true);
 				if (verbose) {
 					console.log(s+' has been placed in '+cF);
 				}
@@ -129,7 +127,7 @@ function placeStudent(s,c) {
 			if ((classes[cAM].enrolled.length < classes[cAM].max) && (classes[cPM].enrolled.length < classes[cPM].max)) {
 				classes[cAM].enrolled.push(s)
 				classes[cPM].enrolled.push(s)
-				setStudentHasClass(index,true);
+				setStudentHasClass(si,true);
 				if (verbose) {
 					console.log(s+' has been placed in '+cAM+' & '+cPM);
 				}
@@ -152,7 +150,7 @@ function placeStudent(s,c) {
 		try {
 			if ((classes[cAM].enrolled.length < classes[cAM].max)) {
 				classes[cAM].enrolled.push(s)
-				setStudentHasClass(index,true);
+				setStudentHasClass(si,true);
 				if (verbose) {
 					console.log(s+' has been placed in '+cAM+' (Ford Sayre)');
 				}
@@ -173,7 +171,7 @@ function placeStudent(s,c) {
 			console.log('The class data for '+s+' is not valid.');
 		}
 		if (doNotAssignClassesWhenNoneAreRequested) {
-			setStudentHasClass(index,true)
+			setStudentHasClass(si,true)
 		}
 	}
 	return true;
@@ -197,21 +195,46 @@ if (config.useGrades !== undefined) {
 if (config.grades !== undefined) {
 	grades = config.grades;
 }
+
 if (config.files.input.classes !== undefined) {
 	classFile = 'input/'+config.files.input.classes;
 }
 if (config.files.input.students !== undefined) {
 	studentsFile = 'input/'+config.files.input.students;
 }
+
 if (config.files.output.classes !== undefined) {
-	outputClassesFile = 'output/'+config.files.output.classes;
+	var outputClassesFile = 'output/'+config.files.output.classes;
+} else {
+	var outputClassesFile = 'output/classes.json';
 }
 if (config.files.output.studentsNotPlaced !== undefined) {
-	outputStudentsNotPlaced = 'output/'+config.files.output.studentsNotPlaced;
+	var outputStudentsNotPlaced = 'output/'+config.files.output.studentsNotPlaced;
+} else {
+	var outputStudentsNotPlaced = 'output/studentsNotPlaced';
 }
 if (config.files.output.students !== undefined) {
-	outputStudents = 'output/'+config.files.output.students;
+	var outputStudents = 'output/'+config.files.output.students;
+} else {
+	var outputStudents = 'output/students';
 }
+
+if (config.files.output.classes !== undefined) {
+	var outputWebClassesFile = 'website/data/'+config.files.output.classes;
+} else {
+	var outputWebClassesFile = 'website/data/classes.json';
+}
+if (config.files.output.studentsNotPlaced !== undefined) {
+	var outputWebStudentsNotPlaced = 'website/data/'+config.files.output.studentsNotPlaced;
+} else {
+	var outputWebStudentsNotPlaced = 'website/data/studentsNotPlaced';
+}
+if (config.files.output.students !== undefined) {
+	var outputWebStudents = 'website/data/'+config.files.output.students;
+} else {
+	var outputWebStudents = 'website/data/students';
+}
+
 if (config.doNotAssignClassesWhenNoneAreRequested !== undefined) {
 	doNotAssignClassesWhenNoneAreRequested = config.doNotAssignClassesWhenNoneAreRequested;
 }
@@ -261,42 +284,37 @@ for (var i = 0; i < students.length; i++) {
 	setStudentHasClass(i,false);
 };
 /*randomize student indexes*/
-while (studentIndex.length < students.length) {
-	var rand = randomIntFromInterval(0,students.length - 1);
-	if (studentIndex.indexOf(rand) === -1) {
-		studentIndex.push(rand);
-	}
-}
+shuffle(students);
+
 /*four loops, one for each grade*/
 for (var x = 0; x < grades.length; x++) {
 	/*three loops, first time won't assign classes not requests*/
 	for (var y = 0; y < 3; y++) {
 		/*go through random student array*/
-		for (var i = 0; i < studentIndex.length; i++) {
-			var index = studentIndex[i];
-			if (students[index].grade == grades[x] || !useGrades) {
+		for (var i = 0; i < students.length; i++) {
+			if (students[i].grade == grades[x] || !useGrades) {
 				/*if the student has no class, try to assing their requests*/
-				if (getStudentHasClass(index) !== true) {
+				if (getStudentHasClass(i) !== true) {
 					/*going from request 1, to last request*/
-					for (var n = 0; n < students[index].choices.length; n++) {
-						if (placeStudent(students[index].name,students[index].choices[n])) {
+					for (var n = 0; n < students[i].choices.length; n++) {
+						if (placeStudent(students[i].name,students[i].choices[n])) {
 							happiness.push(n);
 							break;
 						} else {
-							if (classRequestDetails('type',students[index].choices[n]) == 'AMPM') {
-								if (classes[students[index].choices[n].AM].waitlist == undefined) {
-									classes[students[index].choices[n].AM].waitlist = [];
+							if (classRequestDetails('type',students[i].choices[n]) == 'AMPM') {
+								if (classes[students[i].choices[n].AM].waitlist == undefined) {
+									classes[students[i].choices[n].AM].waitlist = [];
 								}
-								classes[students[index].choices[n].AM].waitlist.push(students[index].name+' ('+index+'/ '+students[index].choices[n].AM+')');
-								if (classes[students[index].choices[n].PM].waitlist == undefined) {
-									classes[students[index].choices[n].PM].waitlist = [];
+								classes[students[i].choices[n].AM].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].AM+')');
+								if (classes[students[i].choices[n].PM].waitlist == undefined) {
+									classes[students[i].choices[n].PM].waitlist = [];
 								}
-								classes[students[index].choices[n].PM].waitlist.push(students[index].name+' ('+index+'/ '+students[index].choices[n].AM+')');
-							} else if (classRequestDetails('type',students[index].choices[n]) == 'FULL') {
-								if (classes[students[index].choices[n].FULL].waitlist == undefined) {
-									classes[students[index].choices[n].FULL].waitlist = [];
+								classes[students[i].choices[n].PM].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].AM+')');
+							} else if (classRequestDetails('type',students[i].choices[n]) == 'FULL') {
+								if (classes[students[i].choices[n].FULL].waitlist == undefined) {
+									classes[students[i].choices[n].FULL].waitlist = [];
 								}
-								classes[students[index].choices[n].FULL].waitlist.push(students[index].name+' ('+index+'/ '+students[index].choices[n].AM+')');	
+								classes[students[i].choices[n].FULL].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].AM+')');	
 							}
 						}
 					}
@@ -343,12 +361,12 @@ for (var x = 0; x < grades.length; x++) {
 				//	}
 				//}
 				/*If unable to place the student, put them on the unplaceable list*/
-				if (getStudentHasClass(index) !== true && y !== 0) {
-					studentUnplaceableIndex.push(index);
+				if (getStudentHasClass(i) !== true && y !== 0) {
+					studentUnplaceableIndex.push(i);
 				}
 			} else {
 				if (verbose) {
-					console.log('Denied '+students[index].name+' due to '+students[index].grade+' ≠ '+grades[x]);
+					console.log('Denied '+students[i].name+' due to '+students[i].grade+' ≠ '+grades[x]);
 				}
 			}
 		}
@@ -366,11 +384,11 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 //	}
 //};
 /*print the success percentage*/
-var percentage = Math.round((studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100);
+var percentage = Math.round((students.length-studentUnplaceableIndex.length)/students.length*100);
 if (studentUnplaceableIndex !== 0 && percentage == 100) {
 	percentage = 99;
 }
-console.log(percentage+'% placement, where '+(studentIndex.length - studentUnplaceableIndex.length)+' student(s) of '+studentIndex.length+' were placed');
+console.log(percentage+'% placement, where '+(students.length - studentUnplaceableIndex.length)+' student(s) of '+students.length+' were placed');
 var total = 0;
 for (var i = 0; i < happiness.length; i++) {
 	total += happiness[i]
@@ -387,3 +405,9 @@ console.log(totalZero);
 writeJSON(outputClassesFile, classes);
 writeJSON(outputStudents, students);
 writeJSON(outputStudentsNotPlaced, studentUnplaceableIndex);
+
+if (config.updateWebDirectory) {
+	writeJSON(outputWebClassesFile, classes);
+	writeJSON(outputWebStudents, students);
+	writeJSON(outputWebStudentsNotPlaced, studentUnplaceableIndex);
+}
