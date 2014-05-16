@@ -1,5 +1,9 @@
 <?php
 
+define("MINIMIZE", false);
+
+ob_start();
+
 //# of choices, hardcoded because oh well
 $choices = 8;
 
@@ -73,24 +77,21 @@ if (array_key_exists("submitting", $_POST)) {
 		}
 	} else {
 		/*Rest of the page*/
-
-		ob_start();
-
 		?>
 		<html>
 		<head>
-			<?php /* JQuery */ ?>
+			<?php /*JQuery*/ ?>
 			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 			<script type="text/javascript">
 				
 				/*Spit out the intensive list*/
 				var intensives = <?php echo(json_encode($list)); ?>;
 
-				/* On ready, load up all the selector checkers */
+				/*On ready, load up all the selector checkers*/
 				$(document).ready(function() {
-					/* Loop for each choice */
+					/*Loop for each choice*/
 					for (var i = 0; i < <?php echo($choices);?>; i ++) {
-						/* Add to the list */
+						/*Add to the list*/
 						for (var intensive in intensives["full"]) {
 							$("<option name=\"" + intensives["full"][intensive] + "\">" + intensives["full"][intensive] + "</option>").appendTo($("#select-full-" + i));
 						}
@@ -101,14 +102,14 @@ if (array_key_exists("submitting", $_POST)) {
 							$("<option name=\"" + intensives["pm"][intensive] + "\">" + intensives["pm"][intensive] + "</option>").appendTo($("#select-pm-" + i));
 						}
 
-						/* If you select full-day, you don't get to choose any half-days */
+						/*If you select full-day, you don't get to choose any half-days*/
 						$("#select-full-" + i).change(function(event) {
 							var num = $(this).attr("select-num");
 							$("#select-am-" + num).val("");
 							$("#select-pm-" + num).val("");
 							updateSubmit();
 						});
-						/* If you select half-day, you don't get to choose a full-day */
+						/*If you select half-day, you don't get to choose a full-day*/
 						$("#select-am-" + i).change(function(event) {
 							var num = $(this).attr("select-num");
 							$("#select-full-" + num).val("");
@@ -151,37 +152,37 @@ if (array_key_exists("submitting", $_POST)) {
 						updateSubmit();
 					});
 
-					/* Make sure they've filled all their choices */
+					/*Make sure they've filled all their choices*/
 					updateSubmit();
 				});
 function updateSubmit() {
-	/* Check all inputs */
+	/*Check all inputs*/
 	var good = true;
 	for (var i = 0; i < <?php echo($choices);?>; i ++) {
-		/* You need to have either a full-day or both half-days */
+		/*You need to have either a full-day or both half-days*/
 		if ($("#select-full-" + i).val() == "" &&
 			($("#select-am-" + i).val() == "" ||
-				$("#select-pm-" + i).val() == "")) {
+			 $("#select-pm-" + i).val() == "")) {
 			good = false;
-		break;
+			break;
+		}
+	}	
+
+	if ($("#firstname").val() == "" || $("#lastname").val() == "" || $("#id").val() == "" || $("#studentid").val() == "") {
+		good = false;
 	}
-}
 
-if ($("#firstname").val() == "" || $("#lastname").val() == "" || $("#id").val() == "" || $("#studentid").val() == "") {
-	good = false;
-}
-
-/* Update the button */
-if (good)
-	$("#form-submit").attr("disabled", null);
-else
-	$("#form-submit").attr("disabled", "disabled");
+	/*Update the button*/
+	if (good)
+		$("#form-submit").attr("disabled", null);
+	else
+		$("#form-submit").attr("disabled", "disabled");
 }
 </script>
 </head>
 <body>
 	<div>
-		<?php /* Super lazy redirection */ ?>
+		<?php /*Super lazy redirection*/ ?>
 		<form method="POST">
 			<div>
 				First Name: <input type="text" name="firstname" id="firstname" placeholder="John"><br>
@@ -224,15 +225,17 @@ else
 </body>
 </html>
 <?php
+}
 $output = ob_get_clean();
-echo($output);
-	//TODO: This section
-	// //Do magic with $output
-	// $lines = explode("\n", $output);
-	// foreach ($lines as $line) {
-	// 	//Strip stuff from the beginning of the line
-	// 	$lines[array_search($line, $lines)] = trim($line);
-	// }
-	// echo(implode("", $lines));
+if (MINIMIZE) {
+	//Do magic with $output
+	$lines = explode("\n", $output);
+	foreach ($lines as $line) {
+		//Strip stuff from the beginning of the line
+		$lines[array_search($line, $lines)] = trim($line);
+	}
+	echo(implode("\n", $lines));
+} else {
+	echo($output);
 }
 ?>
