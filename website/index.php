@@ -81,9 +81,9 @@ if (array_key_exists("submitting", $_POST)) {
 				for (var i = 0; i < choices; i ++) {
 					/*You need to have either a full-day or both half-days*/
 					if ($("#select-full-" + i).val() == "" && ($("#select-am-" + i).val() == "" || $("#select-pm-" + i).val() == "")) {
-						response['choice'+i] = true;
-					} else {
 						response['choice'+i] = false;
+					} else {
+						response['choice'+i] = true;
 					}
 				}
 
@@ -178,36 +178,39 @@ if (array_key_exists("submitting", $_POST)) {
 					var response = checkForm();
 
 					if (!response.firstname) {
-						$('#firstname').parent().parent().removeClass('has-success').addClass('has-error');
+						$('#firstname').parent().parent().addClass('has-error');
 					} else {
-						$('#firstname').parent().parent().removeClass('has-error').addClass('has-success');
+						$('#firstname').parent().parent().removeClass('has-error');
 					}
 					if (!response.lastname) {
-						$('#lastname').parent().parent().removeClass('has-success').addClass('has-error');
+						$('#lastname').parent().parent().addClass('has-error');
 					} else {
-						$('#lastname').parent().parent().removeClass('has-error').addClass('has-success');
+						$('#lastname').parent().parent().removeClass('has-error');
 					}
 					if (!response.grade) {
-						$('#grade').parent().parent().removeClass('has-success').addClass('has-error');
+						$('#grade').parent().parent().addClass('has-error');
 					} else {
-						$('#grade').parent().parent().removeClass('has-error').addClass('has-success');
+						$('#grade').parent().parent().removeClass('has-error');
 					}
 					if (!response.cg) {
-						$('#cg').parent().parent().removeClass('has-success').addClass('has-error');
+						$('#cg').parent().parent().addClass('has-error');
 					} else {
-						$('#cg').parent().parent().removeClass('has-error').addClass('has-success');
+						$('#cg').parent().parent().removeClass('has-error');
 					}
 					if (!response.studentid) {
-						$('#studentid').parent().parent().removeClass('has-success').addClass('has-error');
+						$('#studentid').parent().parent().addClass('has-error');
 					} else {
-						$('#studentid').parent().parent().removeClass('has-error').addClass('has-success');
+						$('#studentid').parent().parent().removeClass('has-error');
 					}
-					if (!response.fordsayre) {
-						$('.fordsayre').parent().parent().removeClass('has-success').addClass('has-error');
-					} else {
-						$('.fordsayre').parent().parent().removeClass('has-error').addClass('has-success');
-					}
-					console.log(response);
+
+					for (var i = 0; i < choices; i++) {
+						if (!response['choice'+i]) {
+							$('#choice'+i).addClass('has-error');
+						} else {
+							$('#choice'+i).removeClass('has-error');
+						}
+					};
+					
 					for (var i = 0; i < Object.keys(response).length; i++) {
 						if (!response[Object.keys(response)[i]]) {
 							return false;
@@ -286,7 +289,7 @@ if (array_key_exists("submitting", $_POST)) {
 				/*Spit out eight choice selectors*/
 				for ($i = 0; $i < $choices; $i ++) {
 					?>
-					<div class="row row-margin-top row-margin-bottom">
+					<div id="choice<?php echo $i; ?>" class="row row-margin-top row-margin-bottom">
 						<div class="col-md-2">Choice <?php echo($i + 1);?>:</div>
 						<div class="col-md-4"><select class="form-control" id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]"></select></div>
 						<div class="col-md-3"><select class="form-control" id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]"></select></div>
