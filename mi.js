@@ -202,10 +202,10 @@ if (config.useGrades !== undefined) {
 	useGrades = config.useGrades;
 }
 if (config.files.input.classes !== undefined) {
-	classFile = 'resources/'+config.files.input.classes;
+	classFile = 'input/'+config.files.input.classes;
 }
 if (config.files.input.students !== undefined) {
-	studentsFile = 'resources/'+config.files.input.students;
+	studentsFile = 'input/'+config.files.input.students;
 }
 if (config.files.output.classes !== undefined) {
 	outputClassesFile = 'output/'+config.files.output.classes;
