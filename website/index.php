@@ -69,92 +69,90 @@ if (array_key_exists("submitting", $_POST)) {
 		Your results have been "recorded."<br>
 		<br>
 		Because I'm too lazy to do it now, here's a postdump:
-		<pre><?php
-			print_r($_POST);
-			?></pre>
-			<a href="<?php echo($_SERVER["PHP_SELF"]);?>">Back</a>
-			<?php
+		<pre><?php print_r($_POST); ?></pre>
+		<a href="<?php echo($_SERVER["PHP_SELF"]);?>">Back</a>
+		<?php
+	}
+} else {
+	/*Rest of the page*/
+	?>
+<html>
+	<head>
+		<?php /*JQuery*/ ?>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			
+/*Spit out the intensive list*/
+var intensives = <?php echo(json_encode($list)); ?>;
+
+/*On ready, load up all the selector checkers*/
+$(document).ready(function() {
+	/*Loop for each choice*/
+	for (var i = 0; i < <?php echo($choices);?>; i ++) {
+		/*Add to the list*/
+		for (var intensive in intensives["full"]) {
+			$("<option name=\"" + intensives["full"][intensive] + "\">" + intensives["full"][intensive] + "</option>").appendTo($("#select-full-" + i));
 		}
-	} else {
-		/*Rest of the page*/
-		?>
-		<html>
-		<head>
-			<?php /*JQuery*/ ?>
-			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-			<script type="text/javascript">
-				
-				/*Spit out the intensive list*/
-				var intensives = <?php echo(json_encode($list)); ?>;
+		for (var intensive in intensives["am"]) {
+			$("<option name=\"" + intensives["am"][intensive] + "\">" + intensives["am"][intensive] + "</option>").appendTo($("#select-am-" + i));
+		}
+		for (var intensive in intensives["pm"]) {
+			$("<option name=\"" + intensives["pm"][intensive] + "\">" + intensives["pm"][intensive] + "</option>").appendTo($("#select-pm-" + i));
+		}
 
-				/*On ready, load up all the selector checkers*/
-				$(document).ready(function() {
-					/*Loop for each choice*/
-					for (var i = 0; i < <?php echo($choices);?>; i ++) {
-						/*Add to the list*/
-						for (var intensive in intensives["full"]) {
-							$("<option name=\"" + intensives["full"][intensive] + "\">" + intensives["full"][intensive] + "</option>").appendTo($("#select-full-" + i));
-						}
-						for (var intensive in intensives["am"]) {
-							$("<option name=\"" + intensives["am"][intensive] + "\">" + intensives["am"][intensive] + "</option>").appendTo($("#select-am-" + i));
-						}
-						for (var intensive in intensives["pm"]) {
-							$("<option name=\"" + intensives["pm"][intensive] + "\">" + intensives["pm"][intensive] + "</option>").appendTo($("#select-pm-" + i));
-						}
+		/*If you select full-day, you don't get to choose any half-days*/
+		$("#select-full-" + i).change(function(event) {
+			var num = $(this).attr("select-num");
+			$("#select-am-" + num).val("");
+			$("#select-pm-" + num).val("");
+			updateSubmit();
+		});
+		/*If you select half-day, you don't get to choose a full-day*/
+		$("#select-am-" + i).change(function(event) {
+			var num = $(this).attr("select-num");
+			$("#select-full-" + num).val("");
+			updateSubmit();
+		});
+		$("#select-pm-" + i).change(function(event) {
+			var num = $(this).attr("select-num");
+			$("#select-full-" + num).val("");
+			updateSubmit();
+		});
+	}
 
-						/*If you select full-day, you don't get to choose any half-days*/
-						$("#select-full-" + i).change(function(event) {
-							var num = $(this).attr("select-num");
-							$("#select-am-" + num).val("");
-							$("#select-pm-" + num).val("");
-							updateSubmit();
-						});
-						/*If you select half-day, you don't get to choose a full-day*/
-						$("#select-am-" + i).change(function(event) {
-							var num = $(this).attr("select-num");
-							$("#select-full-" + num).val("");
-							updateSubmit();
-						});
-						$("#select-pm-" + i).change(function(event) {
-							var num = $(this).attr("select-num");
-							$("#select-full-" + num).val("");
-							updateSubmit();
-						});
-					}
+	$("#hartford").change(function(event) {
+		alert("TODO: This button (ask the MI people)");
+		return;
+		var selected = $(this).is(":checked");
+		for (var i = 0; i < <?php echo($choices);?>; i ++) {
+			if (selected) {
+				$("#select-am-" + i).attr("disabled", "disabled");
+				$("#select-pm-" + i).attr("disabled", "disabled");
+				$("#select-am-" + i).val("");
+				$("#select-pm-" + i).val("");
+			} else {
+				$("#select-am-" + i).attr("disabled", null);
+				$("#select-pm-" + i).attr("disabled", null);
+			}
+		}
+	});
 
-					$("#hartford").change(function(event) {
-						alert("TODO: This button (ask the MI people)");
-						return;
-						var selected = $(this).is(":checked");
-						for (var i = 0; i < <?php echo($choices);?>; i ++) {
-							if (selected) {
-								$("#select-am-" + i).attr("disabled", "disabled");
-								$("#select-pm-" + i).attr("disabled", "disabled");
-								$("#select-am-" + i).val("");
-								$("#select-pm-" + i).val("");
-							} else {
-								$("#select-am-" + i).attr("disabled", null);
-								$("#select-pm-" + i).attr("disabled", null);
-							}
-						}
-					});
+	$("#firstname").keydown(function(event) {
+		updateSubmit();
+	});
+	$("#lastname").keydown(function(event) {
+		updateSubmit();
+	});
+	$("#cg").keydown(function(event) {
+		updateSubmit();
+	});
+	$("#studentid").keydown(function(event) {
+		updateSubmit();
+	});
 
-					$("#firstname").keydown(function(event) {
-						updateSubmit();
-					});
-					$("#lastname").keydown(function(event) {
-						updateSubmit();
-					});
-					$("#cg").keydown(function(event) {
-						updateSubmit();
-					});
-					$("#studentid").keydown(function(event) {
-						updateSubmit();
-					});
-
-					/*Make sure they've filled all their choices*/
-					updateSubmit();
-				});
+	/*Make sure they've filled all their choices*/
+	updateSubmit();
+});
 function updateSubmit() {
 	/*Check all inputs*/
 	var good = true;
