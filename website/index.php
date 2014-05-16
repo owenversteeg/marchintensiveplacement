@@ -211,14 +211,11 @@ if (array_key_exists("submitting", $_POST)) {
 				/*Spit out eight choice selectors*/
 				for ($i = 0; $i < $choices; $i ++) {
 					?>
-					<div>
-						Choice <?php echo($i + 1);?>:
-						<select id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]">
-						</select>
-						<select id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]">
-						</select>
-						<select id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]">
-						</select>
+					<div class="row row-margin-top row-margin-bottom">
+						<div class="col-md-2">Choice <?php echo($i + 1);?>:</div>
+						<div class="col-md-4"><select class="form-control" id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]"></select></div>
+						<div class="col-md-3"><select class="form-control" id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]"></select></div>
+						<div class="col-md-3"><select class="form-control" id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]"></select></div>
 					</div>
 					<?php
 				}
