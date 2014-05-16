@@ -181,7 +181,7 @@ if (array_key_exists("submitting", $_POST)) {
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
 					<div class="col-md-2">Last Name:</div>
-					<div class="col-md-10"><input class="form-control" type="text" name="lastname"  id="lastname"  placeholder="Doe"><br></div>
+					<div class="col-md-10"><input class="form-control" type="text" name="lastname"  id="lastname"  placeholder="Doe"></div>
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
 					<div class="col-md-2">Grade:</div>
@@ -193,37 +193,44 @@ if (array_key_exists("submitting", $_POST)) {
 							<option value="9">9</option>
 						</select>
 					</div>
-					Common Ground #: <input type="text" name="cg" id="cg"><br>
-					Student ID #: <input type="text" name="studentid" id="studentid"><br>
-					Are you... (Select all that apply):<br>
-					<input type="checkbox" id="hartford" name="hartford"><label for="hartford">A Hartford Tech Student</label><br>
-					<input type="checkbox" id="fordsayre" name="fordsayre"><label for="fordsayre">A Ford Sayre Student</label>
 				</div>
-				<div>
-					<?php
-					/*Spit out eight choice selectors*/
-					for ($i = 0; $i < $choices; $i ++) {
-						?>
-						<div>
-							Choice <?php echo($i + 1);?>:
-							<select id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]">
-							</select>
-							<select id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]">
-							</select>
-							<select id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]">
-							</select>
-						</div>
-						<?php
-					}
+				<div class="row row-margin-top row-margin-bottom">
+					<div class="col-md-2">Common Ground #:</div>
+					<div class="col-md-10"><input class="form-control" type="text" name="cg" id="cg"></div>
+				</div>
+				<div class="row row-margin-top row-margin-bottom">
+					<div class="col-md-2">Student ID #:</div>
+					<div class="col-md-10"><input class="form-control" type="text" name="studentid" id="studentid"></div>
+				</div>
+				Are you... (Select all that apply):<br>
+				<input type="checkbox" id="hartford" name="hartford"><label for="hartford">A Hartford Tech Student</label><br>
+				<input type="checkbox" id="fordsayre" name="fordsayre"><label for="fordsayre">A Ford Sayre Student</label>
+			</div>
+			<div>
+				<?php
+				/*Spit out eight choice selectors*/
+				for ($i = 0; $i < $choices; $i ++) {
 					?>
-				</div>
-				<input type="submit" value="Submit" id="form-submit">
-				<input type="hidden" name="submitting" value="true">
-			</form>
-		</div>
-	</body>
-	</html>
-	<?php
+					<div>
+						Choice <?php echo($i + 1);?>:
+						<select id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]">
+						</select>
+						<select id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]">
+						</select>
+						<select id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]">
+						</select>
+					</div>
+					<?php
+				}
+				?>
+			</div>
+			<input type="submit" value="Submit" id="form-submit">
+			<input type="hidden" name="submitting" value="true">
+		</form>
+	</div>
+</body>
+</html>
+<?php
 }
 $output = ob_get_clean();
 if (MINIMIZE) {
