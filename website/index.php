@@ -202,9 +202,19 @@ if (array_key_exists("submitting", $_POST)) {
 					<div class="col-md-2">Student ID #:</div>
 					<div class="col-md-10"><input class="form-control" type="text" name="studentid" id="studentid"></div>
 				</div>
-				Are you... (Select all that apply):<br>
-				<input type="checkbox" id="hartford" name="hartford"><label for="hartford">A Hartford Tech Student</label><br>
-				<input type="checkbox" id="fordsayre" name="fordsayre"><label for="fordsayre">A Ford Sayre Student</label>
+				<div class="row row-margin-top row-margin-bottom">
+					<div class="col-md-4">
+						Are you... (Select all that apply):
+					</div>
+				</div>
+				<div class="row row-margin-top row-margin-bottom">
+					<div class="col-md-5 col-md-offset-2">
+						<input type="checkbox" id="hartford" name="hartford"><label for="hartford">A Hartford Tech Student</label>
+					</div>
+					<div class="col-md-5">
+						<input type="checkbox" id="fordsayre" name="fordsayre"><label for="fordsayre">A Ford Sayre Student</label>
+					</div>
+				</div>
 			</div>
 			<div>
 				<?php
