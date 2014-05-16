@@ -17,9 +17,9 @@
 			?>
 			<div class="row well">
 				<div class="col-md-6">
-				<?php
-						echo '<h4>'.$className.'</h4>';
-				?>
+					<?php
+					echo '<h4>'.$className.'</h4>';
+					?>
 				</div>
 				<div class="col-md-6">
 					<?php
