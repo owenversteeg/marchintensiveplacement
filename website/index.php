@@ -77,10 +77,27 @@ print_r($_POST);
 <?php /* JQuery */ ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">
+
+var intensives = <?php
+//Spit out the intensive list
+echo(json_encode($list));
+?>;
+
 <?php /* On ready, load up all the selector checkers */ ?>
 $(document).ready(function() {
 <?php /* Loop for each choice */ ?>
 	for (var i = 0; i < <?php echo($choices);?>; i ++) {
+<?php /* Add to the list */ ?>
+		for (var intensive in intensives["full"]) {
+			$("<option name=\"" + intensives["full"][intensive] + "\">" + intensives["full"][intensive] + "</option>").appendTo($("#select-full-" + i));
+		}
+		for (var intensive in intensives["am"]) {
+			$("<option name=\"" + intensives["am"][intensive] + "\">" + intensives["am"][intensive] + "</option>").appendTo($("#select-am-" + i));
+		}
+		for (var intensive in intensives["pm"]) {
+			$("<option name=\"" + intensives["pm"][intensive] + "\">" + intensives["pm"][intensive] + "</option>").appendTo($("#select-pm-" + i));
+		}
+
 <?php /* If you select full-day, you don't get to choose any half-days */ ?>
 		$("#select-full-" + i).change(function(event) {
 			var num = $(this).attr("select-num");
@@ -118,6 +135,19 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#firstname").keydown(function(event) {
+		updateSubmit();
+	});
+	$("#lastname").keydown(function(event) {
+		updateSubmit();
+	});
+	$("#cg").keydown(function(event) {
+		updateSubmit();
+	});
+	$("#studentid").keydown(function(event) {
+		updateSubmit();
+	});
+
 <?php /* Make sure they've filled all their choices */ ?>
 	updateSubmit();
 });
@@ -135,20 +165,25 @@ function updateSubmit() {
 		}
 	}
 
+	if ($("#firstname").val() == "" ||
+		 $("#lastname").val() == "" ||
+		 $("#id").val() == "" ||
+		 $("#studentid").val() == "")
+		good = false;
+
 <?php /* Update the button */ ?>
 	if (good)
 		$("#form-submit").attr("disabled", null);
 	else
 		$("#form-submit").attr("disabled", "disabled");
 }
-
 </script>
 <div>
 <?php /* Super lazy redirection */ ?>
 <form action="<?php echo($_SERVER["PHP_SELF"]); ?>" method="POST">
 <div>
-First Name: <input type="text" name="firstname" placeholder="John"><br>
-Last Name:  <input type="text" name="lastname"  placeholder="Doe"><br>
+First Name: <input type="text" name="firstname" id="firstname" placeholder="John"><br>
+Last Name:  <input type="text" name="lastname"  id="lastname"  placeholder="Doe"><br>
 Grade:
 <select name="grade">
 	<option value="12" selected>12</option>
@@ -156,8 +191,8 @@ Grade:
 	<option value="10">10</option>
 	<option value="9">9</option>
 </select><br>
-Common Ground #: <input type="text" name="cg"><br>
-Student ID #: <input type="text" name="studentid"><br>
+Common Ground #: <input type="text" name="cg" id="cg"><br>
+Student ID #: <input type="text" name="studentid" id="studentid"><br>
 Are you... (Select all that apply):<br>
 <input type="checkbox" id="hartford" name="hartford"><label for="hartford">A Hartford Tech Student</label><br>
 <input type="checkbox" id="fordsayre" name="fordsayre"><label for="fordsayre">A Ford Sayre Student</label>
@@ -184,31 +219,10 @@ for ($i = 0; $i < $choices; $i ++) {
 <div>
 Choice <?php echo($i + 1);?>:
 	<select id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]">
-<?php
-	foreach ($list["full"] as $intensive) {
-?>
-	<option name="<?php echo($intensive); ?>"><?php echo($intensive); ?></option>
-<?php
-	}
-?>
 	</select>
 	<select id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]">
-<?php
-	foreach ($list["am"] as $intensive) {
-?>
-	<option name="<?php echo($intensive); ?>"><?php echo($intensive); ?></option>
-<?php
-	}
-?>
 	</select>
 	<select id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]">
-<?php
-	foreach ($list["pm"] as $intensive) {
-?>
-	<option name="<?php echo($intensive); ?>"><?php echo($intensive); ?></option>
-<?php
-	}
-?>
 	</select>
 </div>
 <?php
