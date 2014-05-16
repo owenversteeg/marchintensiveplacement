@@ -3,7 +3,7 @@ var fs = require('fs');
 var studentIndex = []; /*Used to randomly order students*/
 var studentUnplaceableIndex = []; /*Used to track students that were not assigned to a class*/
 var happiness = []; /*Used to track how happy students are with their seleciton*/
-var grades = [ 12, 11, 10, 9 ];
+var grades = [];
 var doNotAssignClassesWhenNoneAreRequested = true; /*If a user doesn't request any classes, they will not be given one and no error will be output*/
 var verbose = false; /*Output operations, triggerable with --verbose as well*/
 var classFile = 'classes.json';
@@ -17,11 +17,9 @@ var studentClassData = {};
 function setStudentHasClass(i,s) {
 	studentClassData[i] = s;
 }
-
 function getStudentHasClass(i) {
 	return studentClassData[i];
 }
-
 function readJSON(file) {
 	return JSON.parse(readFile(file));
 }
@@ -42,7 +40,6 @@ function getIndexOfStudentName(name) {
 		}
 	};
 }
-
 function shuffle(array) {
 	/*shuffles an array*/
 	var currentIndex = array.length
@@ -201,6 +198,9 @@ if (!fs.existsSync('output/')) {
 if (config.useGrades !== undefined) {
 	useGrades = config.useGrades;
 }
+if (config.grades !== undefined) {
+	grades = config.grades;
+}
 if (config.files.input.classes !== undefined) {
 	classFile = 'input/'+config.files.input.classes;
 }
@@ -260,7 +260,6 @@ for (var i = 0; i < students.length; i++) {
 		}
 	};
 };
-
 /*prepares data, hasClass, shouldn't be passed, will be overritten*/
 for (var i = 0; i < students.length; i++) {
 	setStudentHasClass(i,false);
@@ -292,16 +291,16 @@ for (var x = 0; x < grades.length; x++) {
 								if (classes[students[index].choices[n].AM].waitlist == undefined) {
 									classes[students[index].choices[n].AM].waitlist = [];
 								}
-								classes[students[index].choices[n].AM].waitlist.push(students[index].name);
+								classes[students[index].choices[n].AM].waitlist.push(students[index].name+' ('+index+'/ '+students[index].choices[n].AM+')');
 								if (classes[students[index].choices[n].PM].waitlist == undefined) {
 									classes[students[index].choices[n].PM].waitlist = [];
 								}
-								classes[students[index].choices[n].PM].waitlist.push(students[index].name);
+								classes[students[index].choices[n].PM].waitlist.push(students[index].name+' ('+index+'/ '+students[index].choices[n].AM+')');
 							} else if (classRequestDetails('type',students[index].choices[n]) == 'FULL') {
 								if (classes[students[index].choices[n].FULL].waitlist == undefined) {
 									classes[students[index].choices[n].FULL].waitlist = [];
 								}
-								classes[students[index].choices[n].FULL].waitlist.push(students[index].name);	
+								classes[students[index].choices[n].FULL].waitlist.push(students[index].name+' ('+index+'/ '+students[index].choices[n].AM+')');	
 							}
 						}
 					}
@@ -364,12 +363,12 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 	studentUnplaceableIndex[i] = students[studentUnplaceableIndex[i]].name;
 };
 /*remove dupe waitlists*/
-for (var i = 0; i < Object.keys(classes).length; i++) {
-	if (classes[Object.keys(classes)[i]].waitlist != undefined) {
-		classes[Object.keys(classes)[i]].waitlist = removeDuplicatesFromArray(classes[Object.keys(classes)[i]].waitlist);
-		console.log(Object.keys(classes)[i]);
-	}
-};
+//for (var i = 0; i < Object.keys(classes).length; i++) {
+//	if (classes[Object.keys(classes)[i]].waitlist != undefined) {
+//		classes[Object.keys(classes)[i]].waitlist = removeDuplicatesFromArray(classes[Object.keys(classes)[i]].waitlist);
+//		console.log(Object.keys(classes)[i]);
+//	}
+//};
 /*print the success percentage*/
 var percentage = Math.round((studentIndex.length-studentUnplaceableIndex.length)/studentIndex.length*100);
 if (studentUnplaceableIndex !== 0 && percentage == 100) {
@@ -380,7 +379,14 @@ var total = 0;
 for (var i = 0; i < happiness.length; i++) {
 	total += happiness[i]
 };
-console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
+var totalZero = 0;
+for (var i = 0; i < happiness.length; i++) {
+	if (happiness[i] == 0) {
+		totalZero++;
+	}
+};
+//console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
+console.log(totalZero);
 /*write files*/
 writeJSON(outputClassesFile, classes);
 writeJSON(outputStudents, students);

@@ -89,17 +89,24 @@ The config file allows manipulating of the way the program runs
 Default:
 ```
 {
-    "files": {
-        "input": {
-            "classes": "resources/classes.json",
-            "students": "resources/students.json"
-        },
-        "output": {
-            "classes": "output/classes.json",
-            "studentsNotPlaced": "output/studentsNotPlaced.json",
-            "students": "output/students.json"
-        }
-    },
-    "useGrades": true
+	"doNotAssignClassesWhenNoneAreRequested": true,
+	"files": {
+		"input": {
+			"classes": "classes.json",
+			"students": "students.json"
+		},
+		"output": {
+			"classes": "classes.json",
+			"studentsNotPlaced": "studentsNotPlaced.json",
+			"students": "students.json"
+		}
+	},
+	"grades": [
+		12,
+		11,
+		10,
+		9
+	],
+	"useGrades": true
 }
 ```
