@@ -77,7 +77,7 @@ if (array_key_exists("submitting", $_POST)) {
 			var choices = <?php echo $choices; ?>;
 			function checkForm() {
 				/*Check all inputs*/
-				var response = {"firstname":false,"lastname":false,"grade":true,"cg":false,"studentid":false,"fordsayre":true,"hartfordtech":true};
+				var response = {"fullname":false,"grade":true,"cg":false,"studentid":false,"fordsayre":true,"hartfordtech":true};
 				for (var i = 0; i < choices; i ++) {
 					/*You need to have either a full-day or both half-days*/
 					if ($("#select-full-" + i).val() == "" && ($("#select-am-" + i).val() == "" || $("#select-pm-" + i).val() == "")) {
@@ -87,11 +87,8 @@ if (array_key_exists("submitting", $_POST)) {
 					}
 				}
 
-				if ($('#firstname').val() != "") {
-					response.firstname = true;
-				}
-				if ($('#lastname').val() != "") {
-					response.lastname = true;
+				if ($('#fullname').val() != "") {
+					response.fullname = true;
 				}
 				if ($('#grade').val() != "") {
 					response.grade = true;
@@ -161,31 +158,13 @@ if (array_key_exists("submitting", $_POST)) {
 					}
 				});
 
-				$("#firstname").keydown(function(event) {
-					checkForm();
-				});
-				$("#lastname").keydown(function(event) {
-					checkForm();
-				});
-				$("#cg").keydown(function(event) {
-					checkForm();
-				});
-				$("#studentid").keydown(function(event) {
-					checkForm();
-				});
-
 				$('#form-tag').submit(function(){
 					var response = checkForm();
 
-					if (!response.firstname) {
-						$('#firstname').parent().parent().addClass('has-error');
+					if (!response.fullname) {
+						$('#fullname').parent().parent().addClass('has-error');
 					} else {
-						$('#firstname').parent().parent().removeClass('has-error');
-					}
-					if (!response.lastname) {
-						$('#lastname').parent().parent().addClass('has-error');
-					} else {
-						$('#lastname').parent().parent().removeClass('has-error');
+						$('#fullname').parent().parent().removeClass('has-error');
 					}
 					if (!response.grade) {
 						$('#grade').parent().parent().addClass('has-error');
@@ -227,15 +206,9 @@ if (array_key_exists("submitting", $_POST)) {
 			<div>
 				<div class="row row-margin-top row-margin-bottom">
 					<div class="col-md-2">
-						<label class="control-label">First Name:</label>
+						<label class="control-label">Full Name:</label>
 					</div>
-					<div class="col-md-10"><input class="form-control" type="text" name="firstname" id="firstname" placeholder="John"></div>
-				</div>
-				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-2">
-						<label class="control-label">Last Name:</label>
-					</div>
-					<div class="col-md-10"><input class="form-control" type="text" name="lastname"  id="lastname"  placeholder="Doe"></div>
+					<div class="col-md-10"><input class="form-control" type="text" name="fullname" id="fullname" placeholder="John Doe"></div>
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
 					<div class="col-md-2">
