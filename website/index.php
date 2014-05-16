@@ -10,7 +10,7 @@ $list = array(
 				"pm" => array("")
 			);
 
-$classes = json_decode(file_get_contents("input/classes.json"), true);
+$classes = json_decode(file_get_contents("../input/classes.json"), true);
 
 foreach ($classes as $name => $className) {
 	$type = strtolower($className["type"]);
