@@ -65,10 +65,9 @@ if (array_key_exists("submitting", $_POST)) {
 		<?php
 	}
 } else {
-	/*Rest of the page*/ ?>
+	?>
 	<html>
 	<head>
-		<?php /*JQuery*/ ?>
 		<link rel="stylesheet" href="css/font-awesome.min.css">
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<script type="text/javascript" src="js/jquery.min.js"></script>
@@ -103,7 +102,7 @@ if (array_key_exists("submitting", $_POST)) {
 			/*On ready, load up all the selector checkers*/
 			$(document).ready(function() {
 				/*Loop for each choice*/
-				for (var i = 0; i < 8; i++) {
+				for (var i = 0; i < choices; i++) {
 					/*Add to the list*/
 					for (var intensive in intensives["full"]) {
 						$("<option name=\"" + intensives["full"][intensive] + "\">" + intensives["full"][intensive] + "</option>").appendTo($("#select-full-" + i));
@@ -171,12 +170,18 @@ if (array_key_exists("submitting", $_POST)) {
 </script>
 </head>
 <body>
-	<div>
+	<div class="container">
 		<?php /*Super lazy redirection*/ ?>
 		<form method="POST">
 			<div>
-				First Name: <input type="text" name="firstname" id="firstname" placeholder="John"><br>
-				Last Name:  <input type="text" name="lastname"  id="lastname"  placeholder="Doe"><br>
+				<div class="row">
+					<div class="col-md-2">First Name: </div>
+					<div class="col-md-10"><input class="form-control" type="text" name="firstname" id="firstname" placeholder="John"></div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">Last Name: </div>
+					<div class="col-md-10"><input class="form-control" type="text" name="lastname"  id="lastname"  placeholder="Doe"><br></div>
+				</div>
 				Grade:
 				<select name="grade">
 					<option value="12" selected>12</option>
