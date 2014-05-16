@@ -75,26 +75,35 @@ if (array_key_exists("submitting", $_POST)) {
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			var choices = <?php echo $choices; ?>;
-			function updateSubmit() {
+			function checkForm() {
 				/*Check all inputs*/
-				var good = true;
-				for (var i = 0; i < <?php echo($choices);?>; i ++) {
+				var response = {"firstname":false,"lastname":false,"grade":true,"cg":false,"studentid":false,"fordsayre":true,"hartfordtech":true};
+				for (var i = 0; i < choices; i ++) {
 					/*You need to have either a full-day or both half-days*/
 					if ($("#select-full-" + i).val() == "" && ($("#select-am-" + i).val() == "" || $("#select-pm-" + i).val() == "")) {
-						good = false;
-						break;
+						response['choice'+i] = true;
+					} else {
+						response['choice'+i] = false;
 					}
 				}
 
-				if ($("#firstname").val() == "" || $("#lastname").val() == "" || $("#id").val() == "" || $("#studentid").val() == "") {
-					good = false;
+				if ($('#firstname').val() != "") {
+					response.firstname = true;
+				}
+				if ($('#lastname').val() != "") {
+					response.lastname = true;
+				}
+				if ($('#grade').val() != "") {
+					response.grade = true;
+				}
+				if ($('#cg').val() != "") {
+					response.cg = true;
+				}
+				if ($('#studentid').val() != "") {
+					response.studentid = true;
 				}
 
-				/*Update the button*/
-				if (good)
-					$("#form-submit").attr("disabled", null);
-				else
-					$("#form-submit").attr("disabled", "disabled");
+				return response;
 			}
 
 			/*Spit out the intensive list*/
@@ -120,22 +129,22 @@ if (array_key_exists("submitting", $_POST)) {
 						var num = $(this).attr("select-num");
 						$("#select-am-" + num).val("");
 						$("#select-pm-" + num).val("");
-						updateSubmit();
+						checkForm();
 					});
 					/*If you select half-day, you don't get to choose a full-day*/
 					$("#select-am-" + i).change(function(event) {
 						var num = $(this).attr("select-num");
 						$("#select-full-" + num).val("");
-						updateSubmit();
+						checkForm();
 					});
 					$("#select-pm-" + i).change(function(event) {
 						var num = $(this).attr("select-num");
 						$("#select-full-" + num).val("");
-						updateSubmit();
+						checkForm();
 					});
 				};
 
-				$("#hartford").change(function(event) {
+				$('.hartfordtech').change(function(event) {
 					alert("TODO: This button (ask the MI people)");
 					return;
 					var selected = $(this).is(":checked");
@@ -153,40 +162,84 @@ if (array_key_exists("submitting", $_POST)) {
 				});
 
 				$("#firstname").keydown(function(event) {
-					updateSubmit();
+					checkForm();
 				});
 				$("#lastname").keydown(function(event) {
-					updateSubmit();
+					checkForm();
 				});
 				$("#cg").keydown(function(event) {
-					updateSubmit();
+					checkForm();
 				});
 				$("#studentid").keydown(function(event) {
-					updateSubmit();
+					checkForm();
 				});
 
-				/*Make sure they've filled all their choices*/
-				updateSubmit();
-			});
+				$('#form-tag').submit(function(){
+					var response = checkForm();
+
+					if (!response.firstname) {
+						$('#firstname').parent().parent().removeClass('has-success').addClass('has-error');
+					} else {
+						$('#firstname').parent().parent().removeClass('has-error').addClass('has-success');
+					}
+					if (!response.lastname) {
+						$('#lastname').parent().parent().removeClass('has-success').addClass('has-error');
+					} else {
+						$('#lastname').parent().parent().removeClass('has-error').addClass('has-success');
+					}
+					if (!response.grade) {
+						$('#grade').parent().parent().removeClass('has-success').addClass('has-error');
+					} else {
+						$('#grade').parent().parent().removeClass('has-error').addClass('has-success');
+					}
+					if (!response.cg) {
+						$('#cg').parent().parent().removeClass('has-success').addClass('has-error');
+					} else {
+						$('#cg').parent().parent().removeClass('has-error').addClass('has-success');
+					}
+					if (!response.studentid) {
+						$('#studentid').parent().parent().removeClass('has-success').addClass('has-error');
+					} else {
+						$('#studentid').parent().parent().removeClass('has-error').addClass('has-success');
+					}
+					if (!response.fordsayre) {
+						$('.fordsayre').parent().parent().removeClass('has-success').addClass('has-error');
+					} else {
+						$('.fordsayre').parent().parent().removeClass('has-error').addClass('has-success');
+					}
+					console.log(response);
+					for (var i = 0; i < Object.keys(response).length; i++) {
+						if (!response[Object.keys(response)[i]]) {
+							return false;
+						}
+					};
+				})
+});
 </script>
 </head>
 <body>
 	<div class="container">
 		<?php /*Super lazy redirection*/ ?>
-		<form method="POST">
+		<form method="POST" id="form-tag">
 			<div>
 				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-2">First Name:</div>
+					<div class="col-md-2">
+						<label class="control-label">First Name:</label>
+					</div>
 					<div class="col-md-10"><input class="form-control" type="text" name="firstname" id="firstname" placeholder="John"></div>
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-2">Last Name:</div>
+					<div class="col-md-2">
+						<label class="control-label">Last Name:</label>
+					</div>
 					<div class="col-md-10"><input class="form-control" type="text" name="lastname"  id="lastname"  placeholder="Doe"></div>
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-2">Grade:</div>
+					<div class="col-md-2">
+						<label class="control-label">Grade:</label>
+					</div>
 					<div class="col-md-10">
-						<select name="grade" class="form-control">
+						<select name="grade" id="grade" class="form-control">
 							<option value="12" selected>12</option>
 							<option value="11">11</option>
 							<option value="10">10</option>
@@ -195,24 +248,36 @@ if (array_key_exists("submitting", $_POST)) {
 					</div>
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-2">Common Ground #:</div>
+					<div class="col-md-2">
+						<label class="control-label">Common Ground #:</label>
+					</div>
 					<div class="col-md-10"><input class="form-control" type="text" name="cg" id="cg"></div>
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-2">Student ID #:</div>
-					<div class="col-md-10"><input class="form-control" type="text" name="studentid" id="studentid"></div>
-				</div>
-				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-4">
-						Are you... (Select all that apply):
+					<div class="col-md-2">
+						<label class="control-label">Student ID #:</label>
+					</div>
+					<div class="col-md-10">
+						<input class="form-control" type="text" name="studentid" id="studentid">
 					</div>
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-5 col-md-offset-2">
-						<input type="checkbox" id="hartford" name="hartford"><label for="hartford">A Hartford Tech Student</label>
+					<div class="col-md-2">
+						<label class="control-label">Hartford Tech:</label>
+					</div>
+					<div class="col-md-10">
+						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="none" checked> None</label>
+						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="am"> Morning</label>
+						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="pm"> Afternoon</label>
+					</div>
+				</div>
+				<div class="row row-margin-top row-margin-bottom">
+					<div class="col-md-2">
+						<label class="control-label">Ford Sayre:</label>
 					</div>
 					<div class="col-md-5">
-						<input type="checkbox" id="fordsayre" name="fordsayre"><label for="fordsayre">A Ford Sayre Student</label>
+						<label><input type="radio" class="fordsayre" name="fordsayre" value="no" checked> No</label>
+						<label><input type="radio" class="fordsayre" name="fordsayre" value="yes"> Yes</label>
 					</div>
 				</div>
 			</div>
@@ -231,7 +296,11 @@ if (array_key_exists("submitting", $_POST)) {
 				}
 				?>
 			</div>
-			<input type="submit" value="Submit" id="form-submit">
+			<div class="row row-margin-top row-margin-bottom">
+				<div class="col-md-2 col-md-offset-5">
+					<input class="btn btn-block btn-defualt" type="submit" value="Submit" id="form-submit">
+				</div>
+			</div>
 			<input type="hidden" name="submitting" value="true">
 		</form>
 	</div>
