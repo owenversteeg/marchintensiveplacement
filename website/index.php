@@ -73,7 +73,12 @@ print_r($_POST);
 	}
 } else {
 	//Rest of the page
+
+ob_start();
+
 ?>
+<html>
+<head>
 <?php /* JQuery */ ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -178,6 +183,8 @@ function updateSubmit() {
 		$("#form-submit").attr("disabled", "disabled");
 }
 </script>
+</head>
+<body>
 <div>
 <?php /* Super lazy redirection */ ?>
 <form action="<?php echo($_SERVER["PHP_SELF"]); ?>" method="POST">
@@ -233,6 +240,18 @@ Choice <?php echo($i + 1);?>:
 <input type="hidden" name="submitting" value="true">
 </form>
 </div>
+</body>
+</html>
 <?php
+	$output = ob_get_clean();
+	echo($output);
+	//TODO: This section
+	// //Do magic with $output
+	// $lines = explode("\n", $output);
+	// foreach ($lines as $line) {
+	// 	//Strip stuff from the beginning of the line
+	// 	$lines[array_search($line, $lines)] = trim($line);
+	// }
+	// echo(implode("", $lines));
 }
 ?>
