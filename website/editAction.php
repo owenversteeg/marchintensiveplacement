@@ -4,28 +4,28 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 	exit;
 }
 $classes = json_decode(file_get_contents('data/classes.json'),true);
-if (@$_GET['operation'] == 'add') {
-	if (@$_GET['user'] != "") {
-		if (@$_GET['class'] != "") {
-			if (!in_array(@$_GET['user'], $classes[@$_GET['class']])) {
-				push_array($classes[@$_GET['class']],@$_GET['user']);
+if (@$_POST['operation'] == 'add') {
+	if (@$_POST['user'] != "") {
+		if (@$_POST['class'] != "") {
+			if (!in_array(@$_POST['user'], $classes[@$_POST['class']]['enrolled'])) {
+				array_push($classes[@$_POST['class']]['enrolled'],@$_POST['user']);
 			} else {
 				$error = "Student already in class";
 			}
 		} else {
-			$error = "No class sent (GET CLASS)";
+			$error = "No class sent (POST CLASS)";
 		}
 	} else {
-		$error = "No user sent (GET USER)";
+		$error = "No user sent (POST USER)";
 	}
 } else {
-	$error = "No operation set (GET OPERATION)";
+	$error = "No operation set (POST OPERATION)";
 }
 if (@$error != "") {
 	echo $error;
-	echo '<br><br><a href="/marchintensive/index.php">Click here to go back</a>';
+	echo '<br><br><a href="edit.php">Click here to go back</a>';
 } else {
 	file_put_contents('data/classes.json', json_encode($classes));
-	header('Location:/marchintensive/index.php');
+	header('Location:edit.php');
 }
 ?>
