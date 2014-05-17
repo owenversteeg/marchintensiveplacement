@@ -7,7 +7,7 @@ $classes = json_decode(file_get_contents('data/classes.json'),true);
 if (@$_GET['operation'] == 'add') {
 	if (@$_GET['user'] != "") {
 		if (@$_GET['class'] != "") {
-			if (!in_array(@$_GET['user'], $classes[@$_GET['class']])))
+			if (!in_array(@$_GET['user'], $classes[@$_GET['class']])) {
 				push_array($classes[@$_GET['class']],@$_GET['user']);
 			} else {
 				$error = "Student already in class";
