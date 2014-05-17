@@ -94,7 +94,7 @@ if (array_key_exists("submitting", $_POST)) {
 		
 		for ($i = 0; $i < 8; $i ++) {
 			if ($requestData["full"][$i] != "") {
-				$requestData["choicesx"][$i]["full"] = $requestData["full"][$i];
+				$requestData["choices"][$i]["full"] = $requestData["full"][$i];
 			}
 			if ($requestData["am"][$i] != "") {
 				$requestData["choices"][$i]["am"] = $requestData["am"][$i];
