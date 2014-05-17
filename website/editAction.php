@@ -1,4 +1,8 @@
 <?php
+if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !file_exists('data/studentsNotPlaced.json')) {
+	echo "Please generate your data files";
+	exit;
+}
 $classes = json_decode(file_get_contents('data/classes.json'),true);
 if (@$_GET['operation'] == 'add') {
 	if (@$_GET['user'] != "") {

@@ -1,4 +1,9 @@
 <?php
+if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !file_exists('data/studentsNotPlaced.json')) {
+	echo "Please generate your data files";
+	exit;
+}
+
 //# of choices, hardcoded because oh well
 $choices = 8;
 

@@ -169,7 +169,7 @@ function placeStudent(s,c) {
 			console.log(students[si]);
 			process.kill();
 		}
-	} else if (students[si].hartfordTech == 'am' && students[si].fordSayre == false && c.am != undefined) {
+	} else if (students[si].hartfordTech == 'pm' && students[si].fordSayre == false && c.am != undefined) {
 		var cam = c.am;
 		try {
 			if ((classes[cam].enrolled.length < classes[cam].max)) {
@@ -191,7 +191,7 @@ function placeStudent(s,c) {
 			console.log(students[si]);
 			process.kill();
 		}
-	} else if (students[si].hartfordTech == 'pm' && students[si].fordSayre == false && c.pm != undefined) {
+	} else if (students[si].hartfordTech == 'am' && students[si].fordSayre == false && c.pm != undefined) {
 		var cpm = c.pm;
 		try {
 			if ((classes[cpm].enrolled.length < classes[cpm].max)) {
@@ -325,6 +325,12 @@ for (var i = 0; i < students.length; i++) {
 		students[i].fordSayre = false;
 		if (verbose) {
 			console.log(students[i].name+' fordSayre=false');
+		}
+	}
+	if (students[i].hartfordTech != 'none' && students[i].hartfordTech != 'am' && students[i].hartfordTech != 'pm') {
+		students[i].hartfordTech = 'none'
+		if (verbose) {
+			console.log(students[i].name+' hartfordTech=false');
 		}
 	}
 	for (var x = 0; x < students[i].choices.length; x++) {
