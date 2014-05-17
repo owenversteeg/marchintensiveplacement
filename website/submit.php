@@ -7,11 +7,6 @@ if (!file_exists("data/classes.json")) {
 	exit;
 }
 
-//If we don't have a students file, then we should create one!
-if (!file_exists("data/students.json")) {
-	file_put_contents("data/students.json", "{}");
-}
-
 //# of choices, hardcoded because oh well
 $choices = 8;
 
@@ -113,12 +108,6 @@ if (array_key_exists("submitting", $_POST)) {
 		unset($requestData["full"]);
 		unset($requestData["am"]);
 		unset($requestData["pm"]);
-
-		//Write it out
-		$students = json_decode(file_get_contents("data/students.json"), true);
-		array_push($students,$requestData);
-
-		file_put_contents("data/students.json", json_encode($students));
 
 		?>
 		<pre><?php echo json_encode($requestData,JSON_PRETTY_PRINT); ?></pre>
