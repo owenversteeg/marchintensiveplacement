@@ -11,13 +11,13 @@ if (!file_exists("data/classes.json")) {
 $choices = 8;
 
 //List of intensives, nab this from ezekiel's weirdly laid out files
-$list = array( "full" => array(""),	 "am" => array(""), "pm" => array("") );
+$list = array( "full" => array(array("name" => "", "displayname" => "")),	 "am" => array(array("name" => "", "displayname" => "")), "pm" => array(array("name" => "", "displayname" => "")) );
 
 $classes = json_decode(file_get_contents("data/classes.json"), true);
 
 foreach ($classes as $name => $className) {
 	$type = strtolower($className["type"]);
-	array_push($list[$type], $name);
+	array_push($list[$type], array("name" => $name, "displayname" => $className["displayname"]));
 }
 
 sort($list["full"]);
@@ -170,13 +170,13 @@ if (array_key_exists("submitting", $_POST)) {
 				for (var i = 0; i < choices; i++) {
 					/*Add to the list*/
 					for (var intensive in intensives["full"]) {
-						$("<option name=\"" + intensives["full"][intensive] + "\">" + intensives["full"][intensive] + "</option>").appendTo($("#select-full-" + i));
+						$("<option value=\""+ intensives["full"][intensive].name +"\" name=\"" + intensives["full"][intensive]["name"] + "\">" + intensives["full"][intensive].displayname + "</option>").appendTo($("#select-full-" + i));
 					}
 					for (var intensive in intensives["am"]) {
-						$("<option name=\"" + intensives["am"][intensive] + "\">" + intensives["am"][intensive] + "</option>").appendTo($("#select-am-" + i));
+						$("<option value=\""+ intensives["am"][intensive].name +"\" name=\"" + intensives["am"][intensive]["name"] + "\">" + intensives["am"][intensive].displayname + "</option>").appendTo($("#select-am-" + i));
 					}
 					for (var intensive in intensives["pm"]) {
-						$("<option name=\"" + intensives["pm"][intensive] + "\">" + intensives["pm"][intensive] + "</option>").appendTo($("#select-pm-" + i));
+						$("<option value=\""+ intensives["pm"][intensive].name +"\" name=\"" + intensives["pm"][intensive]["name"] + "\">" + intensives["pm"][intensive].displayname + "</option>").appendTo($("#select-pm-" + i));
 					}
 
 					/*If you select full-day, you don't get to choose any half-days*/
