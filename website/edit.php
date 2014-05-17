@@ -24,12 +24,12 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 			?>
 			<div class="row well">
 				<div class="col-md-6">
-					<div class="row">
+					<div class="row row-margin-bottom">
 						<div class="col-md-12">
-							<?php echo '<h4>'.$className.'</h4>'; ?>
+							<?php echo '<h4>'.$class['displayname'].'</h4>'; ?>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row row-margin-top row-margin-bottom">
 						<form method="post" action="editAction.php">
 							<input type="hidden" name="operation" value="add">
 							<input type="hidden" name="class" value="<?php echo $className; ?>">
@@ -37,9 +37,14 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 								<input type="text" class="form-control" name="user" placeholder="John Doe">
 							</div>
 							<div class="col-md-4">
-								<input type="submit" value="add" class="btn">
+								<input type="submit" value="Add" class="btn btn-block">
 							</div>
 						</form>
+					</div>
+					<div class="row row-margin-top">
+						<div class="col-md-12">
+							<pre> <?php echo json_encode($class,JSON_PRETTY_PRINT); ?></pre>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-6">

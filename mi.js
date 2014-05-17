@@ -20,7 +20,6 @@ function readJSON(file) { return JSON.parse(readFile(file)); }
 function readFile(file) { return fs.readFileSync(file, 'utf8'); }
 function writeJSON(file, obj, options) { return writeFile(file, JSON.stringify(obj, null, module.exports.spaces), options); }
 function getNameOfStudentID(id) {
-	console.log(id);
 	return students[getIndexOfStudentID(id)].name;
 };
 
@@ -61,10 +60,8 @@ function shuffle(array) {
 }
 function removeDuplicatesFromArray(arr) {
 	for (var i = 0; i < arr.length; i++) {
-		for (var y = 0; y < arr.length; y++) {
-			if (arr[i] == arr[y] && i != y) {
-				arr.splice(y,1);
-			}
+		if (arr.indexOf(arr[i]) != 1) {
+			arr.splice(i,1);
 		}
 	}
 	return arr;
@@ -346,7 +343,7 @@ for (var x = 0; x < grades.length; x++) {
 			var sid = students[i].studentid;
 			if (students[i].grade == grades[x] || !useGrades) {
 				/*if the student has no class, try to assing their requests*/
-				if (getStudentHasClass(i) != true) {
+				if (!getStudentHasClass(i)) {
 					/*going from request 1, to last request*/
 					for (var n = 0; n < students[i].choices.length; n++) {
 						if (placeStudent(students[i].studentid,students[i].choices[n])) {
@@ -358,19 +355,19 @@ for (var x = 0; x < grades.length; x++) {
 									if (classes[students[i].choices[n].am].waitlist == undefined) {
 										classes[students[i].choices[n].am].waitlist = [];
 									}
-									classes[students[i].choices[n].am].waitlist.push(sid+' ('+i+'/ '+JSON.stringify(getStudentClass(sid))+')');
+									classes[students[i].choices[n].am].waitlist.push(JSON.stringify(getStudentClass(sid)));
 								}
 								if (students[i].choices[n].pm != undefined) {
 									if (classes[students[i].choices[n].pm].waitlist == undefined) {
 										classes[students[i].choices[n].pm].waitlist = [];
 									}
-									classes[students[i].choices[n].pm].waitlist.push(sid+' ('+i+'/ '+JSON.stringify(getStudentClass(sid))+')');
+									classes[students[i].choices[n].pm].waitlist.push(JSON.stringify(getStudentClass(sid)));
 								}
 							} else if (classRequestDetails('type',students[i].choices[n]) == 'full') {
 								if (classes[students[i].choices[n].full].waitlist == undefined) {
 									classes[students[i].choices[n].full].waitlist = [];
 								}
-								classes[students[i].choices[n].full].waitlist.push(sid+' ('+i+'/ '+JSON.stringify(getStudentClass(sid))+')');	
+								classes[students[i].choices[n].full].waitlist.push(JSON.stringify(getStudentClass(sid)));
 							}
 						}
 					}
@@ -392,12 +389,13 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 	studentUnplaceableIndex[i] = getNameOfStudentID(studentUnplaceableIndex[i]);
 };
 /*remove dupe waitlists*/
-//for (var i = 0; i < Object.keys(classes).length; i++) {
-//	if (classes[Object.keys(classes)[i]].waitlist != undefined) {
-//		classes[Object.keys(classes)[i]].waitlist = removeDuplicatesFromArray(classes[Object.keys(classes)[i]].waitlist);
-//		console.log(Object.keys(classes)[i]);
-//	}
-//};
+for (var i = 0; i < Object.keys(classes).length; i++) {
+	var key = Object.keys(classes);
+	if (classes[key[i]].waitlist != undefined) {
+		classes[key[i]].waitlist = removeDuplicatesFromArray(classes[key[i]].waitlist);
+		//console.log(key[i]);
+	}
+};
 /*print the success percentage*/
 var percentage = Math.round((students.length-studentUnplaceableIndex.length)/students.length*100);
 if (studentUnplaceableIndex != 0 && percentage == 100) {
@@ -413,6 +411,12 @@ for (var i = 0; i < happiness.length; i++) {
 	if (happiness[i] == 0) {
 		totalZero++;
 	}
+};
+for (var i = 0; i < Object.keys(classes).length; i++) {
+	var classKey = Object.keys(classes)[i];
+	for (var n = 0; n < classes[classKey].enrolled.length; n++) {
+		classes[classKey].enrolled[n] = getNameOfStudentID(classes[classKey].enrolled[n]);
+	};
 };
 //console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
 console.log(totalZero);
