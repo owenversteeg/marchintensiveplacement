@@ -24,20 +24,34 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 			?>
 			<div class="row well">
 				<div class="col-md-6">
-					<?php
-					echo '<h4>'.$className.'</h4>';
-					?>
+					<div class="row">
+						<?php
+						echo '<h4>'.$className.'</h4>';
+						?>
+					</div>
+					<div class="row">
+						<form method="post" action="editAction.php">
+							<input type="hidden" name="operation" value="add">
+							<input type="hidden" name="class" value="<?php echo $className; ?>">
+							<div class="col-md-8">
+								<input type="text" class="form-control" name="user" placeholder="John Doe">
+							</div>
+							<div class="col-md-4">
+								<input type="submit" value="add" class="btn">
+							</div>
+						</form>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<?php
 					foreach ($class['enrolled'] as $key => $student) {
 						echo $student;
 						?>
-						<form method="post" action="editAction.php">
+						<form style="display:inline;" method="post" id="removeUser<?php echo $class.'_'.$key; ?>" action="editAction.php">
 							<input type="hidden" name="operation" value="remove">
 							<input type="hidden" name="class" value="<?php echo $className; ?>">
 							<input type="hidden" name="user" value="<?php echo $student; ?>">
-							<input type="submit" value="Remove" class="btn btn-xs">
+							<span class="glyphicon glyphicon-remove" onclick="$('#removeUser<?php echo $class.'_'.$key; ?>').submit();"></span>
 						</form>
 						<br>
 						<?php
