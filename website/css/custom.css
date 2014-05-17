@@ -1,7 +1,12 @@
 .row-margin-top {
-  margin-top:10px;
+	margin-top:10px;
 }
 
 .row-margin-bottom {
-  margin-top:10px;
+	margin-top:10px;
+}
+
+.addUserField {
+	border: none;
+	outline: none;
 }

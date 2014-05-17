@@ -13,6 +13,49 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 	<link rel="stylesheet" href="css/custom.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script>
+		function sendNetworkRequest(operation,user,cl,obj) {
+			$.ajax({
+				type: "POST",
+				url: "editAction.php",
+				data: { "operation": operation, "user": user, "class": cl }
+			})
+			.done(function( msg ) {
+				if (msg == "TRUE" && operation == "remove") {
+					obj.parent().parent().slideUp();
+				} else if (msg == "TRUE" && operation == "add") {
+					obj.parent().parent().before('<div style="display:none;" class="row"><div class="col-md-6">'+user+'</div><div class="col-md-6"><span class="studentremovebutton glyphicon glyphicon-remove" netuser="'+user+'" netclass="'+cl+'"></span></div></div>');
+					obj.parent().parent().prev().slideDown();
+					$('#addUser'+obj.attr('netclass')).val('');
+				} else {
+					alert(msg);
+				}
+			});
+		}
+		function addUser(user,cl) {
+			sendNetworkRequest('add',$('#').val(),cl);
+		}
+		$(document).ready(function(){
+			$(document).on('click','.studentremovebutton',function(){
+				if ($(this).attr('netuser') != undefined && $(this).attr('netclass') != undefined) {
+					sendNetworkRequest('remove',$(this).attr('netuser'),$(this).attr('netclass'),$(this));
+				} else {
+					return false;
+				}
+			});
+			$(document).on('click','.addstudentbutton',function(){
+				if ($(this).attr('netclass') != undefined && $('#addUser'+$(this).attr('netclass')).val() != "") {
+					sendNetworkRequest('add',$('#addUser'+$(this).attr('netclass')).val(),$(this).attr('netclass'),$(this));
+				} else {
+					return false;
+				}
+			});
+			$('.addUserForm').submit(function(event){
+				$('#'+$(this).attr('netid')).click();
+				event.preventDefault();
+			});
+		});
+	</script>
 </head>
 <body>
 	<div id="container" style="margin-top:50px" class="container">
@@ -29,18 +72,6 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 							<?php echo '<h4>'.$class['displayname'].'</h4>'; ?>
 						</div>
 					</div>
-					<div class="row row-margin-top row-margin-bottom">
-						<form method="post" action="editAction.php">
-							<input type="hidden" name="operation" value="add">
-							<input type="hidden" name="class" value="<?php echo $className; ?>">
-							<div class="col-md-8">
-								<input type="text" class="form-control" name="user" placeholder="John Doe">
-							</div>
-							<div class="col-md-4">
-								<input type="submit" value="Add" class="btn btn-block">
-							</div>
-						</form>
-					</div>
 					<div class="row row-margin-top">
 						<div class="col-md-12">
 							<pre> <?php echo json_encode($class,JSON_PRETTY_PRINT); ?></pre>
@@ -50,18 +81,28 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 				<div class="col-md-6">
 					<?php
 					foreach ($class['enrolled'] as $key => $student) {
-						echo $student;
 						?>
-						<form style="display:inline;" method="post" id="removeUser<?php echo $class.'_'.$key; ?>" action="editAction.php">
-							<input type="hidden" name="operation" value="remove">
-							<input type="hidden" name="class" value="<?php echo $className; ?>">
-							<input type="hidden" name="user" value="<?php echo $student; ?>">
-							<span class="glyphicon glyphicon-remove" onclick="$('#removeUser<?php echo $class.'_'.$key; ?>').submit();"></span>
-						</form>
-						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<?php echo $student; ?>
+							</div>
+							<div class="col-md-6">
+								<span class="studentremovebutton glyphicon glyphicon-remove" netuser="<?php echo $student; ?>" netclass="<?php echo $className; ?>"></span>
+							</div>
+						</div>
 						<?php
 					}
 					?>
+					<div class="row">
+						<div class="col-md-6">
+							<form class="addUserForm" netid="addUserButton<?php echo $className; ?>">
+								<input id="addUser<?php echo $className; ?>" class="addUserField" type="text" name="user" placeholder="Click to add a user...">
+							</form>
+						</div>
+						<div class="col-md-6">
+							<span id="addUserButton<?php echo $className; ?>" class="addstudentbutton glyphicon glyphicon-plus" netclass="<?php echo $className; ?>"></span>
+						</div>
+					</div>
 				</div>
 			</div>
 			<?php

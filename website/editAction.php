@@ -22,7 +22,7 @@ if (@$_POST['operation'] == 'add') {
 	if (@$_POST['user'] != '') {
 		if (@$_POST['class'] != '') {
 			if(($key = array_search(@$_POST['user'], $classes[@$_POST['class']]['enrolled'])) !== false) {
-				unset($classes[@$_POST['class']]['enrolled'][$key]);
+				array_splice($classes[@$_POST['class']]['enrolled'],$key,1);
 			}
 		} else {
 			$error = "No class sent (POST CLASS)";
@@ -35,9 +35,8 @@ if (@$_POST['operation'] == 'add') {
 }
 if (@$error != '') {
 	echo $error;
-	echo '<br><br><a href="edit.php">Click here to go back</a>';
 } else {
 	file_put_contents('data/classes.json', json_encode($classes));
-	header('Location:edit.php');
+	echo "TRUE";
 }
 ?>
