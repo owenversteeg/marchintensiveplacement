@@ -7,12 +7,6 @@ if (!file_exists("data/classes.json")) {
 	exit;
 }
 
-//If we don't have a students file, then we should create one!
-if (!file_exists("data/students.json")) {
-	file_put_contents("data/students.json", "{}");
-	chmod("data/students.json", 0777);
-}
-
 //# of choices, hardcoded because oh well
 $choices = 8;
 
