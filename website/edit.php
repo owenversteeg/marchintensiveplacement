@@ -25,9 +25,11 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 			<div class="row well">
 				<div class="col-md-6">
 					<div class="row">
-						<?php
-						echo '<h4>'.$className.'</h4>';
-						?>
+						<div class="col-md-12">
+							<?php
+							echo '<h4>'.$className.'</h4>';
+							?>
+						</div>
 					</div>
 					<div class="row">
 						<form method="post" action="editAction.php">
