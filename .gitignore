@@ -10,3 +10,9 @@ website/data
 website/data/studentsNotPlaced.json
 website/data/classes.json
 website/data/students.json
+
+input
+
+students.json
+students.csv
+classes.json
