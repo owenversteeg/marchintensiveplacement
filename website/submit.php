@@ -1,16 +1,9 @@
 <?php
 define("MINIMIZE", false);
 
-//If we don't have any classes then we can't run!
-if (!file_exists("data/classes.json")) {
-	echo("Please generate your classes file!");
+if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !file_exists('data/studentsNotPlaced.json')) {
+	echo "Please generate your data files";
 	exit;
-}
-
-//If we don't have a students file, then we should create one!
-if (!file_exists("data/students.json")) {
-	file_put_contents("data/students.json", "{}");
-	chmod("data/students.json", 0777);
 }
 
 //# of choices, hardcoded because oh well
