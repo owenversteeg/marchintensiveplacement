@@ -26,9 +26,7 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 				<div class="col-md-6">
 					<div class="row">
 						<div class="col-md-12">
-							<?php
-							echo '<h4>'.$className.'</h4>';
-							?>
+							<?php echo '<h4>'.$className.'</h4>'; ?>
 						</div>
 					</div>
 					<div class="row">
