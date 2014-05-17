@@ -12,24 +12,16 @@ var useGrades = true;
 var studentRandomData = {};
 var studentClassData = {};
 
-function setStudentHasClass(i,s) {
-	studentClassData[i] = s;
-}
-function getStudentHasClass(i) {
-	return studentClassData[i];
-}
-function readJSON(file) {
-	return JSON.parse(readFile(file));
-}
-function readFile(file) {
-	return fs.readFileSync(file, 'utf8');
-}
-function writeJSON(file, obj, options) {
-	var str = JSON.stringify(obj, null, module.exports.spaces);
-	return writeFile(file, str, options); //not sure if fs.writeJSON returns anything, but just in case
-}
-function writeFile(file, contents, options) {
-	return fs.writeFileSync(file, contents, options);
+function setStudentHasClass(i,s) { studentClassData[i] = s; return true; }
+function getStudentHasClass(i) { return studentClassData[i]; }
+function randomIntFromInterval(min,max) { return Math.floor(Math.random()*(max-min+1)+min); }
+function writeFile(file, contents, options) { return fs.writeFileSync(file, contents, options); }
+function readJSON(file) { return JSON.parse(readFile(file)); }
+function readFile(file) { return fs.readFileSync(file, 'utf8'); }
+function writeJSON(file, obj, options) { return writeFile(file, JSON.stringify(obj, null, module.exports.spaces), options); }
+
+function getStudentClas(i) {
+
 }
 function getIndexOfStudentName(name) {
 	for (var i = 0; i < students.length; i++) {
@@ -55,10 +47,6 @@ function shuffle(array) {
 	}
 
 	return array;
-}
-function randomIntFromInterval(min,max) {
-	/*Generates a random number from min to max, including*/
-	return Math.floor(Math.random()*(max-min+1)+min);
 }
 function removeDuplicatesFromArray(arr) {
 	for (var i = 0; i < arr.length; i++) {
@@ -240,9 +228,9 @@ if (config.updateWebDirectory) {
 	if (!fs.existsSync('website/')) {
 		fs.mkdir('website');
 	}
-		if (!fs.existsSync('website/data')) {
-			fs.mkdir('website/data');
-		}
+	if (!fs.existsSync('website/data')) {
+		fs.mkdir('website/data');
+	}
 }
 if (config.useGrades != undefined) {
 	useGrades = config.useGrades;
