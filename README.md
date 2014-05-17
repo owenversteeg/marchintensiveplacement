@@ -11,17 +11,38 @@ Running: `node mi.js[ --help]`
 Environment (*=required file)
 ```
 .
-├── README.md
-├── config.json *
-├── conversion.js
-├── mi.js *
-├── output
+├── config.json
+├── input
 │   ├── classes.json
 │   └── students.json
-└── resources *
-    ├── classes.json *
-    ├── students.csv
-    └── students.json *
+├── mi.js
+├── output
+│   ├── classes.json
+│   ├── students.json
+│   └── studentsNotPlaced.json
+└── website
+    ├── css
+    │   ├── bootstrap.min.css
+    │   ├── custom.css
+    │   └── font-awesome.min.css
+    ├── edit.php
+    ├── editAction.php
+    ├── fonts
+    │   ├── FontAwesome.otf
+    │   ├── fontawesome-webfont.eot
+    │   ├── fontawesome-webfont.svg
+    │   ├── fontawesome-webfont.ttf
+    │   ├── fontawesome-webfont.woff
+    │   ├── glyphicons-halflings-regular.eot
+    │   ├── glyphicons-halflings-regular.svg
+    │   ├── glyphicons-halflings-regular.ttf
+    │   └── glyphicons-halflings-regular.woff
+    ├── index.php
+    ├── js
+    │   ├── bootstrap.js
+    │   ├── bootstrap.min.js
+    │   └── jquery.min.js
+    └── submit.php
 ```
 
 ### Data
