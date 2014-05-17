@@ -1,7 +1,15 @@
 <?php
-if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !file_exists('data/studentsNotPlaced.json')) {
-	echo "Please generate your data files";
+define("MINIMIZE", false);
+
+//If we don't have any classes then we can't run!
+if (!file_exists("data/classes.json")) {
+	echo("Please generate your classes file!");
 	exit;
+}
+
+//If we don't have a students file, then we should create one!
+if (!file_exists("data/students.json")) {
+	file_put_contents("data/students.json", "{}");
 }
 
 //# of choices, hardcoded because oh well
@@ -10,7 +18,7 @@ $choices = 8;
 //List of intensives, nab this from ezekiel's weirdly laid out files
 $list = array( "full" => array(""),	 "am" => array(""), "pm" => array("") );
 
-$classes = json_decode(file_get_contents("../input/classes.json"), true);
+$classes = json_decode(file_get_contents("data/classes.json"), true);
 
 foreach ($classes as $name => $className) {
 	$type = strtolower($className["type"]);
@@ -68,43 +76,49 @@ if (array_key_exists("submitting", $_POST)) {
 		<?php
 		$requestData = $_POST;
 
-		$requestData['name'] = $requestData['fullname'];
-		unset($requestData['fullname']);
+		$requestData["name"] = $requestData["fullname"];
+		unset($requestData["fullname"]);
 		
-		$requestData['commonGround'] = $requestData['cg'];
-		unset($requestData['cg']);
+		$requestData["commonGround"] = $requestData["cg"];
+		unset($requestData["cg"]);
 
-		$requestData['hartfordTech'] = $requestData['hartfordtech'];
-		unset($requestData['hartfordtech']);
+		$requestData["hartfordTech"] = $requestData["hartfordtech"];
+		unset($requestData["hartfordtech"]);
 
-		$requestData['fordSayre'] = $requestData['fordsayre'];
-		unset($requestData['fordsayre']);
+		$requestData["fordSayre"] = $requestData["fordsayre"];
+		unset($requestData["fordsayre"]);
 		
-		unset($requestData['submitting']);
+		unset($requestData["submitting"]);
 
-		if ($requestData['fordSayre'] == 'yes') {
-			$requestData['fordSayre'] = true;
+		if ($requestData["fordSayre"] == "yes") {
+			$requestData["fordSayre"] = true;
 		} else {
-			$requestData['fordSayre'] = false;
+			$requestData["fordSayre"] = false;
 		}
 
-		$requestData['choices'] = array();
+		$requestData["choices"] = array();
 		
-		for ($i=0; $i < 8; $i++) {
-			if ($requestData['full'][$i] != "") {
-				$requestData['choices'][$i]['full'] = $requestData['full'][$i];
+		for ($i = 0; $i < 8; $i ++) {
+			if ($requestData["full"][$i] != "") {
+				$requestData["choicesx"][$i]["full"] = $requestData["full"][$i];
 			}
-			if ($requestData['am'][$i] != "") {
-				$requestData['choices'][$i]['am'] = $requestData['am'][$i];
+			if ($requestData["am"][$i] != "") {
+				$requestData["choices"][$i]["am"] = $requestData["am"][$i];
 			}
-			if ($requestData['pm'][$i] != "") {
-				$requestData['choices'][$i]['pm'] = $requestData['pm'][$i];
+			if ($requestData["pm"][$i] != "") {
+				$requestData["choices"][$i]["pm"] = $requestData["pm"][$i];
 			}
 		}
 
-		unset($requestData['full']);
-		unset($requestData['am']);
-		unset($requestData['pm']);
+		unset($requestData["full"]);
+		unset($requestData["am"]);
+		unset($requestData["pm"]);
+
+		//Write it out
+		$studentlist = json_decode(file_get_contents("data/students.json"), true);
+		$studentlist[$requestData["name"]] = $requestData;
+
+		file_put_contents("data/students.json", json_encode($studentlist));
 
 		?>
 		<pre><?php echo json_encode($requestData,JSON_PRETTY_PRINT); ?></pre>
@@ -128,22 +142,22 @@ if (array_key_exists("submitting", $_POST)) {
 				for (var i = 0; i < choices; i ++) {
 					/*You need to have either a full-day or both half-days*/
 					if ($("#select-full-" + i).val() == "" && ($("#select-am-" + i).val() == "" || $("#select-pm-" + i).val() == "")) {
-						response['choice'+i] = false;
+						response["fchoice"+i] = false;
 					} else {
-						response['choice'+i] = true;
+						response["choice"+i] = true;
 					}
 				}
 
-				if ($('#fullname').val() != "") {
+				if ($("#fullname").val() != "") {
 					response.fullname = true;
 				}
-				if ($('#grade').val() != "") {
+				if ($("#grade").val() != "") {
 					response.grade = true;
 				}
-				if ($('#cg').val() != "") {
+				if ($("#cg").val() != "") {
 					response.cg = true;
 				}
-				if ($('#studentid').val() != "") {
+				if ($("#studentid").val() != "") {
 					response.studentid = true;
 				}
 
@@ -188,7 +202,7 @@ if (array_key_exists("submitting", $_POST)) {
 					});
 				};
 
-				$('.hartfordtech').change(function(event) {
+				$(".hartfordtech").change(function(event) {
 					alert("TODO: This button (ask the MI people)");
 					return;
 					var selected = $(this).is(":checked");
@@ -205,35 +219,35 @@ if (array_key_exists("submitting", $_POST)) {
 					}
 				});
 
-				$('#form-tag').submit(function(){
+				$("#form-tag").submit(function(){
 					var response = checkForm();
 
 					if (!response.fullname) {
-						$('#fullname').parent().parent().addClass('has-error');
+						$("#fullname").parent().parent().addClass("has-error");
 					} else {
-						$('#fullname').parent().parent().removeClass('has-error');
+						$("#fullname").parent().parent().removeClass("has-error");
 					}
 					if (!response.grade) {
-						$('#grade').parent().parent().addClass('has-error');
+						$("#grade").parent().parent().addClass("has-error");
 					} else {
-						$('#grade').parent().parent().removeClass('has-error');
+						$("#grade").parent().parent().removeClass("has-error");
 					}
 					if (!response.cg) {
-						$('#cg').parent().parent().addClass('has-error');
+						$("#cg").parent().parent().addClass("has-error");
 					} else {
-						$('#cg').parent().parent().removeClass('has-error');
+						$("#cg").parent().parent().removeClass("has-error");
 					}
 					if (!response.studentid) {
-						$('#studentid').parent().parent().addClass('has-error');
+						$("#studentid").parent().parent().addClass("has-error");
 					} else {
-						$('#studentid').parent().parent().removeClass('has-error');
+						$("#studentid").parent().parent().removeClass("has-error");
 					}
 
 					for (var i = 0; i < choices; i++) {
-						if (!response['choice'+i]) {
-							$('#choice'+i).addClass('has-error');
+						if (!response["choice"+i]) {
+							$("#choice"+i).addClass("has-error");
 						} else {
-							$('#choice'+i).removeClass('has-error');
+							$("#choice"+i).removeClass("has-error");
 						}
 					};
 					
