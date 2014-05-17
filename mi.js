@@ -236,6 +236,14 @@ if (process.argv.indexOf('--config') != -1) {
 if (!fs.existsSync('output/')) {
 	fs.mkdir('output');
 }
+if (config.updateWebDirectory) {
+	if (!fs.existsSync('website/')) {
+		fs.mkdir('website');
+	}
+		if (!fs.existsSync('website/data')) {
+			fs.mkdir('website/data');
+		}
+}
 if (config.useGrades != undefined) {
 	useGrades = config.useGrades;
 }
