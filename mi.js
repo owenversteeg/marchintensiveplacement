@@ -99,7 +99,8 @@ function placeStudent(s,c) {
 		}
 		return false;
 	}
-	if (c.full !== null && c.am === null && c.pm === null) {/*if fullDAY and not am/pm, assign fullDAY class if not full etc.*/
+	if (students[si].fordSayre != true && students[si].hartfordTech)
+	if (c.full != undefined && c.am == undefined && c.pm == undefined) {/*if fullDAY and not am/pm, assign fullDAY class if not full etc.*/
 		var cF = c.full;
 		try {
 			if (classes[cF].enrolled.length < classes[cF].max) {
@@ -115,12 +116,13 @@ function placeStudent(s,c) {
 				return false;
 			}
 		} catch (err) {
-			console.log('----');
-			console.log('ERROR:'+err.message);
-			console.log(cF);
-			console.log(s);
+			console.log('An error occured. EID:FORDSAYRE');
+			console.log(err.message);
+			console.log(cam);
+			console.log(students[si]);
+			process.kill();
 		}
-	} else if (c.full === undefined && c.am !== null && c.pm !== null) {/*IF am/pm and not fullDAY assign am/pm if both are not full*/ 
+	} else if (c.full == undefined && c.am != undefined && c.pm != undefined) {/*IF am/pm and not fullday assign am/pm if both are not full*/ 
 		var cam = c.am;
 		var cpm = c.pm;
 		try {
@@ -139,13 +141,14 @@ function placeStudent(s,c) {
 				return false;
 			}
 		} catch (err) {
-			console.log('----');
-			console.log('ERROR:'+err.message);
-			console.log(cam+', '+cpm);
+			console.log('An error occured. EID:FORDSAYRE');
+			console.log(err.message);
+			console.log(cam);
 			console.log(students[si]);
+			process.kill();
 		}
 		/*terminate, throw error if verbose=true, also used to mark a user as having a class based on settings*/
-	} else if (c.pm === undefined && students[si].fordSayre === true) {
+	} else if (c.pm == undefined && students[si].fordSayre == true) {
 		var cam = c.am;
 		try {
 			if ((classes[cam].enrolled.length < classes[cam].max)) {
@@ -161,10 +164,11 @@ function placeStudent(s,c) {
 				return false;
 			}
 		} catch (err) {
-			console.log('----');
-			console.log('ERROR:'+err.message);
+			console.log('An error occured. EID:FORDSAYRE');
+			console.log(err.message);
 			console.log(cam);
-			console.log(s);
+			console.log(students[si]);
+			process.kill();
 		}
 	} else {
 		if (verbose) {

@@ -68,10 +68,23 @@ if (array_key_exists("submitting", $_POST)) {
 		
 		$requestData['commonGround'] = $requestData['cg'];
 		unset($requestData['cg']);
+
+		$requestData['hartfordTech'] = $requestData['hartfordtech'];
+		unset($requestData['hartfordtech']);
+
+		$requestData['fordSayre'] = $requestData['fordsayre'];
+		unset($requestData['fordsayre']);
 		
+		unset($requestData['submitting']);
+
+		if ($requestData['fordSayre'] == 'yes') {
+			$requestData['fordSayre'] = true;
+		} else {
+			$requestData['fordSayre'] = false;
+		}
+
 		$requestData['choices'] = array();
 		
-
 		for ($i=0; $i < 8; $i++) {
 			if ($requestData['full'][$i] != "") {
 				$requestData['choices'][$i]['full'] = $requestData['full'][$i];
@@ -89,8 +102,7 @@ if (array_key_exists("submitting", $_POST)) {
 		unset($requestData['pm']);
 
 		?>
-		<pre><?php print_r($requestData); ?></pre>
-		<pre><?php echo json_encode($requestData); ?></pre>
+		<pre><?php echo json_encode($requestData,JSON_PRETTY_PRINT); ?></pre>
 		<a href="<?php echo($_SERVER["PHP_SELF"]);?>">Back</a>
 		<?php
 	}
