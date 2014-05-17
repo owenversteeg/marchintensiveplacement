@@ -45,7 +45,7 @@ function shuffle(array) {
 	, randomIndex
 	;
 
-	while (0 !== currentIndex) {
+	while (0 != currentIndex) {
 		randomIndex = Math.floor(Math.random() * currentIndex);
 		currentIndex -= 1;
 
@@ -63,7 +63,7 @@ function randomIntFromInterval(min,max) {
 function removeDuplicatesFromArray(arr) {
 	for (var i = 0; i < arr.length; i++) {
 		for (var y = 0; y < arr.length; y++) {
-			if (arr[i] === arr[y] && i !== y) {
+			if (arr[i] == arr[y] && i != y) {
 				arr.splice(y,1);
 			}
 		}
@@ -72,9 +72,9 @@ function removeDuplicatesFromArray(arr) {
 }
 function classRequestDetails(det,cl) {
 	if (det == 'type') {
-		if (cl.am !== null && cl.pm !== null) {
+		if (cl.am != undefined && cl.pm != undefined) {
 			return 'ampm';
-		} else if (cl.full !== null) {
+		} else if (cl.full != undefined) {
 			return 'full';
 		}
 	}
@@ -99,8 +99,7 @@ function placeStudent(s,c) {
 		}
 		return false;
 	}
-	if (students[si].fordSayre != true && students[si].hartfordTech)
-	if (c.full != undefined && c.am == undefined && c.pm == undefined) {/*if fullDAY and not am/pm, assign fullDAY class if not full etc.*/
+	if (c.full != undefined && c.am == undefined && c.pm == undefined && students[si].hartfordTech == 'none' && students[si].fordSayre == false) {
 		var cF = c.full;
 		try {
 			if (classes[cF].enrolled.length < classes[cF].max) {
@@ -116,13 +115,13 @@ function placeStudent(s,c) {
 				return false;
 			}
 		} catch (err) {
-			console.log('An error occured. EID:FORDSAYRE');
+			console.log('An error occured. EID:FULL');
 			console.log(err.message);
 			console.log(cam);
 			console.log(students[si]);
 			process.kill();
 		}
-	} else if (c.full == undefined && c.am != undefined && c.pm != undefined) {/*IF am/pm and not fullday assign am/pm if both are not full*/ 
+	} else if (c.full == undefined && c.am != undefined && c.pm != undefined && students[si].hartfordTech == 'none' && students[si].fordSayre == false) {
 		var cam = c.am;
 		var cpm = c.pm;
 		try {
@@ -141,14 +140,14 @@ function placeStudent(s,c) {
 				return false;
 			}
 		} catch (err) {
-			console.log('An error occured. EID:FORDSAYRE');
+			console.log('An error occured. EID:AMPM');
 			console.log(err.message);
 			console.log(cam);
 			console.log(students[si]);
 			process.kill();
 		}
 		/*terminate, throw error if verbose=true, also used to mark a user as having a class based on settings*/
-	} else if (c.pm == undefined && students[si].fordSayre == true) {
+	} else if (c.am != undefined && students[si].hartfordTech == 'none' && students[si].fordSayre == true) {
 		var cam = c.am;
 		try {
 			if ((classes[cam].enrolled.length < classes[cam].max)) {
@@ -170,6 +169,50 @@ function placeStudent(s,c) {
 			console.log(students[si]);
 			process.kill();
 		}
+	} else if (students[si].hartfordTech == 'am' && students[si].fordSayre == false && c.am != undefined) {
+		var cam = c.am;
+		try {
+			if ((classes[cam].enrolled.length < classes[cam].max)) {
+				classes[cam].enrolled.push(s)
+				setStudentHasClass(si,true);
+				if (verbose) {
+					console.log(s+' has been placed in '+cam+' (HTECHAM)');
+				}
+			} else {
+				if (verbose) {
+					console.log('Class '+cam+' is full! ('+s+' HTECHAM)');
+				}
+				return false;
+			}
+		} catch (err) {
+			console.log('An error occured. EID:HTECHAM');
+			console.log(err.message);
+			console.log(cpm);
+			console.log(students[si]);
+			process.kill();
+		}
+	} else if (students[si].hartfordTech == 'pm' && students[si].fordSayre == false && c.pm != undefined) {
+		var cpm = c.pm;
+		try {
+			if ((classes[cpm].enrolled.length < classes[cpm].max)) {
+				classes[cpm].enrolled.push(s)
+				setStudentHasClass(si,true);
+				if (verbose) {
+					console.log(s+' has been placed in '+cpm+' (HTECHPM)');
+				}
+			} else {
+				if (verbose) {
+					console.log('Class '+cpm+' is full! ('+s+' HTECHPM)');
+				}
+				return false;
+			}
+		} catch (err) {
+			console.log('An error occured. EID:HTECHPM');
+			console.log(err.message);
+			console.log(cpm);
+			console.log(students[si]);
+			process.kill();
+		}
 	} else {
 		if (verbose) {
 			console.log('The class data for '+s+' is not valid.');
@@ -181,10 +224,10 @@ function placeStudent(s,c) {
 	return true;
 }
 
-if (process.argv.indexOf('--verbose') !== -1) {
+if (process.argv.indexOf('--verbose') != -1) {
 	verbose = true;
 }
-if (process.argv.indexOf('--config') !== -1) {
+if (process.argv.indexOf('--config') != -1) {
 	var config = readJSON(process.argv[process.argv.indexOf('--classes') + 1]);
 } else {
 	var config = readJSON('config.json');
@@ -193,57 +236,56 @@ if (process.argv.indexOf('--config') !== -1) {
 if (!fs.existsSync('output/')) {
 	fs.mkdir('output');
 }
-if (config.useGrades !== undefined) {
+if (config.useGrades != undefined) {
 	useGrades = config.useGrades;
 }
-if (config.grades !== undefined) {
+if (config.grades != undefined) {
 	grades = config.grades;
 }
 
-if (config.files.input.classes !== undefined) {
+if (config.files.input.classes != undefined) {
 	classFile = 'input/'+config.files.input.classes;
 }
-if (config.files.input.students !== undefined) {
+if (config.files.input.students != undefined) {
 	studentsFile = 'input/'+config.files.input.students;
 }
 
-if (config.files.output.classes !== undefined) {
+if (config.files.output.classes != undefined) {
 	var outputClassesFile = 'output/'+config.files.output.classes;
 } else {
 	var outputClassesFile = 'output/classes.json';
 }
-if (config.files.output.studentsNotPlaced !== undefined) {
+if (config.files.output.studentsNotPlaced != undefined) {
 	var outputStudentsNotPlaced = 'output/'+config.files.output.studentsNotPlaced;
 } else {
 	var outputStudentsNotPlaced = 'output/studentsNotPlaced';
 }
-if (config.files.output.students !== undefined) {
+if (config.files.output.students != undefined) {
 	var outputStudents = 'output/'+config.files.output.students;
 } else {
 	var outputStudents = 'output/students';
 }
 
-if (config.files.output.classes !== undefined) {
+if (config.files.output.classes != undefined) {
 	var outputWebClassesFile = 'website/data/'+config.files.output.classes;
 } else {
 	var outputWebClassesFile = 'website/data/classes.json';
 }
-if (config.files.output.studentsNotPlaced !== undefined) {
+if (config.files.output.studentsNotPlaced != undefined) {
 	var outputWebStudentsNotPlaced = 'website/data/'+config.files.output.studentsNotPlaced;
 } else {
 	var outputWebStudentsNotPlaced = 'website/data/studentsNotPlaced';
 }
-if (config.files.output.students !== undefined) {
+if (config.files.output.students != undefined) {
 	var outputWebStudents = 'website/data/'+config.files.output.students;
 } else {
 	var outputWebStudents = 'website/data/students';
 }
-
-if (config.doNotAssignClassesWhenNoneAreRequested !== undefined) {
+if (config.doNotAssignClassesWhenNoneAreRequested != undefined) {
 	doNotAssignClassesWhenNoneAreRequested = config.doNotAssignClassesWhenNoneAreRequested;
 }
 
-if (process.argv.indexOf('--help') !== -1) {
+if (process.argv.indexOf('--help') != -1) {
 	console.log('Show all actions');
 	console.log('	--verbose');
 	console.log('Custom Config Path');
@@ -256,8 +298,8 @@ var students = readJSON(studentsFile);
 
 var studentRecordsForDuplicates = [];
 for (var i = 0; i < students.length; i++) {
-	if (studentRecordsForDuplicates.indexOf(students[i].name) !== -1) {
-		if (process.argv.indexOf('--force') !== -1) {
+	if (studentRecordsForDuplicates.indexOf(students[i].name) != -1) {
+		if (process.argv.indexOf('--force') != -1) {
 			students.splice(i,1);
 		} else {
 			console.log(students[i].name+' was found twice, names must be unique');
@@ -271,15 +313,18 @@ for (var i = 0; i < students.length; i++) {
 
 for (var i = 0; i < students.length; i++) {
 	/*Set ford sayre values*/
-	if (students[i].fordSayre !== true) {
+	if (students[i].fordSayre != true) {
 		students[i].fordSayre = false;
 		if (verbose) {
 			console.log(students[i].name+' fordSayre=false');
 		}
 	}
 	for (var x = 0; x < students[i].choices.length; x++) {
-		if (students[i].choices[x].full == null) {
-			//TODO: Delete request to prevent potential program errors: students[i].choices.splice(x,1);
+		if (students[i].choices[x].full == undefined && students[i].choices[x].am == undefined && students[i].choices[x].pm == undefined) {
+			students[i].choices.splice(x,1);
+			if (verbose) {
+				console.log('Spliced for '+students[i].name);
+			}
 		}
 	};
 };
@@ -298,7 +343,7 @@ for (var x = 0; x < grades.length; x++) {
 		for (var i = 0; i < students.length; i++) {
 			if (students[i].grade == grades[x] || !useGrades) {
 				/*if the student has no class, try to assing their requests*/
-				if (getStudentHasClass(i) !== true) {
+				if (getStudentHasClass(i) != true) {
 					/*going from request 1, to last request*/
 					for (var n = 0; n < students[i].choices.length; n++) {
 						if (placeStudent(students[i].name,students[i].choices[n])) {
@@ -306,13 +351,13 @@ for (var x = 0; x < grades.length; x++) {
 							break;
 						} else {
 							if (classRequestDetails('type',students[i].choices[n]) == 'ampm') {
-								if (students[i].choices[n].am !== undefined) {
+								if (students[i].choices[n].am != undefined) {
 									if (classes[students[i].choices[n].am].waitlist == undefined) {
 										classes[students[i].choices[n].am].waitlist = [];
 									}
 									classes[students[i].choices[n].am].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].am+')');
 								}
-								if (students[i].choices[n].pm !== undefined) {
+								if (students[i].choices[n].pm != undefined) {
 									if (classes[students[i].choices[n].pm].waitlist == undefined) {
 										classes[students[i].choices[n].pm].waitlist = [];
 									}
@@ -328,7 +373,7 @@ for (var x = 0; x < grades.length; x++) {
 					}
 				}
 				/*If unable to place the student, put them on the unplaceable list*/
-				if (getStudentHasClass(i) !== true && y !== 0) {
+				if (getStudentHasClass(i) != true && y != 0) {
 					studentUnplaceableIndex.push(i);
 				}
 			} else {
@@ -352,7 +397,7 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 //};
 /*print the success percentage*/
 var percentage = Math.round((students.length-studentUnplaceableIndex.length)/students.length*100);
-if (studentUnplaceableIndex !== 0 && percentage == 100) {
+if (studentUnplaceableIndex != 0 && percentage == 100) {
 	percentage = 99;
 }
 console.log(percentage+'% placement, where '+(students.length - studentUnplaceableIndex.length)+' student(s) of '+students.length+' were placed');
