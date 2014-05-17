@@ -115,11 +115,13 @@ if (array_key_exists("submitting", $_POST)) {
 		unset($requestData["am"]);
 		unset($requestData["pm"]);
 
-		//Write it out
-		$students = json_decode(file_get_contents("data/students.json"), true);
-		array_push($students,$requestData);
+		//Write it to the database
+		require("mysql-config.php");
 
-		file_put_contents("data/students.json", json_encode($students));
+		$query = $db->prepare("INSERT INTO `choices` SET `studentid` = :id, `choices` = :choices");
+		$query->bindValue(":id", $requestData["studentid"]);
+		$query->bindValue(":choices", json_encode($requestData));
+		$query->execute();
 
 		?>
 		<pre><?php echo json_encode($requestData,JSON_PRETTY_PRINT); ?></pre>

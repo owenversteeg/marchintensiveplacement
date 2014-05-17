@@ -16,3 +16,4 @@ input
 students.json
 students.csv
 classes.json
+mysql-config.php
