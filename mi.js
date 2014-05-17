@@ -369,19 +369,19 @@ for (var x = 0; x < grades.length; x++) {
 									if (classes[students[i].choices[n].am].waitlist == undefined) {
 										classes[students[i].choices[n].am].waitlist = [];
 									}
-									classes[students[i].choices[n].am].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].am+')');
+									classes[students[i].choices[n].am].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices+')');
 								}
 								if (students[i].choices[n].pm != undefined) {
 									if (classes[students[i].choices[n].pm].waitlist == undefined) {
 										classes[students[i].choices[n].pm].waitlist = [];
 									}
-									classes[students[i].choices[n].pm].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].am+')');
+									classes[students[i].choices[n].pm].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices+')');
 								}
 							} else if (classRequestDetails('type',students[i].choices[n]) == 'full') {
 								if (classes[students[i].choices[n].full].waitlist == undefined) {
 									classes[students[i].choices[n].full].waitlist = [];
 								}
-								classes[students[i].choices[n].full].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].am+')');	
+								classes[students[i].choices[n].full].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices+')');	
 							}
 						}
 					}
