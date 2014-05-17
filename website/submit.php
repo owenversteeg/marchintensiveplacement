@@ -10,6 +10,7 @@ if (!file_exists("data/classes.json")) {
 //If we don't have a students file, then we should create one!
 if (!file_exists("data/students.json")) {
 	file_put_contents("data/students.json", "{}");
+	chmod("data/students.json", 0777);
 }
 
 //# of choices, hardcoded because oh well
@@ -40,15 +41,15 @@ if (array_key_exists("submitting", $_POST)) {
 
 		/*Make sure they're correct*/
 		if (!in_array($full, $list["full"])) {
-			$error = "Invalid full intensive #$i";
+			$error = "Invalid full intensive #$i: $full";
 			break;
 		}
 		if (!in_array($am, $list["am"])) {
-			$error = "Invalid am intensive #$i";
+			$error = "Invalid am intensive #$i: $am";
 			break;
 		}
 		if (!in_array($pm, $list["pm"])) {
-			$error = "Invalid pm intensive #$i";
+			$error = "Invalid pm intensive #$i: $pm";
 			break;
 		}
 
@@ -115,10 +116,10 @@ if (array_key_exists("submitting", $_POST)) {
 		unset($requestData["pm"]);
 
 		//Write it out
-		$studentlist = json_decode(file_get_contents("data/students.json"), true);
-		$studentlist[$requestData["name"]] = $requestData;
+		$students = json_decode(file_get_contents("data/students.json"), true);
+		array_push($students,$requestData);
 
-		file_put_contents("data/students.json", json_encode($studentlist));
+		file_put_contents("data/students.json", json_encode($students));
 
 		?>
 		<pre><?php echo json_encode($requestData,JSON_PRETTY_PRINT); ?></pre>
