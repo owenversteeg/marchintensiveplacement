@@ -31,7 +31,16 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 				<div class="col-md-6">
 					<?php
 					foreach ($class['enrolled'] as $key => $student) {
-						echo '<h4>'.$student.'</h4><br>';			
+						echo $student;
+						?>
+						<form method="post" action="editAction.php">
+							<input type="hidden" name="operation" value="remove">
+							<input type="hidden" name="class" value="<?php echo $className; ?>">
+							<input type="hidden" name="user" value="<?php echo $student; ?>">
+							<input type="submit" value="Remove" class="btn btn-xs">
+						</form>
+						<br>
+						<?php
 					}
 					?>
 				</div>
