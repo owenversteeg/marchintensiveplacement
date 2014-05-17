@@ -60,7 +60,37 @@ if (array_key_exists("submitting", $_POST)) {
 		Your results have been "recorded."<br>
 		<br>
 		Because I'm too lazy to do it now, here's a postdump:
-		<pre><?php print_r($_POST); ?></pre>
+		<?php
+		$requestData = $_POST;
+
+		$requestData['name'] = $requestData['fullname'];
+		unset($requestData['fullname']);
+		
+		$requestData['commonGround'] = $requestData['cg'];
+		unset($requestData['cg']);
+		
+		$requestData['choices'] = array();
+		
+
+		for ($i=0; $i < 8; $i++) {
+			if ($requestData['full'][$i] != "") {
+				$requestData['choices'][$i]['full'] = $requestData['full'][$i];
+			}
+			if ($requestData['am'][$i] != "") {
+				$requestData['choices'][$i]['am'] = $requestData['am'][$i];
+			}
+			if ($requestData['pm'][$i] != "") {
+				$requestData['choices'][$i]['pm'] = $requestData['pm'][$i];
+			}
+		}
+
+		unset($requestData['full']);
+		unset($requestData['am']);
+		unset($requestData['pm']);
+
+		?>
+		<pre><?php print_r($requestData); ?></pre>
+		<pre><?php echo json_encode($requestData); ?></pre>
 		<a href="<?php echo($_SERVER["PHP_SELF"]);?>">Back</a>
 		<?php
 	}

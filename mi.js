@@ -72,15 +72,15 @@ function removeDuplicatesFromArray(arr) {
 }
 function classRequestDetails(det,cl) {
 	if (det == 'type') {
-		if (cl.AM !== null && cl.PM !== null) {
-			return 'AMPM';
-		} else if (cl.FULL !== null) {
-			return 'FULL';
+		if (cl.am !== null && cl.pm !== null) {
+			return 'ampm';
+		} else if (cl.full !== null) {
+			return 'full';
 		}
 	}
 }
 function placeStudent(s,c) {
-	/*places student s in class c, where possible. c is an object, with keys FULL, AM, and PM, s is a string*/	
+	/*places student s in class c, where possible. c is an object, with keys full, am, and pm, s is a string*/	
 	/*terminate if student doesn't exist, throw error if verbose=true*/
 	var si = getIndexOfStudentName(s);
 	if (si == undefined) {
@@ -99,8 +99,8 @@ function placeStudent(s,c) {
 		}
 		return false;
 	}
-	if (c.FULL !== null && c.AM === null && c.PM === null) {/*if FULLDAY and not AM/PM, assign FULLDAY class if not full etc.*/
-		var cF = c.FULL;
+	if (c.full !== null && c.am === null && c.pm === null) {/*if fullDAY and not am/pm, assign fullDAY class if not full etc.*/
+		var cF = c.full;
 		try {
 			if (classes[cF].enrolled.length < classes[cF].max) {
 				classes[cF].enrolled.push(s);
@@ -120,50 +120,50 @@ function placeStudent(s,c) {
 			console.log(cF);
 			console.log(s);
 		}
-	} else if (c.FULL === null && c.AM !== null && c.PM !== null) {/*IF AM/PM and not FULLDAY assign AM/PM if both are not full*/ 
-		var cAM = c.AM;
-		var cPM = c.PM;
+	} else if (c.full === undefined && c.am !== null && c.pm !== null) {/*IF am/pm and not fullDAY assign am/pm if both are not full*/ 
+		var cam = c.am;
+		var cpm = c.pm;
 		try {
-			if ((classes[cAM].enrolled.length < classes[cAM].max) && (classes[cPM].enrolled.length < classes[cPM].max)) {
-				classes[cAM].enrolled.push(s)
-				classes[cPM].enrolled.push(s)
+			if ((classes[cam].enrolled.length < classes[cam].max) && (classes[cpm].enrolled.length < classes[cpm].max)) {
+				classes[cam].enrolled.push(s)
+				classes[cpm].enrolled.push(s)
 				setStudentHasClass(si,true);
 				if (verbose) {
-					console.log(s+' has been placed in '+cAM+' & '+cPM);
+					console.log(s+' has been placed in '+cam+' & '+cpm);
 				}
 				return true;
 			} else {
 				if (verbose) {
-					console.log('Class '+cPM+' or '+cAM+' is full! ('+s+')');
+					console.log('Class '+cpm+' or '+cam+' is full! ('+s+')');
 				}
 				return false;
 			}
 		} catch (err) {
 			console.log('----');
 			console.log('ERROR:'+err.message);
-			console.log(cAM+', '+cPM);
-			console.log(s);
+			console.log(cam+', '+cpm);
+			console.log(students[si]);
 		}
 		/*terminate, throw error if verbose=true, also used to mark a user as having a class based on settings*/
-	} else if (c.PM === null && students[si].fordSayre === true) {
-		var cAM = c.AM;
+	} else if (c.pm === undefined && students[si].fordSayre === true) {
+		var cam = c.am;
 		try {
-			if ((classes[cAM].enrolled.length < classes[cAM].max)) {
-				classes[cAM].enrolled.push(s)
+			if ((classes[cam].enrolled.length < classes[cam].max)) {
+				classes[cam].enrolled.push(s)
 				setStudentHasClass(si,true);
 				if (verbose) {
-					console.log(s+' has been placed in '+cAM+' (Ford Sayre)');
+					console.log(s+' has been placed in '+cam+' (Ford Sayre)');
 				}
 			} else {
 				if (verbose) {
-					console.log('Class '+cAM+' is full! ('+s+' Ford Sayre)');
+					console.log('Class '+cam+' is full! ('+s+' Ford Sayre)');
 				}
 				return false;
 			}
 		} catch (err) {
 			console.log('----');
 			console.log('ERROR:'+err.message);
-			console.log(cAM);
+			console.log(cam);
 			console.log(s);
 		}
 	} else {
@@ -274,7 +274,7 @@ for (var i = 0; i < students.length; i++) {
 		}
 	}
 	for (var x = 0; x < students[i].choices.length; x++) {
-		if (JSON.stringify(students[i].choices[x]) == JSON.stringify({"FULL":null,"AM":null,"PM":null})) {
+		if (students[i].choices[x].full == null) {
 			//TODO: Delete request to prevent potential program errors: students[i].choices.splice(x,1);
 		}
 	};
@@ -301,65 +301,28 @@ for (var x = 0; x < grades.length; x++) {
 							happiness.push(n);
 							break;
 						} else {
-							if (classRequestDetails('type',students[i].choices[n]) == 'AMPM') {
-								if (classes[students[i].choices[n].AM].waitlist == undefined) {
-									classes[students[i].choices[n].AM].waitlist = [];
+							if (classRequestDetails('type',students[i].choices[n]) == 'ampm') {
+								if (students[i].choices[n].am !== undefined) {
+									if (classes[students[i].choices[n].am].waitlist == undefined) {
+										classes[students[i].choices[n].am].waitlist = [];
+									}
+									classes[students[i].choices[n].am].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].am+')');
 								}
-								classes[students[i].choices[n].AM].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].AM+')');
-								if (classes[students[i].choices[n].PM].waitlist == undefined) {
-									classes[students[i].choices[n].PM].waitlist = [];
+								if (students[i].choices[n].pm !== undefined) {
+									if (classes[students[i].choices[n].pm].waitlist == undefined) {
+										classes[students[i].choices[n].pm].waitlist = [];
+									}
+									classes[students[i].choices[n].pm].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].am+')');
 								}
-								classes[students[i].choices[n].PM].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].AM+')');
-							} else if (classRequestDetails('type',students[i].choices[n]) == 'FULL') {
-								if (classes[students[i].choices[n].FULL].waitlist == undefined) {
-									classes[students[i].choices[n].FULL].waitlist = [];
+							} else if (classRequestDetails('type',students[i].choices[n]) == 'full') {
+								if (classes[students[i].choices[n].full].waitlist == undefined) {
+									classes[students[i].choices[n].full].waitlist = [];
 								}
-								classes[students[i].choices[n].FULL].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].AM+')');	
+								classes[students[i].choices[n].full].waitlist.push(students[i].name+' ('+i+'/ '+students[i].choices[n].am+')');	
 							}
 						}
 					}
 				}
-				//if ((randomIntFromInterval(1,2) === 1 || studentRandomData[index] === 2) && studentRandomData[index] !== 1) {
-				//	studentRandomData[index] = 1;
-				//	/*if the student has no class, and not the first loop, assign to random class*/
-				//	if (getStudentHasClass(index) !== true && y !== 0) {
-				//		/*loop classes*/
-				//		for (var n = 0; n < Object.keys(classes).length; n++) {
-				//			var key = Object.keys(classes)[n];
-				//			/*find first FULLDAY type class that isn't empty.*/
-				//			if (classes[key].type == 'FULL') {
-				//				if (placeStudent(students[index].name,{"FULL":key,"AM":null,"PM":null})) {
-				//					happiness.push(8);
-				//					break;
-				//				}
-				//			}
-				//		}
-				//	}					
-				//} else {
-				//	studentRandomData[index] = 2;
-				//	if (getStudentHasClass(index) !== true && y !== 0) {
-				//		/*loop classes*/
-				//		for (var n = 0; n < Object.keys(classes).length; n++) {
-				//			var keyAM = Object.keys(classes)[n];
-				//			/*find first AM type class that isn't empty.*/
-				//			if (classes[keyAM].type == 'AM') {
-				//				for (var z = 0; z < Object.keys(classes).length; z++) {
-				//					var keyPM = Object.keys(classes)[z];
-				//					/*find first PM type class that isn't empty.*/
-				//					if (classes[keyPM].type == 'PM') {
-				//						if (placeStudent(students[index].name,{"FULL":null,"AM":keyAM,"PM":keyPM})) {
-				//							happiness.push(8);
-				//							if (verbose) {
-				//								console.log('Placed AM/PM Random Class!');
-				//							}
-				//							break;
-				//						}
-				//					}
-				//				}
-				//			}
-				//		}
-				//	}
-				//}
 				/*If unable to place the student, put them on the unplaceable list*/
 				if (getStudentHasClass(i) !== true && y !== 0) {
 					studentUnplaceableIndex.push(i);
