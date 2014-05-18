@@ -33,17 +33,38 @@ if (array_key_exists("submitting", $_POST)) {
 		$am = $_POST["am"][$i];
 		$pm = $_POST["pm"][$i];
 
-		/*Make sure they're correct*/
-		if (!in_array($full, $list["full"])) {
+
+		$foundFull = false;
+		foreach ($list["full"] as $key => $value) {
+			if ($full == $list["full"][$key]["name"]) {
+				$foundFull = true;
+				break;
+			}
+		}
+		if (!$foundFull) {
 			$error = "Invalid full intensive #$i: $full";
 			break;
 		}
-		if (!in_array($am, $list["am"])) {
+		$foundAm = false;
+		foreach ($list["am"] as $key => $value) {
+			if ($am == $list["am"][$key]["name"]) {
+				$foundAm = true;
+				break;
+			}
+		}
+		if (!$foundAm) {
 			$error = "Invalid am intensive #$i: $am";
 			break;
 		}
-		if (!in_array($pm, $list["pm"])) {
-			$error = "Invalid pm intensive #$i: $pm";
+		$foundPm = false;
+		foreach ($list["pm"] as $key => $value) {
+			if ($pm == $list["pm"][$key]["name"]) {
+				$foundPm = true;
+				break;
+			}
+		}
+		if (!$foundPm) {
+			$error = "Invalid pm intensive #$i: $full";
 			break;
 		}
 
@@ -157,6 +178,22 @@ if (array_key_exists("submitting", $_POST)) {
 				if ($("#studentid").val() != "") {
 					response.studentid = true;
 				}
+
+				var choices = {"full":[],"am":[],"pm":[]};
+				$('.select-full').each(function(){
+					choices.full.push($(this).val());
+				});
+				$('.select-am').each(function(){
+					choices.am.push($(this).val());
+				});
+				$('.select-pm').each(function(){
+					choices.pm.push($(this).val());
+				});
+				for (var i = 0; i < choices.full.length; i++) {
+					if (choices.full.indexOf(choices.full[i]) != i) {
+						$('#select-full-'+i).val('');
+					}
+				};
 
 				return response;
 			}
@@ -322,9 +359,9 @@ if (array_key_exists("submitting", $_POST)) {
 					?>
 					<div id="choice<?php echo $i; ?>" class="row row-margin-top row-margin-bottom">
 						<div class="col-md-2"><label class="control-label">Choice <?php echo($i + 1);?>:</label></div>
-						<div class="col-md-4"><select class="form-control" id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]"></select></div>
-						<div class="col-md-3"><select class="form-control" id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]"></select></div>
-						<div class="col-md-3"><select class="form-control" id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]"></select></div>
+						<div class="col-md-4"><select class="form-control select-full" id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]"></select></div>
+						<div class="col-md-3"><select class="form-control select-am" id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]"></select></div>
+						<div class="col-md-3"><select class="form-control select-pm" id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]"></select></div>
 					</div>
 					<?php
 				}
