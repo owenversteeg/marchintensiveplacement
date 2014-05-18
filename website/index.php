@@ -22,15 +22,13 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 			</div>
 		</div>
 		<div class="row row-margin-top">
-			<div class="col-md-1 col-md-offset-4">
+			<div class="col-md-3 col-md-offset-3">
 				<a href="submit.php" class="btn btn-block btn-info">Submit</a>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<a href="edit.php" class="btn btn-block btn-warning">Edit</a>
 			</div>
-			<div class="col-md-1">
-				<a href="generate.php" class="btn btn-block btn-success">Generate</a>
-			</div>
+
 		</div>
 	</div>
 </body>
