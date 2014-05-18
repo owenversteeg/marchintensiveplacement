@@ -347,28 +347,29 @@ for (var x = 0; x < grades.length; x++) {
 					/*going from request 1, to last request*/
 					for (var n = 0; n < students[i].choices.length; n++) {
 						if (placeStudent(students[i].studentid,students[i].choices[n])) {
+							if (n != 0) {
+								if (classRequestDetails('type',students[i].choices[n-1]) == 'ampm') {
+									if (students[i].choices[n-1].am != undefined) {
+										if (classes[students[i].choices[n-1].am].waitlist == undefined) {
+											classes[students[i].choices[n-1].am].waitlist = [];
+										}
+										classes[students[i].choices[n-1].am].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].am].name+' and '+classes[students[i].choices[n-1].pm].name);
+									}
+									if (students[i].choices[n-1].pm != undefined) {
+										if (classes[students[i].choices[n-1].pm].waitlist == undefined) {
+											classes[students[i].choices[n-1].pm].waitlist = [];
+										}
+										classes[students[i].choices[n-1].pm].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].am].name+' and '+classes[students[i].choices[n-1].pm].name);
+									}
+								} else if (classRequestDetails('type',students[i].choices[n-1]) == 'full') {
+									if (classes[students[i].choices[n-1].full].waitlist == undefined) {
+										classes[students[i].choices[n-1].full].waitlist = [];
+									}
+									classes[students[i].choices[n-1].full].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].full].name);
+								}
+							}
 							happiness.push(n);
 							break;
-						} else {
-							if (classRequestDetails('type',students[i].choices[n]) == 'ampm') {
-								if (students[i].choices[n].am != undefined) {
-									if (classes[students[i].choices[n].am].waitlist == undefined) {
-										classes[students[i].choices[n].am].waitlist = [];
-									}
-									classes[students[i].choices[n].am].waitlist.push(JSON.stringify(getStudentClass(sid)));
-								}
-								if (students[i].choices[n].pm != undefined) {
-									if (classes[students[i].choices[n].pm].waitlist == undefined) {
-										classes[students[i].choices[n].pm].waitlist = [];
-									}
-									classes[students[i].choices[n].pm].waitlist.push(JSON.stringify(getStudentClass(sid)));
-								}
-							} else if (classRequestDetails('type',students[i].choices[n]) == 'full') {
-								if (classes[students[i].choices[n].full].waitlist == undefined) {
-									classes[students[i].choices[n].full].waitlist = [];
-								}
-								classes[students[i].choices[n].full].waitlist.push(JSON.stringify(getStudentClass(sid)));
-							}
 						}
 					}
 				}
