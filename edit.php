@@ -58,21 +58,16 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 	</script>
 </head>
 <body>
-	<div id="container" class="container">
-		<div class="row row-margin-top row-margin-bottom">
-			<div class="col-md-1">
-				<a href="index.php" class="btn btn-info btn-block">Home</a>
-			</div>
-		</div>
+	<div id="container" style="margin-top:50px" class="container">
 		<?php
 		$classes = json_decode(file_get_contents('data/classes.json'),true);
 		$students = json_decode(file_get_contents('data/students.json'),true);
 
 		foreach ($classes as $className => $class) {
 			?>
-			<div class="row well row-margin-top row-margin-bottom">
+			<div class="row well">
 				<div class="col-md-6">
-					<div class="row">
+					<div class="row row-margin-bottom">
 						<div class="col-md-12">
 							<?php echo '<h4>'.$class['displayname'].'</h4>'; ?>
 						</div>

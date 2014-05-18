@@ -296,6 +296,11 @@ if (array_key_exists("submitting", $_POST)) {
 </head>
 <body>
 	<div class="container">
+		<div class="row row-margin-top">
+			<div class="col-md-1">
+				<a href="index.php" class="btn btn-info btn-block">Home</a>
+			</div>
+		</div>
 		<?php /*Super lazy redirection*/ ?>
 		<form method="POST" id="form-tag">
 			<div>
