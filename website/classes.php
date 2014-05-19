@@ -20,17 +20,84 @@ if (!file_exists('data/classes.json')) {
 		<?php
 		foreach ($classes as $classKey => $class) {
 			?>
-			<div class="row row-margin-top row-margin-bottom">
-				<div class="col-md-3">
-					<h4><?php echo $class["displayname"]; ?></h4>
-				</div>
-				<div class="col-md-9">
+			<p style="background:#89d084">&nbsp;</p>
+			<p>
+				<span style="font-size:12.0pt;font-family:Arial Black;color:#039c08">
+					<?php echo $class["displayname"]; ?>
+				</span>
+				<span style="font-size:12.0pt;font-family:Arial Black">
+					<br>
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial Black;color:#74d033">
+					INSTRUCTOR(S)&nbsp;
+				</span>
+				<b>
+					<i>
+						<span style="font-size:9.0pt;font-family:Arial">
+							NA
+						</span>
+					</i>
+				</b>
+				<b>
+					<i>
+						<span style="font-size:9.0pt;font-family:Arial">
+							<br>
+						</span>
+					</i>
+				</b>
+				<span style="font-size:9.0pt;font-family:Arial Black;color:#74d033">
+					LOCATION(S)&nbsp;
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
+					NA
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
+					<br>
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial Black;color:#74d033">
+					READING(S)&nbsp;
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
+					NA
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
+					<br>
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial Black;color:#74d033">
+					TIME
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
+					&nbsp;&nbsp; <?php echo strtoupper($class["type"]); ?>&nbsp;&nbsp;&nbsp;&nbsp;
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial Black;color:#74d033">MAX #
+					STUDENTS
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
+					&nbsp;&nbsp;<?php echo strtoupper($class["max"]); ?>&nbsp;&nbsp;&nbsp;&nbsp;
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial Black;color:#74d033">
+					COST PER STUDENT
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
+					&nbsp;&nbsp; $NA
+					<br>
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial Black;color:#74d033">
+					DESCRIPTION
+					<br>
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
 					<?php echo $class["description"]; ?>
-				</div>
-			</div>
+				</span>
+				<span style="font-size:9.0pt;font-family:Arial">
+					<br>
+					<br>
+				</span>
+			</p>
 			<?php
 		}
 		?>
+		<p style="background:#89d084">&nbsp;</p>
 	</div>
 </body>
 </html>
