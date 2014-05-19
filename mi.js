@@ -23,6 +23,35 @@ function getNameOfStudentID(id) {
 	return students[getIndexOfStudentID(id)].name;
 };
 
+function verifyClassRequirements(sid,cl) {
+	if (classes[cl].requirements == undefined) {
+		return true;
+	}
+	if (classes[cl].requirements.length == 0) {
+		return true;
+	}
+	for (var i = 0; i < Object.keys(classes[cl].requirements).length; i++) {
+		var key = Object.keys(classes[cl].requirements)[i];
+		switch (key) {
+			case "gender":
+				if (classes[cl].requirements[key] == students[getIndexOfStudentID(sid)].gender) {
+					return true;
+				} else {
+					return false;
+				}
+			break;
+			case "grade":
+				if (classes[cl].requirements[key] == students[getIndexOfStudentID(sid)].grade) {
+					return true;
+				} else {
+					return false;
+				}
+			break;
+		}
+
+
+	};
+}
 function getStudentClass(sid) {
 	var classesWithStudent = [];
 	for (var i = 0; i < Object.keys(classes).length; i++) {
@@ -98,15 +127,22 @@ function placeStudent(sid,c) {
 	if (c.full != undefined && c.am == undefined && c.pm == undefined && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == false) {
 		var cF = c.full;
 		try {
-			if (classes[cF].enrolled.length < classes[cF].max) {
-				classes[cF].enrolled.push(sid);
-				setStudentHasClass(studentIndex,true);
-				if (verbose) {
-					console.log(getNameOfStudentID(sid)+' has been placed in '+cF);
+			if (verifyClassRequirements(sid,cF)) {
+				if (classes[cF].enrolled.length < classes[cF].max) {
+					classes[cF].enrolled.push(sid);
+					setStudentHasClass(studentIndex,true);
+					if (verbose) {
+						console.log(getNameOfStudentID(sid)+' has been placed in '+cF);
+					}
+				} else {
+					if (verbose) {
+						console.log('Class '+cF+' is full! ('+getNameOfStudentID(sid)+')');
+					}
+					return false;
 				}
 			} else {
 				if (verbose) {
-					console.log('Class '+cF+' is full! ('+getNameOfStudentID(sid)+')');
+					console.log('Unable to place '+getNameOfStudentID(sid)+' in '+cF+' due to not meeting requirements');
 				}
 				return false;
 			}
@@ -121,17 +157,24 @@ function placeStudent(sid,c) {
 		var cam = c.am;
 		var cpm = c.pm;
 		try {
-			if ((classes[cam].enrolled.length < classes[cam].max) && (classes[cpm].enrolled.length < classes[cpm].max)) {
-				classes[cam].enrolled.push(sid);
-				classes[cpm].enrolled.push(sid);
-				setStudentHasClass(studentIndex,true);
-				if (verbose) {
-					console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' & '+cpm);
+			if (verifyClassRequirements(sid,cpm) && verifyClassRequirements(sid,cam)) {
+				if ((classes[cam].enrolled.length < classes[cam].max) && (classes[cpm].enrolled.length < classes[cpm].max)) {
+					classes[cam].enrolled.push(sid);
+					classes[cpm].enrolled.push(sid);
+					setStudentHasClass(studentIndex,true);
+					if (verbose) {
+						console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' & '+cpm);
+					}
+					return true;
+				} else {
+					if (verbose) {
+						console.log('Class '+cpm+' or '+cam+' is full! ('+getNameOfStudentID(sid)+')');
+					}
+					return false;
 				}
-				return true;
 			} else {
 				if (verbose) {
-					console.log('Class '+cpm+' or '+cam+' is full! ('+getNameOfStudentID(sid)+')');
+					console.log('Unable to place '+getNameOfStudentID(sid)+' in '+cam+'/'+cpm+' due to not meeting requirements');
 				}
 				return false;
 			}
@@ -146,15 +189,22 @@ function placeStudent(sid,c) {
 	} else if (c.am != undefined && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == true) {
 		var cam = c.am;
 		try {
-			if ((classes[cam].enrolled.length < classes[cam].max)) {
-				classes[cam].enrolled.push(sid);
-				setStudentHasClass(studentIndex,true);
-				if (verbose) {
-					console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' (Ford Sayre)');
+			if (verifyClassRequirements(sid,cam)) {
+				if ((classes[cam].enrolled.length < classes[cam].max)) {
+					classes[cam].enrolled.push(sid);
+					setStudentHasClass(studentIndex,true);
+					if (verbose) {
+						console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' (Ford Sayre)');
+					}
+				} else {
+					if (verbose) {
+						console.log('Class '+cam+' is full! ('+getNameOfStudentID(sid)+' Ford Sayre)');
+					}
+					return false;
 				}
 			} else {
 				if (verbose) {
-					console.log('Class '+cam+' is full! ('+getNameOfStudentID(sid)+' Ford Sayre)');
+					console.log('Unable to place '+getNameOfStudentID(sid)+' in '+cam+' due to not meeting requirements');
 				}
 				return false;
 			}
@@ -168,15 +218,22 @@ function placeStudent(sid,c) {
 	} else if (students[studentIndex].hartfordTech == 'pm' && students[studentIndex].fordSayre == false && c.am != undefined) {
 		var cam = c.am;
 		try {
-			if ((classes[cam].enrolled.length < classes[cam].max)) {
-				classes[cam].enrolled.push(sid)
-				setStudentHasClass(studentIndex,true);
-				if (verbose) {
-					console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' (HTECHAM)');
+			if (verifyClassRequirements(sid,cam)) {
+				if ((classes[cam].enrolled.length < classes[cam].max)) {
+					classes[cam].enrolled.push(sid)
+					setStudentHasClass(studentIndex,true);
+					if (verbose) {
+						console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' (HTECHAM)');
+					}
+				} else {
+					if (verbose) {
+						console.log('Class '+cam+' is full! ('+getNameOfStudentID(sid)+' HTECHAM)');
+					}
+					return false;
 				}
 			} else {
 				if (verbose) {
-					console.log('Class '+cam+' is full! ('+getNameOfStudentID(sid)+' HTECHAM)');
+					console.log('Unable to place '+getNameOfStudentID(sid)+' in '+cam+' due to not meeting requirements');
 				}
 				return false;
 			}
