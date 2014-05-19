@@ -1,9 +1,3 @@
-<?php
-if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !file_exists('data/studentsNotPlaced.json')) {
-	echo "Please generate your data files";
-	exit;
-}
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,13 +15,19 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 			</div>
 		</div>
 		<div class="row row-margin-top">
-			<div class="col-md-3 col-md-offset-3">
+			<div class="col-md-2 col-md-offset-5">
 				<a href="submit.php" class="btn btn-block btn-info">Submit</a>
 			</div>
-			<div class="col-md-3">
+		</div>
+		<div class="row row-margin-top">
+			<div class="col-md-2 col-md-offset-5">
 				<a href="edit.php" class="btn btn-block btn-warning">Edit</a>
 			</div>
-
+		</div>
+		<div class="row row-margin-top">
+			<div class="col-md-2 col-md-offset-5">
+				<a href="classes.php" class="btn btn-block btn-success">View</a>
+			</div>
 		</div>
 	</div>
 </body>
