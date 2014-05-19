@@ -190,7 +190,7 @@ if (array_key_exists("submitting", $_POST)) {
 				});
 				for (var i = 0; i < choices.full.length; i++) {
 					if (choices.full.indexOf(choices.full[i]) != i) {
-						if ($('#select-full'+i).val() != '') {
+						if ($('#select-full-'+i).val() != '') {
 							alert('You may only request a class once');
 						}
 						$('#select-full-'+i).val('');
