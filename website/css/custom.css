@@ -10,3 +10,7 @@
 	border: none;
 	outline: none;
 }
+
+#container {
+	max-width: 750px;
+}
