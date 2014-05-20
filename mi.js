@@ -11,7 +11,7 @@ function writeFile (file, contents, options) { return fs.writeFileSync(file, con
 function readJSON (file) { return JSON.parse(readFile(file)); }
 function readFile (file) { return fs.readFileSync(file, 'utf8'); }
 function writeJSON (file, obj, options) { return writeFile(file, JSON.stringify(obj, null, module.exports.spaces), options); }
-function getNameOfStudentID (id) { return students[getIndexOfStudentID(id)].name; }
+function getNameOfStudentID (id) { var index = getIndexOfStudentID(id); if (index !== false) { return students[index].name; } else { return id; } }
 
 function verifyClassRequirements(sid, cl) {
 	if (classes[cl].requirements == undefined || classes[cl].requirements.length == 0) {
@@ -40,6 +40,7 @@ function getIndexOfStudentID(id) {
 			return i;
 		}
 	}
+	return false;
 }
 
 function shuffle(array) {
@@ -114,9 +115,6 @@ function placeStudent(sid, c) {
 		if (verbose) {
 			console.log('The class data for '+getNameOfStudentID(sid)+' is not valid.');
 		}
-		//if (doNotAssignClassesWhenNoneAreRequested) {
-		//	console.log(students[studentIndex].name);
-		//}
 	}
 	if (requestClasses.length == 1) {
 		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
@@ -181,7 +179,7 @@ for (var i = 0; i < students.length; i++) {
 		if (process.argv.indexOf('--force') != -1) {
 			students.splice(i,1);
 		} else {
-			console.log(getNameOfStudentID(i)+' was found twice, names must be unique');
+			console.log(getNameOfStudentID(students[i].studentid)+' was found twice, names must be unique');
 			console.log('Use --force to remove ignore duplicates');
 			process.kill();
 		}
@@ -195,21 +193,34 @@ for (var i=0; i < students.length; i++) {
 	if (students[i].fordSayre != true) {
 		students[i].fordSayre = false;
 		if (verbose) {
-			console.log(getNameOfStudentID(i)+' fordSayre=false');
+			console.log(getNameOfStudentID(students[i].studentid)+' fordSayre=false');
 		}
 	}
 	if (students[i].hartfordTech != 'none' && students[i].hartfordTech != 'am' && students[i].hartfordTech != 'pm') {
 		students[i].hartfordTech = 'none'
 		if (verbose) {
-			console.log(getNameOfStudentID(i)+' hartfordTech=false');
+			console.log(getNameOfStudentID(students[i].studentid)+' hartfordTech=false');
 		}
 	}
 	for (var x = 0; x < students[i].choices.length; x++) {
 		if (students[i].choices[x].full == undefined && students[i].choices[x].am == undefined && students[i].choices[x].pm == undefined) {
 			students[i].choices.splice(x,1);
 			if (verbose) {
-				console.log('Spliced for '+getNameOfStudentID(i));
+				console.log('Spliced for '+getNameOfStudentID(students[i].studentid));
 			}
+		}
+		if (students[i].choices[x].full != undefined && students[i].choices[x].am != undefined && students[i].choices[x].pm != undefined) {
+			if (students[i].choices.length < 8)  {
+				students[i].choices.push({"am":students[i].choices[x].am,"pm":students[i].choices[x].pm});
+			}
+			delete students[i].choices[x].am;
+			delete students[i].choices[x].pm;
+		}
+		if (students[i].choices[x].full != undefined && students[i].choices[x].am != undefined && students[i].choices[x].pm == undefined) {
+			delete students[i].choices[x].am;
+		}
+		if (students[i].choices[x].full != undefined && students[i].choices[x].pm != undefined && students[i].choices[x].am == undefined) {
+			delete students[i].choices[x].pm;
 		}
 	}
 }
@@ -257,7 +268,7 @@ for (var x = 0; x < grades.length; x++) {
 			}
 		} else {
 			if (verbose) {
-				console.log('Denied '+getNameOfStudentID(i)+' due to '+students[i].grade+' ≠ '+grades[x]);
+				console.log('Denied '+getNameOfStudentID(students[i].studentid)+' due to '+students[i].grade+' ≠ '+grades[x]);
 			}
 		}
 	}

@@ -33,7 +33,6 @@ if (array_key_exists("submitting", $_POST)) {
 		$am = $_POST["am"][$i];
 		$pm = $_POST["pm"][$i];
 
-
 		$foundFull = false;
 		foreach ($list["full"] as $key => $value) {
 			if ($full == $list["full"][$key]["name"]) {
