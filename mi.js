@@ -342,51 +342,46 @@ shuffle(students);
 
 /*four loops, one for each grade*/
 for (var x = 0; x < grades.length; x++) {
-	/*three loops, first time won't assign classes not requests*/
-	for (var y = 0; y < 3; y++) {
-		/*go through random student array*/
-		for (var i = 0; i < students.length; i++) {
-			var sid = students[i].studentid;
-			if (students[i].grade == grades[x] || !useGrades) {
-				/*if the student has no class, try to assing their requests*/
-				if (!getStudentHasClass(i)) {
-					/*going from request 1, to last request*/
-					for (var n = 0; n < students[i].choices.length; n++) {
-						if (placeStudent(students[i].studentid,students[i].choices[n])) {
-							if (n != 0) {
-								if (classRequestDetails('type',students[i].choices[n-1]) == 'ampm') {
-									if (students[i].choices[n-1].am != undefined) {
-										if (classes[students[i].choices[n-1].am].waitlist == undefined) {
-											classes[students[i].choices[n-1].am].waitlist = [];
-										}
-										classes[students[i].choices[n-1].am].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].am].name+' and '+classes[students[i].choices[n-1].pm].name);
-									}
-									if (students[i].choices[n-1].pm != undefined) {
-										if (classes[students[i].choices[n-1].pm].waitlist == undefined) {
-											classes[students[i].choices[n-1].pm].waitlist = [];
-										}
-										classes[students[i].choices[n-1].pm].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].am].name+' and '+classes[students[i].choices[n-1].pm].name);
-									}
-								} else if (classRequestDetails('type',students[i].choices[n-1]) == 'full') {
-									if (classes[students[i].choices[n-1].full].waitlist == undefined) {
-										classes[students[i].choices[n-1].full].waitlist = [];
-									}
-									classes[students[i].choices[n-1].full].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].full].name);
+	/*go through random student array*/
+	for (var i = 0; i < students.length; i++) {
+		var sid = students[i].studentid;
+		if ((students[i].grade == grades[x] || !useGrades) && !getStudentHasClass(i)) {
+			/*if the student has no class, try to assing their requests*/
+			/*going from request 1, to last request*/
+			for (var n = 0; n < students[i].choices.length; n++) {
+				if (placeStudent(students[i].studentid,students[i].choices[n])) {
+					if (n != 0) {
+						if (classRequestDetails('type',students[i].choices[n-1]) == 'ampm') {
+							if (students[i].choices[n-1].am != undefined) {
+								if (classes[students[i].choices[n-1].am].waitlist == undefined) {
+									classes[students[i].choices[n-1].am].waitlist = [];
 								}
+								classes[students[i].choices[n-1].am].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].am].name+' and '+classes[students[i].choices[n-1].pm].name);
 							}
-							happiness.push(n);
-							break;
+							if (students[i].choices[n-1].pm != undefined) {
+								if (classes[students[i].choices[n-1].pm].waitlist == undefined) {
+									classes[students[i].choices[n-1].pm].waitlist = [];
+								}
+								classes[students[i].choices[n-1].pm].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].am].name+' and '+classes[students[i].choices[n-1].pm].name);
+							}
+						} else if (classRequestDetails('type',students[i].choices[n-1]) == 'full') {
+							if (classes[students[i].choices[n-1].full].waitlist == undefined) {
+								classes[students[i].choices[n-1].full].waitlist = [];
+							}
+							classes[students[i].choices[n-1].full].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].full].name);
 						}
 					}
+					happiness.push(n);
+					break;
 				}
-				/*If unable to place the student, put them on the unplaceable list*/
-				if (getStudentHasClass(i) != true && y != 0) {
-					studentUnplaceableIndex.push(students[i].studentid);
-				}
-			} else {
-				if (verbose) {
-					console.log('Denied '+getNameOfStudentID(i)+' due to '+students[i].grade+' ≠ '+grades[x]);
-				}
+			}
+			/*If unable to place the student, put them on the unplaceable list*/
+			if (getStudentHasClass(i) != true && y != 0) {
+				studentUnplaceableIndex.push(students[i].studentid);
+			}
+		} else {
+			if (verbose) {
+				console.log('Denied '+getNameOfStudentID(i)+' due to '+students[i].grade+' ≠ '+grades[x]);
 			}
 		}
 	}
