@@ -207,14 +207,31 @@ if (array_key_exists("submitting", $_POST)) {
 			/*Spit out the intensive list*/
 			var intensives = <?php echo(json_encode($list)); ?>;
 
-			/*On ready, load up all the selector checkers*/
-			$(document).ready(function() {
-				/*Loop for each choice*/
+			function updateLists() {
+				/*Find selected intensives*/
+				var selected = [];
+				for (var i = 0; i < choices; i ++) {
+					var full = $("#select-full-" + i).val();
+					if (full != "") selected.push(full);
+				}
+
 				for (var i = 0; i < choices; i++) {
+					var full = $("#select-full-" + i).val();
+					var am = $("#select-am-" + i).val();
+					var pm = $("#select-pm-" + i).val();
+
+					$("#select-full-" + i).empty();
+					$("#select-am-" + i).empty();
+					$("#select-pm-" + i).empty();
+
 					/*Add to the list*/
 					for (var intensive in intensives["full"]) {
+						/*Make sure it's not selected yet*/
+						if (selected.indexOf(intensives["full"][intensive].name) != -1 && full != intensives["full"][intensive].name)
+							continue;
 						$("<option value=\""+ intensives["full"][intensive].name +"\" name=\"" + intensives["full"][intensive]["name"] + "\">" + intensives["full"][intensive].displayname + "</option>").appendTo($("#select-full-" + i));
 					}
+					/*Half-days can have any intensive*/
 					for (var intensive in intensives["am"]) {
 						$("<option value=\""+ intensives["am"][intensive].name +"\" name=\"" + intensives["am"][intensive]["name"] + "\">" + intensives["am"][intensive].displayname + "</option>").appendTo($("#select-am-" + i));
 					}
@@ -222,23 +239,38 @@ if (array_key_exists("submitting", $_POST)) {
 						$("<option value=\""+ intensives["pm"][intensive].name +"\" name=\"" + intensives["pm"][intensive]["name"] + "\">" + intensives["pm"][intensive].displayname + "</option>").appendTo($("#select-pm-" + i));
 					}
 
+					if (full != "") $("#select-full-" + i).val(full);
+					if (am != "") $("#select-am-" + i).val(am);
+					if (pm != "") $("#select-pm-" + i).val(pm);
+				}
+			}
+
+			/*On ready, load up all the selector checkers*/
+			$(document).ready(function() {
+				updateLists();
+
+				/*Loop for each choice*/
+				for (var i = 0; i < choices; i++) {
 					/*If you select full-day, you don't get to choose any half-days*/
 					$("#select-full-" + i).change(function(event) {
 						var num = $(this).attr("select-num");
 						$("#select-am-" + num).val("");
 						$("#select-pm-" + num).val("");
 						checkForm();
+						updateLists();
 					});
 					/*If you select half-day, you don't get to choose a full-day*/
 					$("#select-am-" + i).change(function(event) {
 						var num = $(this).attr("select-num");
 						$("#select-full-" + num).val("");
 						checkForm();
+						updateLists();
 					});
 					$("#select-pm-" + i).change(function(event) {
 						var num = $(this).attr("select-num");
 						$("#select-full-" + num).val("");
 						checkForm();
+						updateLists();
 					});
 				};
 
