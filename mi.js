@@ -1,14 +1,11 @@
 var fs = require('fs');
 
-var studentIndex = []; /*Used to randomly order students*/
-var studentUnplaceableIndex = []; /*Used to track students that were not assigned to a class*/
-var happiness = []; /*Used to track how happy students are with their seleciton*/
 var doNotAssignClassesWhenNoneAreRequested = true; /*If a user doesn't request any classes, they will not be given one and no error will be output*/
 var verbose = false; /*Output operations, triggerable with --verbose as well*/
-var classFile = 'classes.json', studentsFile = 'students.json', useGrades = true, studentRandomData = {}, studentClassData = {}, grades = [];
+var classFile = 'classes.json', studentsFile = 'students.json', useGrades = true, studentRandomData = {}, studentClassData = {}, grades = [], happiness = [], studentUnplaceableIndex = [];
 
-function setStudentHasClass (i, s) { studentClassData[i] = s; return true; }
-function getStudentHasClass (i) { return studentClassData[i]; }
+function setStudentHasClass (i, s) { studentClassData[students[i].studentid] = s; return true; }
+function getStudentHasClass (i) { return studentClassData[students[i].studentid]; }
 function randomIntFromInterval (min,max) { return Math.floor(Math.random()*(max-min+1)+min); }
 function writeFile (file, contents, options) { return fs.writeFileSync(file, contents, options); }
 function readJSON (file) { return JSON.parse(readFile(file)); }
@@ -33,7 +30,7 @@ function getStudentClass(sid) {
 		if (classes[classKey].enrolled.indexOf(sid) != -1) {
 			classesWithStudent.push(classKey);
 		}
-	};
+	}
 	return classesWithStudent;
 }
 
@@ -42,7 +39,7 @@ function getIndexOfStudentID(id) {
 		if (students[i].studentid == id) {
 			return i;
 		}
-	};
+	}
 }
 
 function shuffle(array) {
@@ -84,6 +81,7 @@ function placeStudent(sid, c) {
 	/*places student s in class c, where possible. c is an object, with keys full, am, and pm, s is a string*/	
 	/*terminate if student doesn't exist, throw error if verbose=true*/
 	var studentIndex = getIndexOfStudentID(sid);
+	var requestClasses = [];
 	if (studentIndex == undefined) {
 		if (verbose) {
 			console.log('Index for '+getNameOfStudentID(sid)+' could not be found!');
@@ -100,154 +98,36 @@ function placeStudent(sid, c) {
 		}
 		return false;
 	}
+	/*verify all possible combinations of class choices and fordSayre/hartfordTech settings*/
 	if (c.full != undefined && c.am == undefined && c.pm == undefined && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == false) {
-		var cF = c.full;
-		try {
-			if (verifyClassRequirements(sid,cF)) {
-				if (classes[cF].enrolled.length < classes[cF].max) {
-					classes[cF].enrolled.push(sid);
-					setStudentHasClass(studentIndex,true);
-					if (verbose) {
-						console.log(getNameOfStudentID(sid)+' has been placed in '+cF);
-					}
-				} else {
-					if (verbose) {
-						console.log('Class '+cF+' is full! ('+getNameOfStudentID(sid)+')');
-					}
-					return false;
-				}
-			} else {
-				if (verbose) {
-					console.log('Unable to place '+getNameOfStudentID(sid)+' in '+cF+' due to not meeting requirements');
-				}
-				return false;
-			}
-		} catch (err) {
-			console.log('An error occured. EID:FULL');
-			console.log(err.message);
-			console.log(cam);
-			console.log(students[studentIndex]);
-			process.kill();
-		}
+		requestClasses.push(c.full);
 	} else if (c.full == undefined && c.am != undefined && c.pm != undefined && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == false) {
-		var cam = c.am;
-		var cpm = c.pm;
-		try {
-			if (verifyClassRequirements(sid,cpm) && verifyClassRequirements(sid,cam)) {
-				if ((classes[cam].enrolled.length < classes[cam].max) && (classes[cpm].enrolled.length < classes[cpm].max)) {
-					classes[cam].enrolled.push(sid);
-					classes[cpm].enrolled.push(sid);
-					setStudentHasClass(studentIndex,true);
-					if (verbose) {
-						console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' & '+cpm);
-					}
-					return true;
-				} else {
-					if (verbose) {
-						console.log('Class '+cpm+' or '+cam+' is full! ('+getNameOfStudentID(sid)+')');
-					}
-					return false;
-				}
-			} else {
-				if (verbose) {
-					console.log('Unable to place '+getNameOfStudentID(sid)+' in '+cam+'/'+cpm+' due to not meeting requirements');
-				}
-				return false;
-			}
-		} catch (err) {
-			console.log('An error occured. EID:AMPM');
-			console.log(err.message);
-			console.log(cam);
-			console.log(students[studentIndex]);
-			process.kill();
-		}
-		/*terminate, throw error if verbose=true, also used to mark a user as having a class based on settings*/
+		requestClasses.push(c.am);
+		requestClasses.push(c.pm);
 	} else if (c.am != undefined && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == true) {
-		var cam = c.am;
-		try {
-			if (verifyClassRequirements(sid,cam)) {
-				if ((classes[cam].enrolled.length < classes[cam].max)) {
-					classes[cam].enrolled.push(sid);
-					setStudentHasClass(studentIndex,true);
-					if (verbose) {
-						console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' (Ford Sayre)');
-					}
-				} else {
-					if (verbose) {
-						console.log('Class '+cam+' is full! ('+getNameOfStudentID(sid)+' Ford Sayre)');
-					}
-					return false;
-				}
-			} else {
-				if (verbose) {
-					console.log('Unable to place '+getNameOfStudentID(sid)+' in '+cam+' due to not meeting requirements');
-				}
-				return false;
-			}
-		} catch (err) {
-			console.log('An error occured. EID:FORDSAYRE');
-			console.log(err.message);
-			console.log(cam);
-			console.log(students[studentIndex]);
-			process.kill();
-		}
+		requestClasses.push(c.am);
 	} else if (students[studentIndex].hartfordTech == 'pm' && students[studentIndex].fordSayre == false && c.am != undefined) {
-		var cam = c.am;
-		try {
-			if (verifyClassRequirements(sid,cam)) {
-				if ((classes[cam].enrolled.length < classes[cam].max)) {
-					classes[cam].enrolled.push(sid)
-					setStudentHasClass(studentIndex,true);
-					if (verbose) {
-						console.log(getNameOfStudentID(sid)+' has been placed in '+cam+' (HTECHAM)');
-					}
-				} else {
-					if (verbose) {
-						console.log('Class '+cam+' is full! ('+getNameOfStudentID(sid)+' HTECHAM)');
-					}
-					return false;
-				}
-			} else {
-				if (verbose) {
-					console.log('Unable to place '+getNameOfStudentID(sid)+' in '+cam+' due to not meeting requirements');
-				}
-				return false;
-			}
-		} catch (err) {
-			console.log('An error occured. EID:HTECHAM');
-			console.log(err.message);
-			console.log(cpm);
-			console.log(students[studentIndex]);
-			process.kill();
-		}
+		requestClasses.push(c.am);
 	} else if (students[studentIndex].hartfordTech == 'am' && students[studentIndex].fordSayre == false && c.pm != undefined) {
-		var cpm = c.pm;
-		try {
-			if ((classes[cpm].enrolled.length < classes[cpm].max)) {
-				classes[cpm].enrolled.push(sid);
-				setStudentHasClass(studentIndex,true);
-				if (verbose) {
-					console.log(getNameOfStudentID(sid)+' has been placed in '+cpm+' (HTECHPM)');
-				}
-			} else {
-				if (verbose) {
-					console.log('Class '+cpm+' is full! ('+getNameOfStudentID(sid)+' HTECHPM)');
-				}
-				return false;
-			}
-		} catch (err) {
-			console.log('An error occured. EID:HTECHPM');
-			console.log(err.message);
-			console.log(cpm);
-			console.log(students[studentIndex]);
-			process.kill();
-		}
+		requestClasses.push(c.pm);
 	} else {
 		if (verbose) {
 			console.log('The class data for '+getNameOfStudentID(sid)+' is not valid.');
 		}
-		if (doNotAssignClassesWhenNoneAreRequested) {
-			setStudentHasClass(studentIndex,true)
+		//if (doNotAssignClassesWhenNoneAreRequested) {
+		//	console.log(students[studentIndex].name);
+		//}
+	}
+	if (requestClasses.length == 1) {
+		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
+			classes[requestClasses[0]].enrolled.push(sid);
+			setStudentHasClass(studentIndex,true);
+		}
+	} else if (requestClasses.length == 2) {
+		if ((classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) && (classes[requestClasses[1]].enrolled.length < classes[requestClasses[1]].max)) {
+			classes[requestClasses[0]].enrolled.push(sid);
+			classes[requestClasses[1]].enrolled.push(sid);
+			setStudentHasClass(studentIndex,true);
 		}
 	}
 	return true;
@@ -308,7 +188,7 @@ for (var i = 0; i < students.length; i++) {
 	} else {
 		studentRecordsForDuplicates.push(students[i].studentid);
 	}
-};
+}
 
 for (var i=0; i < students.length; i++) {
 	/*Set ford sayre values*/
@@ -331,12 +211,12 @@ for (var i=0; i < students.length; i++) {
 				console.log('Spliced for '+getNameOfStudentID(i));
 			}
 		}
-	};
-};
+	}
+}
 /*prepares data, hasClass*/
 for (var i = 0; i < students.length; i++) {
 	setStudentHasClass(i,false);
-};
+}
 /*randomize student indexes*/
 shuffle(students);
 
@@ -375,10 +255,6 @@ for (var x = 0; x < grades.length; x++) {
 					break;
 				}
 			}
-			/*If unable to place the student, put them on the unplaceable list*/
-			if (getStudentHasClass(i) != true && y != 0) {
-				studentUnplaceableIndex.push(students[i].studentid);
-			}
 		} else {
 			if (verbose) {
 				console.log('Denied '+getNameOfStudentID(i)+' due to '+students[i].grade+' ≠ '+grades[x]);
@@ -386,17 +262,23 @@ for (var x = 0; x < grades.length; x++) {
 		}
 	}
 }
+for (var i = 0; i < students.length; i++) {
+	/*If unable to place the student, put them on the unplaceable list*/
+	if (!getStudentHasClass(i)) {
+		studentUnplaceableIndex.push(students[i].studentid);
+	}
+};
 /*look through the student unplaceable index, and replace it with names so that it can be read easier*/
 for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 	studentUnplaceableIndex[i] = getNameOfStudentID(studentUnplaceableIndex[i]);
-};
+}
 /*remove dupe waitlists*/
 for (var i = 0; i < Object.keys(classes).length; i++) {
 	var key = Object.keys(classes);
 	if (classes[key[i]].waitlist != undefined) {
 		classes[key[i]].waitlist = removeDuplicatesFromArray(classes[key[i]].waitlist);
 	}
-};
+}
 /*print the success percentage*/
 var percentage = Math.round((students.length-studentUnplaceableIndex.length)/students.length*100);
 if (studentUnplaceableIndex != 0 && percentage == 100) {
@@ -406,19 +288,19 @@ console.log(percentage+'% placement, where '+(students.length - studentUnplaceab
 var total = 0;
 for (var i = 0; i < happiness.length; i++) {
 	total += happiness[i]
-};
+}
 var totalZero = 0;
 for (var i = 0; i < happiness.length; i++) {
 	if (happiness[i] == 0) {
 		totalZero++;
 	}
-};
+}
 for (var i = 0; i < Object.keys(classes).length; i++) {
 	var classKey = Object.keys(classes)[i];
 	for (var n = 0; n < classes[classKey].enrolled.length; n++) {
 		classes[classKey].enrolled[n] = getNameOfStudentID(classes[classKey].enrolled[n]);
-	};
-};
+	}
+}
 //console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
 console.log(totalZero);
 
