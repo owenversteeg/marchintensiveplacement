@@ -3,58 +3,32 @@ var fs = require('fs');
 var studentIndex = []; /*Used to randomly order students*/
 var studentUnplaceableIndex = []; /*Used to track students that were not assigned to a class*/
 var happiness = []; /*Used to track how happy students are with their seleciton*/
-var grades = [];
 var doNotAssignClassesWhenNoneAreRequested = true; /*If a user doesn't request any classes, they will not be given one and no error will be output*/
 var verbose = false; /*Output operations, triggerable with --verbose as well*/
-var classFile = 'classes.json';
-var studentsFile = 'students.json';
-var useGrades = true;
-var studentRandomData = {};
-var studentClassData = {};
+var classFile = 'classes.json', studentsFile = 'students.json', useGrades = true, studentRandomData = {}, studentClassData = {}, grades = [];
 
-function setStudentHasClass(i,s) { studentClassData[i] = s; return true; }
-function getStudentHasClass(i) { return studentClassData[i]; }
-function randomIntFromInterval(min,max) { return Math.floor(Math.random()*(max-min+1)+min); }
-function writeFile(file, contents, options) { return fs.writeFileSync(file, contents, options); }
-function readJSON(file) { return JSON.parse(readFile(file)); }
-function readFile(file) { return fs.readFileSync(file, 'utf8'); }
-function writeJSON(file, obj, options) { return writeFile(file, JSON.stringify(obj, null, module.exports.spaces), options); }
-function getNameOfStudentID(id) {
-	return students[getIndexOfStudentID(id)].name;
-};
+function setStudentHasClass (i, s) { studentClassData[i] = s; return true; }
+function getStudentHasClass (i) { return studentClassData[i]; }
+function randomIntFromInterval (min,max) { return Math.floor(Math.random()*(max-min+1)+min); }
+function writeFile (file, contents, options) { return fs.writeFileSync(file, contents, options); }
+function readJSON (file) { return JSON.parse(readFile(file)); }
+function readFile (file) { return fs.readFileSync(file, 'utf8'); }
+function writeJSON (file, obj, options) { return writeFile(file, JSON.stringify(obj, null, module.exports.spaces), options); }
+function getNameOfStudentID (id) { return students[getIndexOfStudentID(id)].name; }
 
-function verifyClassRequirements(sid,cl) {
-	if (classes[cl].requirements == undefined) {
-		return true;
-	}
-	if (classes[cl].requirements.length == 0) {
+function verifyClassRequirements(sid, cl) {
+	if (classes[cl].requirements == undefined || classes[cl].requirements.length == 0) {
 		return true;
 	}
 	for (var i = 0; i < Object.keys(classes[cl].requirements).length; i++) {
 		var key = Object.keys(classes[cl].requirements)[i];
-		switch (key) {
-			case "gender":
-				if (classes[cl].requirements[key] == students[getIndexOfStudentID(sid)].gender) {
-					return true;
-				} else {
-					return false;
-				}
-			break;
-			case "grade":
-				if (classes[cl].requirements[key] == students[getIndexOfStudentID(sid)].grade) {
-					return true;
-				} else {
-					return false;
-				}
-			break;
-		}
-
-
-	};
+		return (classes[cl].requirements[key] == students[getIndexOfStudentID(sid)][key])
+	}
 }
+
 function getStudentClass(sid) {
 	var classesWithStudent = [];
-	for (var i = 0; i < Object.keys(classes).length; i++) {
+	for (var i=0; i < Object.keys(classes).length; i++) {
 		var classKey = Object.keys(classes)[i];
 		if (classes[classKey].enrolled.indexOf(sid) != -1) {
 			classesWithStudent.push(classKey);
@@ -62,6 +36,7 @@ function getStudentClass(sid) {
 	};
 	return classesWithStudent;
 }
+
 function getIndexOfStudentID(id) {
 	for (var i = 0; i < students.length; i++) {
 		if (students[i].studentid == id) {
@@ -69,12 +44,10 @@ function getIndexOfStudentID(id) {
 		}
 	};
 }
+
 function shuffle(array) {
 	/*shuffles an array*/
-	var currentIndex = array.length
-	, temporaryValue
-	, randomIndex
-	;
+	var currentIndex = array.length, temporaryValue, randomIndex;
 
 	while (0 != currentIndex) {
 		randomIndex = Math.floor(Math.random() * currentIndex);
@@ -87,6 +60,7 @@ function shuffle(array) {
 
 	return array;
 }
+
 function removeDuplicatesFromArray(arr) {
 	for (var i = 0; i < arr.length; i++) {
 		if (arr.indexOf(arr[i]) != 1) {
@@ -95,7 +69,8 @@ function removeDuplicatesFromArray(arr) {
 	}
 	return arr;
 }
-function classRequestDetails(det,cl) {
+
+function classRequestDetails(det, cl) {
 	if (det == 'type') {
 		if (cl.am != undefined && cl.pm != undefined) {
 			return 'ampm';
@@ -104,7 +79,8 @@ function classRequestDetails(det,cl) {
 		}
 	}
 }
-function placeStudent(sid,c) {
+
+function placeStudent(sid, c) {
 	/*places student s in class c, where possible. c is an object, with keys full, am, and pm, s is a string*/	
 	/*terminate if student doesn't exist, throw error if verbose=true*/
 	var studentIndex = getIndexOfStudentID(sid);
@@ -277,7 +253,7 @@ function placeStudent(sid,c) {
 	return true;
 }
 
-if (process.argv.indexOf('--verbose') != -1) { verbose = true; }
+verbose = (process.argv.indexOf('--verbose') != -1);
 
 if (process.argv.indexOf('--config') != -1) {
 	var config = readJSON(process.argv[process.argv.indexOf('--classes') + 1]);
@@ -300,46 +276,19 @@ if (config.updateWebDirectory) {
 	}
 }
 
-if (config.files.output.classes != undefined) {
-	var outputClassesFile = 'output/'+config.files.output.classes;
-} else {
-	var outputClassesFile = 'output/classes.json';
-}
-if (config.files.output.studentsNotPlaced != undefined) {
-	var outputStudentsNotPlaced = 'output/'+config.files.output.studentsNotPlaced;
-} else {
-	var outputStudentsNotPlaced = 'output/studentsNotPlaced';
-}
-if (config.files.output.students != undefined) {
-	var outputStudents = 'output/'+config.files.output.students;
-} else {
-	var outputStudents = 'output/students';
-}
+var outputClassesFile = 'output/' + (config.files.output.classes || 'classes.json');
+var outputStudentsNotPlaced = 'output/' + (config.files.output.studentsNotPlaced || 'studentsNotPlaced');
+var outputStudents = 'output/'+ (config.files.output.students || 'students');
+var outputWebClassesFile = 'website/data/' + (config.files.output.classes || 'classes.json');
+var outputWebStudentsNotPlaced = 'website/data/'+ (config.files.output.studentsNotPlaced || 'studentsNotPlaced');
+var outputWebStudents = 'website/data/' + (config.files.output.students || 'students');
 
-if (config.files.output.classes != undefined) {
-	var outputWebClassesFile = 'website/data/'+config.files.output.classes;
-} else {
-	var outputWebClassesFile = 'website/data/classes.json';
-}
-if (config.files.output.studentsNotPlaced != undefined) {
-	var outputWebStudentsNotPlaced = 'website/data/'+config.files.output.studentsNotPlaced;
-} else {
-	var outputWebStudentsNotPlaced = 'website/data/studentsNotPlaced';
-}
-if (config.files.output.students != undefined) {
-	var outputWebStudents = 'website/data/'+config.files.output.students;
-} else {
-	var outputWebStudents = 'website/data/students';
-}
 if (config.doNotAssignClassesWhenNoneAreRequested != undefined) {
 	doNotAssignClassesWhenNoneAreRequested = config.doNotAssignClassesWhenNoneAreRequested;
 }
 
 if (process.argv.indexOf('--help') != -1) {
-	console.log('Show all actions');
-	console.log('	--verbose');
-	console.log('Custom Config Path');
-	console.log('	--config [file.json]');
+	console.log('Show all actions\n	--verbose\nCustom Config Path\n	--config [file.json]');
 	process.kill()
 }
 
@@ -361,7 +310,7 @@ for (var i = 0; i < students.length; i++) {
 	}
 };
 
-for (var i = 0; i < students.length; i++) {
+for (var i=0; i < students.length; i++) {
 	/*Set ford sayre values*/
 	if (students[i].fordSayre != true) {
 		students[i].fordSayre = false;
@@ -451,7 +400,6 @@ for (var i = 0; i < Object.keys(classes).length; i++) {
 	var key = Object.keys(classes);
 	if (classes[key[i]].waitlist != undefined) {
 		classes[key[i]].waitlist = removeDuplicatesFromArray(classes[key[i]].waitlist);
-		//console.log(key[i]);
 	}
 };
 /*print the success percentage*/
@@ -478,7 +426,8 @@ for (var i = 0; i < Object.keys(classes).length; i++) {
 };
 //console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
 console.log(totalZero);
-/*write files*/
+
+//write files
 writeJSON(outputClassesFile, classes);
 writeJSON(outputStudents, students);
 writeJSON(outputStudentsNotPlaced, studentUnplaceableIndex);
