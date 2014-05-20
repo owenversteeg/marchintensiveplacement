@@ -196,7 +196,6 @@ if (array_key_exists("submitting", $_POST)) {
 						$('#select-full-'+i).val('');
 					}
 				};
-
 				return response;
 			}
 
