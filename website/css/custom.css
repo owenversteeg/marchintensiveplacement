@@ -14,3 +14,7 @@
 #container {
 	max-width: 750px;
 }
+
+#headers {
+	font-weight: bold;
+}

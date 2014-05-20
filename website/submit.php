@@ -94,7 +94,7 @@ if (array_key_exists("submitting", $_POST)) {
 
 		$requestData["name"] = $requestData["fullname"];
 		unset($requestData["fullname"]);
-		
+
 		$requestData["commonGround"] = $requestData["cg"];
 		unset($requestData["cg"]);
 
@@ -103,7 +103,7 @@ if (array_key_exists("submitting", $_POST)) {
 
 		$requestData["fordSayre"] = $requestData["fordsayre"];
 		unset($requestData["fordsayre"]);
-		
+
 		unset($requestData["submitting"]);
 
 		if ($requestData["fordSayre"] == "yes") {
@@ -113,7 +113,7 @@ if (array_key_exists("submitting", $_POST)) {
 		}
 
 		$requestData["choices"] = array();
-		
+
 		for ($i = 0; $i < 8; $i ++) {
 			if ($requestData["full"][$i] != "") {
 				$requestData["choices"][$i]["full"] = $requestData["full"][$i];
@@ -285,7 +285,7 @@ if (array_key_exists("submitting", $_POST)) {
 							$("#choice"+i).removeClass("has-error");
 						}
 					};
-					
+
 					for (var i = 0; i < Object.keys(response).length; i++) {
 						if (!response[Object.keys(response)[i]]) {
 							return false;
@@ -309,13 +309,17 @@ if (array_key_exists("submitting", $_POST)) {
 					<div class="col-md-2">
 						<label class="control-label">Full Name:</label>
 					</div>
-					<div class="col-md-10"><input class="form-control" type="text" name="fullname" id="fullname" placeholder="John Doe"></div>
+					<div class="col-md-4"><input class="form-control" type="text" name="fullname" id="fullname" placeholder="John Doe"></div>
+					<div class="col-md-2">
+						<label class="control-label">Common Ground #:</label>
+					</div>
+					<div class="col-md-4"><input class="form-control" type="text" name="cg" id="cg"></div>
 				</div>
 				<div class="row row-margin-top row-margin-bottom">
 					<div class="col-md-2">
 						<label class="control-label">Grade:</label>
 					</div>
-					<div class="col-md-10">
+					<div class="col-md-4">
 						<select name="grade" id="grade" class="form-control">
 							<option value="12" selected>12</option>
 							<option value="11">11</option>
@@ -323,18 +327,10 @@ if (array_key_exists("submitting", $_POST)) {
 							<option value="9">9</option>
 						</select>
 					</div>
-				</div>
-				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-2">
-						<label class="control-label">Common Ground #:</label>
-					</div>
-					<div class="col-md-10"><input class="form-control" type="text" name="cg" id="cg"></div>
-				</div>
-				<div class="row row-margin-top row-margin-bottom">
 					<div class="col-md-2">
 						<label class="control-label">Student ID #:</label>
 					</div>
-					<div class="col-md-10">
+					<div class="col-md-4">
 						<input class="form-control" type="text" name="studentid" id="studentid">
 					</div>
 				</div>
@@ -342,23 +338,28 @@ if (array_key_exists("submitting", $_POST)) {
 					<div class="col-md-2">
 						<label class="control-label">Hartford Tech:</label>
 					</div>
-					<div class="col-md-10">
+					<div class="col-md-4">
 						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="none" checked> None</label>
 						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="am"> Morning</label>
 						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="pm"> Afternoon</label>
 					</div>
-				</div>
-				<div class="row row-margin-top row-margin-bottom">
 					<div class="col-md-2">
 						<label class="control-label">Ford Sayre:</label>
 					</div>
-					<div class="col-md-5">
+					<div class="col-md-4">
 						<label><input type="radio" class="fordsayre" name="fordsayre" value="no" checked> No</label>
 						<label><input type="radio" class="fordsayre" name="fordsayre" value="yes"> Yes</label>
 					</div>
 				</div>
 			</div>
+			<hr>
 			<div>
+				<div id="headers" class="row row-margin-top row-margin-bottom">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">Full-Day</div>
+					<div class="col-md-3">AM Only</div>
+					<div class="col-md-3">PM Only</div>
+				</div>
 				<?php
 				/*Spit out eight choice selectors*/
 				for ($i = 0; $i < $choices; $i ++) {
