@@ -175,16 +175,16 @@ var students = readJSON(studentsFile);
 
 var studentRecordsForDuplicates = [];
 for (var i = 0; i < students.length; i++) {
-	if (studentRecordsForDuplicates.indexOf(students[i].studentid) != -1) {
+	if (studentRecordsForDuplicates.indexOf(students[i].name) != -1) {
 		if (process.argv.indexOf('--force') != -1) {
 			students.splice(i,1);
 		} else {
-			console.log(getNameOfStudentID(students[i].studentid)+' was found twice, names must be unique');
+			console.log(students[i].name+' was found twice, names must be unique');
 			console.log('Use --force to remove ignore duplicates');
 			process.kill();
 		}
 	} else {
-		studentRecordsForDuplicates.push(students[i].studentid);
+		studentRecordsForDuplicates.push(students[i].name);
 	}
 }
 
