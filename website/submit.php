@@ -1,4 +1,7 @@
 <?php
+ini_set("zlib.output_compression", "On");
+ini_set("zlib.output_compression", 4096);
+
 define("MINIMIZE", false);
 
 //If we don't have any classes then we can't run!
@@ -6,6 +9,9 @@ if (!file_exists("data/classes.json")) {
 	echo("Please generate your classes file!");
 	exit;
 }
+
+//Start output capture
+ob_start();
 
 //# of choices, hardcoded because oh well
 $choices = 8;
@@ -338,15 +344,15 @@ if (array_key_exists("submitting", $_POST)) {
 						<label class="control-label">Hartford Tech:</label>
 					</div>
 					<div class="col-md-4">
-						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="none" checked> None</label>
-						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="am"> Morning</label>
+						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="none" checked> None&nbsp;</label>
+						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="am"> Morning&nbsp;</label>
 						<label class="control-label"><input type="radio" class="hartfordtech" name="hartfordtech" value="pm"> Afternoon</label>
 					</div>
 					<div class="col-md-2">
 						<label class="control-label">Ford Sayre:</label>
 					</div>
 					<div class="col-md-4">
-						<label><input type="radio" class="fordsayre" name="fordsayre" value="no" checked> No</label>
+						<label><input type="radio" class="fordsayre" name="fordsayre" value="no" checked> No&nbsp;</label>
 						<label><input type="radio" class="fordsayre" name="fordsayre" value="yes"> Yes</label>
 					</div>
 				</div>
@@ -407,15 +413,28 @@ if (array_key_exists("submitting", $_POST)) {
 </html>
 <?php
 }
+//Finish output capture
 $output = ob_get_clean();
+
 if (MINIMIZE) {
 	//Do magic with $output
 	$lines = explode("\n", $output);
 	foreach ($lines as $line) {
+		//So we can insert it later
+		$linepos = array_search($line, $lines);
+
 		//Strip stuff from the beginning of the line
-		$lines[array_search($line, $lines)] = trim($line);
+		$line = trim($line);
+
+		//Strip out comments
+		if (strpos($line, "/*") !== FALSE && strpos($line, "*/") !== FALSE) {
+			$line = substr($line, 0, strpos($line, "/*")) . substr($line, strpos($line, "*/") + 2);
+		}
+
+		if (strlen($line))
+			$lines[$linepos] = $line;
 	}
-	echo(implode("\n", $lines));
+	echo(implode("", $lines));
 } else {
 	echo($output);
 }
