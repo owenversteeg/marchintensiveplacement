@@ -353,7 +353,7 @@ if (array_key_exists("submitting", $_POST)) {
 			</div>
 			<hr>
 			<div>
-				<div id="headers" class="row row-margin-top row-margin-bottom">
+				<div id="headers" class="row row-margin-top row-margin-bottom visible-md visible-lg">
 					<div class="col-md-2"></div>
 					<div class="col-md-4">Full-Day</div>
 					<div class="col-md-3">AM Only</div>
@@ -364,10 +364,32 @@ if (array_key_exists("submitting", $_POST)) {
 				for ($i = 0; $i < $choices; $i ++) {
 					?>
 					<div id="choice<?php echo $i; ?>" class="row row-margin-top row-margin-bottom">
-						<div class="col-md-2"><label class="control-label">Choice <?php echo($i + 1);?>:</label></div>
-						<div class="col-md-4"><select class="form-control select-full" id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]"></select></div>
-						<div class="col-md-3"><select class="form-control select-am" id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]"></select></div>
-						<div class="col-md-3"><select class="form-control select-pm" id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]"></select></div>
+						<div class="col-md-2">
+							<label class="control-label">
+							Choice <?php echo($i + 1);?>:
+							</label>
+						</div>
+						<div class="col-sm-2 hidden-md hidden-lg">
+							Full-Day
+						</div>
+						<div class="col-md-4 col-sm-10">
+							<select class="form-control select-full" id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]">
+							</select>
+						</div>
+						<div class="col-sm-2 hidden-md hidden-lg">
+							AM Only
+						</div>
+						<div class="col-md-3 col-sm-10">
+							<select class="form-control select-am" id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]">
+							</select>
+						</div>
+						<div class="col-sm-2 hidden-md hidden-lg">
+							PM Only
+						</div>
+						<div class="col-md-3 col-sm-10">
+							<select class="form-control select-pm" id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]">
+							</select>
+						</div>
 					</div>
 					<?php
 				}
