@@ -187,6 +187,20 @@ for (var i = 0; i < students.length; i++) {
 		studentRecordsForDuplicates.push(students[i].name);
 	}
 }
+studentRecordsForDuplicates = [];
+for (var i = 0; i < students.length; i++) {
+	if (studentRecordsForDuplicates.indexOf(students[i].studentid) != -1) {
+		if (process.argv.indexOf('--force') != -1) {
+			students.splice(i,1);
+		} else {
+			console.log(students[i].studentid+' was found twice, names must be unique');
+			console.log('Use --force to remove ignore duplicates');
+			process.kill();
+		}
+	} else {
+		studentRecordsForDuplicates.push(students[i].studentid);
+	}
+}
 
 for (var i=0; i < students.length; i++) {
 	/*Set ford sayre values*/
