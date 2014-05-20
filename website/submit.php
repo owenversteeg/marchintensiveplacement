@@ -316,12 +316,6 @@ if (array_key_exists("submitting", $_POST)) {
 					</div>
 					<div class="col-md-4"><input class="form-control" type="text" name="fullname" id="fullname" placeholder="John Doe"></div>
 					<div class="col-md-2">
-						<label class="control-label">Common Ground #:</label>
-					</div>
-					<div class="col-md-4"><input class="form-control" type="text" name="cg" id="cg"></div>
-				</div>
-				<div class="row row-margin-top row-margin-bottom">
-					<div class="col-md-2">
 						<label class="control-label">Grade:</label>
 					</div>
 					<div class="col-md-4">
@@ -332,6 +326,12 @@ if (array_key_exists("submitting", $_POST)) {
 							<option value="9">9</option>
 						</select>
 					</div>
+				</div>
+				<div class="row row-margin-top row-margin-bottom">
+					<div class="col-md-2">
+						<label class="control-label">Common Ground #:</label>
+					</div>
+					<div class="col-md-4"><input class="form-control" type="text" name="cg" id="cg"></div>
 					<div class="col-md-2">
 						<label class="control-label">Student ID #:</label>
 					</div>
