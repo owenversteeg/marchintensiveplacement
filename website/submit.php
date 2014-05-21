@@ -98,18 +98,10 @@ if (array_key_exists("submitting", $_POST)) {
 		$requestData = $_POST;
 
 		$requestData["name"] = $requestData["fullname"];
-		unset($requestData["fullname"]);
-
 		$requestData["commonGround"] = $requestData["cg"];
-		unset($requestData["cg"]);
-
 		$requestData["hartfordTech"] = $requestData["hartfordtech"];
-		unset($requestData["hartfordtech"]);
-
 		$requestData["fordSayre"] = $requestData["fordsayre"];
-		unset($requestData["fordsayre"]);
-
-		unset($requestData["submitting"]);
+		unset($requestData["submitting"], $requestData["fullname"], $requestData["fordsayre"], $requestData["hartfordtech"], $requestData["cg"]);
 
 		if ($requestData["fordSayre"] == "yes") {
 			$requestData["fordSayre"] = true;
@@ -131,9 +123,7 @@ if (array_key_exists("submitting", $_POST)) {
 			}
 		}
 
-		unset($requestData["full"]);
-		unset($requestData["am"]);
-		unset($requestData["pm"]);
+		unset($requestData["full"], $requestData["am"], $requestData["pm"]);
 
 		//Write it to the database
 		require("mysql-config.php");
@@ -169,30 +159,21 @@ if (array_key_exists("submitting", $_POST)) {
 						response["choice"+i] = true;
 					}
 				}
+				
+				var thingsToCheck = ['fullname', 'grade', 'cg', 'studentid'];
 
-				if ($("#fullname").val() != "") {
-					response.fullname = true;
-				}
-				if ($("#grade").val() != "") {
-					response.grade = true;
-				}
-				if ($("#cg").val() != "") {
-					response.cg = true;
-				}
-				if ($("#studentid").val() != "") {
-					response.studentid = true;
+				for (var i=0; i<thingsToCheck.length; i++) {
+					if ($('#'+thingsToCheck[i]).val()) {
+						response.[thingsToCheck[i]] = true;
+					}
 				}
 
 				var choices = {"full":[],"am":[],"pm":[]};
-				$('.select-full').each(function(){
-					choices.full.push($(this).val());
-				});
-				$('.select-am').each(function(){
-					choices.am.push($(this).val());
-				});
-				$('.select-pm').each(function(){
-					choices.pm.push($(this).val());
-				});
+				for (var i=0; i<Object.keys(choices).length; i++) {
+					$('.select-'+Object.keys(choices)[i]).each(function(){
+						choices[Object.keys(choices)[i]].push($(this).val());
+					});
+				}
 				for (var i = 0; i < choices.full.length; i++) {
 					if (choices.full.indexOf(choices.full[i]) != i) {
 						if ($('#select-full-'+i).val() != '') {
@@ -210,7 +191,7 @@ if (array_key_exists("submitting", $_POST)) {
 			function updateLists() {
 				/*Find selected intensives*/
 				var selected = [];
-				for (var i = 0; i < choices; i ++) {
+				 (var i = 0; i < choices; i ++) {
 					var full = $("#select-full-" + i).val();
 					if (full != "") selected.push(full);
 				}
@@ -260,18 +241,14 @@ if (array_key_exists("submitting", $_POST)) {
 						updateLists();
 					});
 					/*If you select half-day, you don't get to choose a full-day*/
-					$("#select-am-" + i).change(function(event) {
+					function selectAMOrPMOnchange (event) {
 						var num = $(this).attr("select-num");
 						$("#select-full-" + num).val("");
 						checkForm();
 						updateLists();
-					});
-					$("#select-pm-" + i).change(function(event) {
-						var num = $(this).attr("select-num");
-						$("#select-full-" + num).val("");
-						checkForm();
-						updateLists();
-					});
+					}
+					$("#select-am-" + i).change(selectAMOrPMOnchange);
+					$('#select-pm-' + i).change(selectAMOrPMOnchange)
 				}
 
 				$(".hartfordtech").change(function(event) {
@@ -289,30 +266,18 @@ if (array_key_exists("submitting", $_POST)) {
 							$("#select-pm-" + i).attr("disabled", null);
 						}
 					}
-				});
+				})
 
 				$("#form-tag").submit(function(){
 					var response = checkForm();
+					var responseThings = ['fullname', 'grade', 'cg', 'studentid'];
 
-					if (!response.fullname) {
-						$("#fullname").parent().parent().addClass("has-error");
-					} else {
-						$("#fullname").parent().parent().removeClass("has-error");
-					}
-					if (!response.grade) {
-						$("#grade").parent().parent().addClass("has-error");
-					} else {
-						$("#grade").parent().parent().removeClass("has-error");
-					}
-					if (!response.cg) {
-						$("#cg").parent().parent().addClass("has-error");
-					} else {
-						$("#cg").parent().parent().removeClass("has-error");
-					}
-					if (!response.studentid) {
-						$("#studentid").parent().parent().addClass("has-error");
-					} else {
-						$("#studentid").parent().parent().removeClass("has-error");
+					for (var i=0; i<responseThings.length; i++) {
+						if (response[responseThings[i]]) {
+							$("#"+responseThings[i]).parent().parent().removeClass("has-error");
+						} else {
+							$("#"+responseThings[i]).parent().parent().addClass("has-error");
+						}
 					}
 
 					for (var i = 0; i < choices; i++) {
