@@ -164,7 +164,7 @@ if (array_key_exists("submitting", $_POST)) {
 
 				for (var i=0; i<thingsToCheck.length; i++) {
 					if ($('#'+thingsToCheck[i]).val()) {
-						response.[thingsToCheck[i]] = true;
+						response[thingsToCheck[i]] = true;
 					}
 				}
 
@@ -191,7 +191,7 @@ if (array_key_exists("submitting", $_POST)) {
 			function updateLists() {
 				/*Find selected intensives*/
 				var selected = [];
-				 (var i = 0; i < choices; i ++) {
+				for (var i = 0; i < choices; i ++) {
 					var full = $("#select-full-" + i).val();
 					if (full != "") selected.push(full);
 				}
