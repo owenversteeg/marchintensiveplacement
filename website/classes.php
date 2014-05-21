@@ -5,8 +5,8 @@ if (!file_exists('data/classes.json')) {
 } else {
 	$classes = json_decode(file_get_contents('data/classes.json'),true);
 }
-?>
 include 'header.php';
+?>
 	<style>
 		.divider {
 			background:#89d084;
