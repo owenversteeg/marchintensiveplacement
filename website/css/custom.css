@@ -1,9 +1,5 @@
-.row-margin-top {
-	margin-top:10px;
-}
-
-.row-margin-bottom {
-	margin-top:10px;
+.row-margin-top, .row-margin-bottom {
+	margin-top: 10px;
 }
 
 .addUserField {
