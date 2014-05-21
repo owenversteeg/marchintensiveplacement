@@ -139,13 +139,8 @@ if (array_key_exists("submitting", $_POST)) {
 		<?php
 	}
 } else {
+	include 'header.php';
 	?>
-	<html>
-	<head>
-		<link rel="stylesheet" href="css/custom.css">
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-		<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 			var choices = <?php echo $choices; ?>;
 			function checkForm() {
