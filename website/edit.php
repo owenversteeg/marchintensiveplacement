@@ -3,8 +3,8 @@ if (!file_exists('data/classes.json') || !file_exists('data/students.json') || !
 	echo "Please generate your data files";
 	exit;
 }
-?>
 include 'header.php';
+?>
 	<script>
 		function sendNetworkRequest(operation,user,cl,obj) {
 			$.ajax({
