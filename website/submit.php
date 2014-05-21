@@ -159,7 +159,7 @@ if (array_key_exists("submitting", $_POST)) {
 						response["choice"+i] = true;
 					}
 				}
-				
+
 				var thingsToCheck = ['fullname', 'grade', 'cg', 'studentid'];
 
 				for (var i=0; i<thingsToCheck.length; i++) {
@@ -274,9 +274,11 @@ if (array_key_exists("submitting", $_POST)) {
 
 					for (var i=0; i<responseThings.length; i++) {
 						if (response[responseThings[i]]) {
-							$("#"+responseThings[i]).parent().parent().removeClass("has-error");
+							$("#"+responseThings[i]).parent().removeClass("has-error");
+							$($("#"+responseThings[i]).parent().parent().children()[$("#"+responseThings[i]).parent().parent().children().index($("#"+responseThings[i]).parent()) - 1]).removeClass("has-error");
 						} else {
-							$("#"+responseThings[i]).parent().parent().addClass("has-error");
+							$("#"+responseThings[i]).parent().addClass("has-error");
+							$($("#"+responseThings[i]).parent().parent().children()[$("#"+responseThings[i]).parent().parent().children().index($("#"+responseThings[i]).parent()) - 1]).addClass("has-error");
 						}
 					}
 
