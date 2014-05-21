@@ -1,4 +1,6 @@
+<?php 
 include 'header.php';
+?>
 </head>
 <body>
 	<div id="container" class="container">
