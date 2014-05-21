@@ -200,7 +200,7 @@ if (array_key_exists("submitting", $_POST)) {
 						}
 						$('#select-full-'+i).val('');
 					}
-				};
+				}
 				return response;
 			}
 
@@ -272,7 +272,7 @@ if (array_key_exists("submitting", $_POST)) {
 						checkForm();
 						updateLists();
 					});
-				};
+				}
 
 				$(".hartfordtech").change(function(event) {
 					alert("TODO: This button (ask the MI people)");
@@ -321,13 +321,13 @@ if (array_key_exists("submitting", $_POST)) {
 						} else {
 							$("#choice"+i).removeClass("has-error");
 						}
-					};
+					}
 
 					for (var i = 0; i < Object.keys(response).length; i++) {
 						if (!response[Object.keys(response)[i]]) {
 							return false;
 						}
-					};
+					}
 				})
 });
 </script>
