@@ -12,8 +12,9 @@ function readJSON (file) { return JSON.parse(readFile(file)); }
 function readFile (file) { return fs.readFileSync(file, 'utf8'); }
 function writeJSON (file, obj, options) { return writeFile(file, JSON.stringify(obj, null, module.exports.spaces), options); }
 function getNameOfStudentID (id) { var index = getIndexOfStudentID(id); if (index !== false) { return students[index].name; } else { return id; } }
+function vlog (message) { if (verbose) console.log(message); }
 
-function verifyClassRequirements(sid, cl) {
+function verifyClassRequirements (sid, cl) {
 	if (classes[cl].requirements == undefined || classes[cl].requirements.length == 0) {
 		return true;
 	}
@@ -23,7 +24,7 @@ function verifyClassRequirements(sid, cl) {
 	}
 }
 
-function getStudentClass(sid) {
+function getStudentClass (sid) {
 	var classesWithStudent = [];
 	for (var i=0; i < Object.keys(classes).length; i++) {
 		var classKey = Object.keys(classes)[i];
@@ -34,7 +35,7 @@ function getStudentClass(sid) {
 	return classesWithStudent;
 }
 
-function getIndexOfStudentID(id) {
+function getIndexOfStudentID (id) {
 	for (var i = 0; i < students.length; i++) {
 		if (students[i].studentid == id) {
 			return i;
@@ -43,7 +44,7 @@ function getIndexOfStudentID(id) {
 	return false;
 }
 
-function shuffle(array) {
+function shuffle (array) {
 	/*shuffles an array*/
 	var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -59,7 +60,7 @@ function shuffle(array) {
 	return array;
 }
 
-function removeDuplicatesFromArray(arr) {
+function removeDuplicatesFromArray (arr) {
 	for (var i = 0; i < arr.length; i++) {
 		if (arr.indexOf(arr[i]) != 1) {
 			arr.splice(i,1);
@@ -68,7 +69,7 @@ function removeDuplicatesFromArray(arr) {
 	return arr;
 }
 
-function classRequestDetails(det, cl) {
+function classRequestDetails (det, cl) {
 	if (det == 'type') {
 		if (cl.am != undefined && cl.pm != undefined) {
 			return 'ampm';
@@ -78,7 +79,7 @@ function classRequestDetails(det, cl) {
 	}
 }
 
-function placeStudent(sid, c) {
+function placeStudent (sid, c) {
 	/*places student s in class c, where possible. c is an object, with keys full, am, and pm, s is a string*/	
 	/*terminate if student doesn't exist, throw error if verbose=true*/
 	var studentIndex = getIndexOfStudentID(sid);
