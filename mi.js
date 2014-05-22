@@ -248,6 +248,7 @@ for (var x = 0; x < grades.length; x++) {
 		if ((students[i].grade == grades[x] || !useGrades) && !getStudentHasClass(i)) {
 			/*if the student has no class, try to assing their requests*/
 			/*going from request 1, to last request*/
+			var foundclass = false;
 			for (var n = 0; n < students[i].choices.length; n++) {
 				if (placeStudent(students[i].studentid,students[i].choices[n])) {
 					if (n != 0) {
@@ -272,9 +273,13 @@ for (var x = 0; x < grades.length; x++) {
 						}
 					}
 					happiness.push(n);
+					foundclass = true;
 					break;
 				}
 			}
+			/*no class=8*/
+			if (!foundclass)
+				happiness.push(8);
 		} else {
 			vlog('Denied '+getNameOfStudentID(students[i].studentid)+' due to '+students[i].grade+' ≠ '+grades[x]);
 		}
@@ -305,8 +310,12 @@ if (studentUnplaceableIndex != 0 && percentage == 100) {
 console.log(percentage+'% placement, where '+(students.length - studentUnplaceableIndex.length)+' student(s) of '+students.length+' were placed');
 var total = 0;
 for (var i = 0; i < happiness.length; i++) {
-	total += happiness[i]
+	total += (8 - happiness[i]);
 }
+vlog("Total: " + total / 8);
+vlog("Count: " + happiness.length);
+console.log("Happiness: " + Math.floor(100 * ((total / 8) / happiness.length)) + "%");
+
 var totalZero = 0;
 for (var i = 0; i < happiness.length; i++) {
 	if (happiness[i] == 0) {
@@ -320,7 +329,7 @@ for (var i = 0; i < Object.keys(classes).length; i++) {
 	}
 }
 //console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
-console.log(totalZero);
+// console.log(totalZero);
 
 //write files
 writeJSON(outputClassesFile, classes);
