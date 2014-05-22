@@ -14,6 +14,7 @@ Lol ezekiel you don't have a coding style. Examples:
  - you put brackets either on the same line or next to the if statement depending on if the ln squared of the line number is odd or even
  - you use fucking strings to store falsy values
  - you don't use the !!, ||, !, or % operators because you don't know what they do
+ - who the hell names something with the first letter a capital letter
 
 you also take credit for bugs I fix by deleting my commits and editing the file yourself.
 
@@ -21,4 +22,4 @@ you wiped the entire bug tracker because you couldn't figure out how to move a r
 
 you revert my commits at random with no explanation
 
-so I'm putting this back here, where it should be. you get write access when you rm your repo.
+so I'm putting this back here, where it should be. not on someone's personal account. you get write access when you rm your repo.
