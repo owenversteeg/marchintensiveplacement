@@ -238,7 +238,7 @@ for (var i = 0; i < students.length; i++) {
 	setStudentHasClass(students[i].studentid,false);
 }
 /*randomize student indexes*/
-shuffle(students);
+students = shuffle(students);
 
 /*four loops, one for each grade*/
 for (var x = 0; x < grades.length; x++) {
