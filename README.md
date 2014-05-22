@@ -18,11 +18,14 @@ also, lol ezekiel you **don't have** a coding style. Examples:
  - you use fucking strings to store falsy values
  - you don't use the !!, ||, !, or % operators because you don't know what they do
  - who the hell names something with the first letter a capital letter
+ - repeated CSS
 
 you also take credit for bugs I fix by deleting my commits and editing the file yourself.
 
 you wiped the entire bug tracker because you couldn't figure out how to move a repo
 
 you revert my commits at random with no explanation
+
+you take credit for my code
 
 so I'm putting this back here, where it should be. not on someone's personal account. you get write access when you rm your repo.
