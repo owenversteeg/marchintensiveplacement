@@ -120,13 +120,19 @@ function placeStudent(sid, c) {
 		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			setStudentHasClass(studentIndex,true);
+		} else {
+			return false;
 		}
 	} else if (requestClasses.length == 2) {
 		if ((classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) && (classes[requestClasses[1]].enrolled.length < classes[requestClasses[1]].max)) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			classes[requestClasses[1]].enrolled.push(sid);
 			setStudentHasClass(studentIndex,true);
+		} else {
+			return false;
 		}
+	} else {
+		return false;
 	}
 	return true;
 }
