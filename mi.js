@@ -15,9 +15,7 @@ function getNameOfStudentID(id) { var index = getIndexOfStudentID(id); if (index
 function vlog(message) { if (verbose) console.log(message); }
 
 function verifyClassRequirements(sid, cl) {
-	if (!classes[cl].requirements || classes[cl].requirements.length === 0) {
-		return true;
-	}
+	if (!classes[cl].requirements || classes[cl].requirements.length === 0) return true;
 	for (var i = 0; i < Object.keys(classes[cl].requirements).length; i++) {
 		var key = Object.keys(classes[cl].requirements)[i];
 		return (classes[cl].requirements[key] === students[getIndexOfStudentID(sid)][key])
@@ -37,9 +35,7 @@ function getStudentClass(sid) {
 
 function getIndexOfStudentID(id) {
 	for (var i = 0; i < students.length; i++) {
-		if (students[i].studentid === id) {
-			return i;
-		}
+		if (students[i].studentid === id) return i;
 	}
 	return false;
 }
@@ -69,11 +65,8 @@ function removeDuplicatesFromArray(arr) {
 
 function classRequestDetails(det, cl) {
 	if (det === 'type') {
-		if (cl.am && cl.pm) {
-			return 'ampm';
-		} else if (cl.full) {
-			return 'full';
-		}
+		if (cl.am && cl.pm) return 'ampm'
+		else if (cl.full) return 'full'
 	}
 }
 
@@ -85,9 +78,7 @@ function placeStudent(sid, c) {
 		vlog('Index for '+getNameOfStudentID(sid)+' could not be found!');
 		return false;
 	}
-	if (getStudentHasClass(sid)) {
-		return false;
-	}
+	if (getStudentHasClass(sid)) return false;
 	// terminate if class doesn't exist, throw error if verbose=true
 	if (!c) {
 		vlog('Class for '+getNameOfStudentID(sid)+' could not be found!');
@@ -106,7 +97,6 @@ function placeStudent(sid, c) {
 		vlog('The class data for '+getNameOfStudentID(sid)+' is not valid.');
 		return false;
 	}
-
 	if (requestClasses.indexOf(undefined) !== -1) {
 		vlog('The student '+students[studentIndex].name+' had an AM without a PM or vice versa.');
 		return false;
@@ -117,21 +107,15 @@ function placeStudent(sid, c) {
 		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			setStudentHasClass(sid,true);
-		} else {
-			return false;
-		}
+		} else return false;
 	} else if (requestClasses.length === 2) {
 		if (!classes[requestClasses[0]]) console.log('Error: class does not exist: '+classes[requestClasses[0]]);
 		if ((classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) && (classes[requestClasses[1]].enrolled.length < classes[requestClasses[1]].max)) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			classes[requestClasses[1]].enrolled.push(sid);
 			setStudentHasClass(sid,true);
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
+		} else return false;
+	} else return false;
 	return true;
 }
 
@@ -175,15 +159,12 @@ var classes = readJSON(classFile), students = readJSON(studentsFile);
 var studentRecordsForDuplicates = [];
 for (var i = 0; i < students.length; i++) {
 	if (studentRecordsForDuplicates.indexOf(students[i].name) !== -1 || studentRecordsForDuplicates.indexOf(students[i].studentid) !== -1) {
-		if (process.argv.indexOf('--force') !== -1) {
-			students.splice(i,1);
-		} else {
+		if (process.argv.indexOf('--force') !== -1) students.splice(i,1);
+		else {
 			console.log('The student with name' + students[i].name + 'and student ID ' + students[i].studentid + ' was found twice; both names and student IDs must be unique. \nUse --force to remove ignore duplicates');
 			process.kill();
 		}
-	} else {
-		studentRecordsForDuplicates.push(students[i].name, students[i].studentid);
-	}
+	} else studentRecordsForDuplicates.push(students[i].name, students[i].studentid);
 }
 
 for (var i=0; i < students.length; i++) {
@@ -199,9 +180,7 @@ for (var i=0; i < students.length; i++) {
 			vlog('Spliced for '+getNameOfStudentID(students[i].studentid));
 		}
 		if (students[i].choices[x].full && students[i].choices[x].am && students[i].choices[x].pm) {
-			if (students[i].choices.length < 8)  {
-				students[i].choices.push({"am":students[i].choices[x].am,"pm":students[i].choices[x].pm});
-			}
+			if (students[i].choices.length < 8) students[i].choices.push({"am":students[i].choices[x].am,"pm":students[i].choices[x].pm});
 			delete students[i].choices[x].am;
 			delete students[i].choices[x].pm;
 		}
@@ -275,9 +254,7 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 // remove dupe waitlists
 for (var i = 0; i < Object.keys(classes).length; i++) {
 	var key = Object.keys(classes);
-	if (classes[key[i]].waitlist) {
-		classes[key[i]].waitlist = removeDuplicatesFromArray(classes[key[i]].waitlist);
-	}
+	if (classes[key[i]].waitlist) classes[key[i]].waitlist = removeDuplicatesFromArray(classes[key[i]].waitlist);
 }
 // print the success percentage to two decimal places
 var percentage = Math.round((students.length-studentUnplaceableIndex.length)/students.length*10000)/100;
