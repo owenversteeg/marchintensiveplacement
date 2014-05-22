@@ -113,6 +113,7 @@ function placeStudent(sid, c) {
 	}
 
 	if (requestClasses.length === 1) {
+		if (!classes[requestClasses[0]]) console.log('Error: class does not exist: '+classes[requestClasses[0]]);
 		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			setStudentHasClass(sid,true);
@@ -120,6 +121,7 @@ function placeStudent(sid, c) {
 			return false;
 		}
 	} else if (requestClasses.length === 2) {
+		if (!classes[requestClasses[0]]) console.log('Error: class does not exist: '+classes[requestClasses[0]]);
 		if ((classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) && (classes[requestClasses[1]].enrolled.length < classes[requestClasses[1]].max)) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			classes[requestClasses[1]].enrolled.push(sid);
