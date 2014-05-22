@@ -369,24 +369,24 @@ if (array_key_exists("submitting", $_POST)) {
 							Choice <?php echo($i + 1);?>:
 							</label>
 						</div>
-						<div class="col-xs-3 col-sm-2 hidden-md hidden-lg">
+						<div class="col-xs-4 col-sm-2 hidden-md hidden-lg">
 							Full-Day
 						</div>
-						<div class="col-md-4 col-sm-10 col-xs-9">
+						<div class="col-md-4 col-sm-10 col-xs-8">
 							<select class="form-control select-full" id="select-full-<?php echo($i);?>" select-num="<?php echo($i);?>" name="full[<?php echo($i);?>]">
 							</select>
 						</div>
-						<div class="col-xs-3 col-sm-2 hidden-md hidden-lg">
+						<div class="col-xs-4 col-sm-2 hidden-md hidden-lg">
 							AM Only
 						</div>
-						<div class="col-md-3 col-sm-10 col-xs-9">
+						<div class="col-md-3 col-sm-10 col-xs-8">
 							<select class="form-control select-am" id="select-am-<?php echo($i);?>" select-num="<?php echo($i);?>" name="am[<?php echo($i);?>]">
 							</select>
 						</div>
-						<div class="col-xs-3 col-sm-2 hidden-md hidden-lg">
+						<div class="col-xs-4 col-sm-2 hidden-md hidden-lg">
 							PM Only
 						</div>
-						<div class="col-md-3 col-sm-10 col-xs-9">
+						<div class="col-md-3 col-sm-10 col-xs-8">
 							<select class="form-control select-pm" id="select-pm-<?php echo($i);?>" select-num="<?php echo($i);?>" name="pm[<?php echo($i);?>]">
 							</select>
 						</div>
