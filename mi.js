@@ -62,18 +62,16 @@ function shuffle(array) {
 
 function removeDuplicatesFromArray(arr) {
 	for (var i = 0; i < arr.length; i++) {
-		if (arr.indexOf(arr[i]) != 1) {
-			arr.splice(i,1);
-		}
+		if (arr.indexOf(arr[i]) != 1) arr.splice(i,1);
 	}
 	return arr;
 }
 
 function classRequestDetails(det, cl) {
 	if (det == 'type') {
-		if (cl.am != undefined && cl.pm != undefined) {
+		if (cl.am && cl.pm) {
 			return 'ampm';
-		} else if (cl.full != undefined) {
+		} else if (cl.full) {
 			return 'full';
 		}
 	}
@@ -82,9 +80,8 @@ function classRequestDetails(det, cl) {
 function placeStudent(sid, c) {
 	/*places student s in class c, where possible. c is an object, with keys full, am, and pm, s is a string*/	
 	/*terminate if student doesn't exist, throw error if verbose=true*/
-	var studentIndex = getIndexOfStudentID(sid);
-	var requestClasses = [];
-	if (studentIndex == undefined) {
+	var studentIndex = getIndexOfStudentID(sid), requestClasses = [];
+	if (!studentIndex) {
 		vlog('Index for '+getNameOfStudentID(sid)+' could not be found!');
 		return false;
 	}
@@ -92,25 +89,29 @@ function placeStudent(sid, c) {
 		return false;
 	}
 	/*terminate if class doesn't exist, throw error if verbose=true*/
-	if (c == undefined) {
+	if (!c) {
 		vlog('Class for '+getNameOfStudentID(sid)+' could not be found!');
 		return false;
 	}
 	/*verify all possible combinations of class choices and fordSayre/hartfordTech settings*/
-	if (c.full != undefined && c.am == undefined && c.pm == undefined && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == false) {
-		requestClasses.push(c.full);
-	} else if (c.full == undefined && c.am != undefined && c.pm != undefined && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == false) {
+	if (students[studentIndex].hartfordTech === 'none' && !students[studentIndex].fordSayre) {
+		requestClasses = requestClasses.concat(c.full || [c.am, c.pm]);
+	} else if (c.am && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == true) {
 		requestClasses.push(c.am);
-		requestClasses.push(c.pm);
-	} else if (c.am != undefined && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == true) {
+	} else if (c.am && students[studentIndex].hartfordTech == 'pm' && students[studentIndex].fordSayre == false) {
 		requestClasses.push(c.am);
-	} else if (students[studentIndex].hartfordTech == 'pm' && students[studentIndex].fordSayre == false && c.am != undefined) {
-		requestClasses.push(c.am);
-	} else if (students[studentIndex].hartfordTech == 'am' && students[studentIndex].fordSayre == false && c.pm != undefined) {
+	} else if (c.pm && students[studentIndex].hartfordTech == 'am' && students[studentIndex].fordSayre == false) {
 		requestClasses.push(c.pm);
 	} else {
 		vlog('The class data for '+getNameOfStudentID(sid)+' is not valid.');
+		return false;
 	}
+
+	if (requestClasses.indexOf(undefined) !== -1) {
+		vlog('The student '+students[studentIndex].name+' had an AM without a PM or vice versa.');
+		return false;
+	}
+
 	if (requestClasses.length == 1) {
 		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
 			classes[requestClasses[0]].enrolled.push(sid);
@@ -141,18 +142,14 @@ if (process.argv.indexOf('--config') != -1) {
 }
 
 if (!fs.existsSync('output/')) { fs.mkdir('output'); }
-if (config.useGrades != undefined) { useGrades = config.useGrades; }
-if (config.grades != undefined) { grades = config.grades; }
-if (config.files.input.classes != undefined) { classFile = 'input/'+config.files.input.classes; }
-if (config.files.input.students != undefined) { studentsFile = 'input/'+config.files.input.students; }
+if (config.useGrades) { useGrades = config.useGrades; }
+if (config.grades) { grades = config.grades; }
+if (config.files.input.classes) { classFile = 'input/'+config.files.input.classes; }
+if (config.files.input.students) { studentsFile = 'input/'+config.files.input.students; }
 
 if (config.updateWebDirectory) {
-	if (!fs.existsSync('website/')) {
-		fs.mkdir('website');
-	}
-	if (!fs.existsSync('website/data')) {
-		fs.mkdir('website/data');
-	}
+	if (!fs.existsSync('website/'))     fs.mkdir('website');
+	if (!fs.existsSync('website/data')) fs.mkdir('website/data');
 }
 
 var outputClassesFile = 'output/' + (config.files.output.classes || 'classes.json');
@@ -171,44 +168,25 @@ if (process.argv.indexOf('--help') != -1) {
 	process.kill()
 }
 
-var classes = readJSON(classFile);
-var students = readJSON(studentsFile);
+var classes = readJSON(classFile), students = readJSON(studentsFile);
 
 var studentRecordsForDuplicates = [];
 for (var i = 0; i < students.length; i++) {
-	if (studentRecordsForDuplicates.indexOf(students[i].name) != -1) {
+	if (studentRecordsForDuplicates.indexOf(students[i].name) != -1 || studentRecordsForDuplicates.indexOf(students[i].studentid) != -1) {
 		if (process.argv.indexOf('--force') != -1) {
 			students.splice(i,1);
 		} else {
-			console.log(students[i].name+' was found twice, names must be unique');
-			console.log('Use --force to remove ignore duplicates');
+			console.log('The student with name' + students[i].name + 'and student ID ' + students[i].studentid + ' was found twice; both names and student IDs must be unique. \nUse --force to remove ignore duplicates');
 			process.kill();
 		}
 	} else {
-		studentRecordsForDuplicates.push(students[i].name);
-	}
-}
-studentRecordsForDuplicates = [];
-for (var i = 0; i < students.length; i++) {
-	if (studentRecordsForDuplicates.indexOf(students[i].studentid) != -1) {
-		if (process.argv.indexOf('--force') != -1) {
-			students.splice(i,1);
-		} else {
-			console.log(students[i].studentid+' was found twice, names must be unique');
-			console.log('Use --force to remove ignore duplicates');
-			process.kill();
-		}
-	} else {
-		studentRecordsForDuplicates.push(students[i].studentid);
+		studentRecordsForDuplicates.push(students[i].name, students[i].studentid);
 	}
 }
 
 for (var i=0; i < students.length; i++) {
 	/*Set ford sayre values*/
-	if (students[i].fordSayre != true) {
-		students[i].fordSayre = false;
-		vlog(getNameOfStudentID(students[i].studentid)+' fordSayre=false');
-	}
+	students[i].fordSayre = !!students[i].fordSayre;
 	if (students[i].hartfordTech != 'none' && students[i].hartfordTech != 'am' && students[i].hartfordTech != 'pm') {
 		students[i].hartfordTech = 'none'
 		vlog(getNameOfStudentID(students[i].studentid)+' hartfordTech=false');
@@ -218,29 +196,29 @@ for (var i=0; i < students.length; i++) {
 			students[i].choices.splice(x,1);
 			vlog('Spliced for '+getNameOfStudentID(students[i].studentid));
 		}
-		if (students[i].choices[x].full != undefined && students[i].choices[x].am != undefined && students[i].choices[x].pm != undefined) {
+		if (students[i].choices[x].full && students[i].choices[x].am && students[i].choices[x].pm) {
 			if (students[i].choices.length < 8)  {
 				students[i].choices.push({"am":students[i].choices[x].am,"pm":students[i].choices[x].pm});
 			}
 			delete students[i].choices[x].am;
 			delete students[i].choices[x].pm;
 		}
-		if (students[i].choices[x].full != undefined && students[i].choices[x].am != undefined && students[i].choices[x].pm == undefined) {
+		if (students[i].choices[x].full && students[i].choices[x].am && !students[i].choices[x].pm) {
 			delete students[i].choices[x].am;
 		}
-		if (students[i].choices[x].full != undefined && students[i].choices[x].pm != undefined && students[i].choices[x].am == undefined) {
+		if (students[i].choices[x].full && students[i].choices[x].pm && !students[i].choices[x].am) {
 			delete students[i].choices[x].pm;
 		}
 	}
 }
-/*prepares data, hasClass*/
+//prepares data, hasClass
 for (var i = 0; i < students.length; i++) {
-	setStudentHasClass(students[i].studentid,false);
+	setStudentHasClass(students[i].studentid, false);
 }
-/*randomize student indexes*/
+//randomize student indexes
 students = shuffle(students);
 
-/*four loops, one for each grade*/
+//four loops, one for each grade
 for (var x = 0; x < grades.length; x++) {
 	/*go through random student array*/
 	for (var i = 0; i < students.length; i++) {
@@ -251,6 +229,7 @@ for (var x = 0; x < grades.length; x++) {
 			for (var n = 0; n < students[i].choices.length; n++) {
 				if (placeStudent(students[i].studentid,students[i].choices[n])) {
 					if (n != 0) {
+						//place students on waitlist
 						if (classRequestDetails('type',students[i].choices[n-1]) == 'ampm') {
 							if (students[i].choices[n-1].am != undefined) {
 								if (classes[students[i].choices[n-1].am].waitlist == undefined) {
@@ -298,10 +277,10 @@ for (var i = 0; i < Object.keys(classes).length; i++) {
 		classes[key[i]].waitlist = removeDuplicatesFromArray(classes[key[i]].waitlist);
 	}
 }
-/*print the success percentage*/
-var percentage = Math.round((students.length-studentUnplaceableIndex.length)/students.length*100);
+//print the success percentage to two decimal places
+var percentage = Math.round((students.length-studentUnplaceableIndex.length)/students.length*10000)/100;
 if (studentUnplaceableIndex != 0 && percentage == 100) {
-	percentage = 99;
+	percentage = 99; //you liar
 }
 console.log(percentage+'% placement, where '+(students.length - studentUnplaceableIndex.length)+' student(s) of '+students.length+' were placed');
 var total = 0;
@@ -314,9 +293,7 @@ console.log("Happiness: " + Math.floor(100 * ((total / 8) / happiness.length)) +
 
 var totalZero = 0;
 for (var i = 0; i < happiness.length; i++) {
-	if (happiness[i] == 0) {
-		totalZero++;
-	}
+	if (happiness[i] == 0) totalZero++;
 }
 for (var i = 0; i < Object.keys(classes).length; i++) {
 	var classKey = Object.keys(classes)[i];
@@ -325,7 +302,7 @@ for (var i = 0; i < Object.keys(classes).length; i++) {
 	}
 }
 //console.log(Math.round(100-((total/happiness.length)/8*100))+'% Happiness');
-// console.log(totalZero);
+//console.log(totalZero);
 
 //write files
 writeJSON(outputClassesFile, classes);
