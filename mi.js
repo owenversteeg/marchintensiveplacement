@@ -4,8 +4,8 @@ var doNotAssignClassesWhenNoneAreRequested = true; /*If a user doesn't request a
 var verbose = false; /*Output operations, triggerable with --verbose as well*/
 var classFile = 'classes.json', studentsFile = 'students.json', useGrades = true, studentRandomData = {}, studentClassData = {}, grades = [], happiness = [], studentUnplaceableIndex = [];
 
-function setStudentHasClass(i, s) { studentClassData[students[i].studentid] = s; return true; }
-function getStudentHasClass(i) { return studentClassData[students[i].studentid]; }
+function setStudentHasClass(id, s) { studentClassData[id] = s; return true; }
+function getStudentHasClass(id) { return studentClassData[id]; }
 function randomIntFromInterval(min,max) { return Math.floor(Math.random()*(max-min+1)+min); }
 function writeFile(file, contents, options) { return fs.writeFileSync(file, contents, options); }
 function readJSON(file) { return JSON.parse(readFile(file)); }
@@ -88,7 +88,7 @@ function placeStudent(sid, c) {
 		vlog('Index for '+getNameOfStudentID(sid)+' could not be found!');
 		return false;
 	}
-	if (getStudentHasClass(studentIndex)) {
+	if (getStudentHasClass(sid)) {
 		return false;
 	}
 	/*terminate if class doesn't exist, throw error if verbose=true*/
@@ -114,7 +114,7 @@ function placeStudent(sid, c) {
 	if (requestClasses.length == 1) {
 		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
 			classes[requestClasses[0]].enrolled.push(sid);
-			setStudentHasClass(studentIndex,true);
+			setStudentHasClass(sid,true);
 		} else {
 			return false;
 		}
@@ -122,7 +122,7 @@ function placeStudent(sid, c) {
 		if ((classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) && (classes[requestClasses[1]].enrolled.length < classes[requestClasses[1]].max)) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			classes[requestClasses[1]].enrolled.push(sid);
-			setStudentHasClass(studentIndex,true);
+			setStudentHasClass(sid,true);
 		} else {
 			return false;
 		}
@@ -235,7 +235,7 @@ for (var i=0; i < students.length; i++) {
 }
 /*prepares data, hasClass*/
 for (var i = 0; i < students.length; i++) {
-	setStudentHasClass(i,false);
+	setStudentHasClass(students[i].studentid,false);
 }
 /*randomize student indexes*/
 shuffle(students);
@@ -245,10 +245,9 @@ for (var x = 0; x < grades.length; x++) {
 	/*go through random student array*/
 	for (var i = 0; i < students.length; i++) {
 		var sid = students[i].studentid;
-		if ((students[i].grade == grades[x] || !useGrades) && !getStudentHasClass(i)) {
+		if ((students[i].grade == grades[x] || !useGrades) && !getStudentHasClass(sid)) {
 			/*if the student has no class, try to assing their requests*/
 			/*going from request 1, to last request*/
-			var foundclass = false;
 			for (var n = 0; n < students[i].choices.length; n++) {
 				if (placeStudent(students[i].studentid,students[i].choices[n])) {
 					if (n != 0) {
@@ -273,13 +272,9 @@ for (var x = 0; x < grades.length; x++) {
 						}
 					}
 					happiness.push(n);
-					foundclass = true;
 					break;
 				}
 			}
-			/*no class=8*/
-			if (!foundclass)
-				happiness.push(8);
 		} else {
 			vlog('Denied '+getNameOfStudentID(students[i].studentid)+' due to '+students[i].grade+' ≠ '+grades[x]);
 		}
@@ -287,8 +282,9 @@ for (var x = 0; x < grades.length; x++) {
 }
 for (var i = 0; i < students.length; i++) {
 	/*If unable to place the student, put them on the unplaceable list*/
-	if (!getStudentHasClass(i)) {
+	if (!getStudentHasClass(students[i].studentid)) {
 		studentUnplaceableIndex.push(students[i].studentid);
+		happiness.push(8);
 	}
 };
 /*look through the student unplaceable index, and replace it with names so that it can be read easier*/
