@@ -11,16 +11,16 @@ function writeFile(file, contents, options) { return fs.writeFileSync(file, cont
 function readJSON(file) { return JSON.parse(readFile(file)); }
 function readFile(file) { return fs.readFileSync(file, 'utf8'); }
 function writeJSON(file, obj, options) { return writeFile(file, JSON.stringify(obj, null, module.exports.spaces), options); }
-function getNameOfStudentID(id) { var index = getIndexOfStudentID(id); if (index !== false) { return students[index].name; } else { return id; } }
+function getNameOfStudentID(id) { var index = getIndexOfStudentID(id); if (index) { return students[index].name; } else { return id; } }
 function vlog(message) { if (verbose) console.log(message); }
 
 function verifyClassRequirements(sid, cl) {
-	if (classes[cl].requirements == undefined || classes[cl].requirements.length == 0) {
+	if (!classes[cl].requirements || classes[cl].requirements.length === 0) {
 		return true;
 	}
 	for (var i = 0; i < Object.keys(classes[cl].requirements).length; i++) {
 		var key = Object.keys(classes[cl].requirements)[i];
-		return (classes[cl].requirements[key] == students[getIndexOfStudentID(sid)][key])
+		return (classes[cl].requirements[key] === students[getIndexOfStudentID(sid)][key])
 	}
 }
 
@@ -28,7 +28,7 @@ function getStudentClass(sid) {
 	var classesWithStudent = [];
 	for (var i=0; i < Object.keys(classes).length; i++) {
 		var classKey = Object.keys(classes)[i];
-		if (classes[classKey].enrolled.indexOf(sid) != -1) {
+		if (classes[classKey].enrolled.indexOf(sid) !== -1) {
 			classesWithStudent.push(classKey);
 		}
 	}
@@ -37,7 +37,7 @@ function getStudentClass(sid) {
 
 function getIndexOfStudentID(id) {
 	for (var i = 0; i < students.length; i++) {
-		if (students[i].studentid == id) {
+		if (students[i].studentid === id) {
 			return i;
 		}
 	}
@@ -48,7 +48,7 @@ function shuffle(array) {
 	// shuffles an array
 	var currentIndex = array.length, temporaryValue, randomIndex;
 
-	while (0 != currentIndex) {
+	while (0 !== currentIndex) {
 		randomIndex = Math.floor(Math.random() * currentIndex);
 		currentIndex -= 1;
 
@@ -62,13 +62,13 @@ function shuffle(array) {
 
 function removeDuplicatesFromArray(arr) {
 	for (var i = 0; i < arr.length; i++) {
-		if (arr.indexOf(arr[i]) != 1) arr.splice(i,1);
+		if (arr.indexOf(arr[i]) !== 1) arr.splice(i,1);
 	}
 	return arr;
 }
 
 function classRequestDetails(det, cl) {
-	if (det == 'type') {
+	if (det === 'type') {
 		if (cl.am && cl.pm) {
 			return 'ampm';
 		} else if (cl.full) {
@@ -96,11 +96,11 @@ function placeStudent(sid, c) {
 	// verify all possible combinations of class choices and fordSayre/hartfordTech settings
 	if (students[studentIndex].hartfordTech === 'none' && !students[studentIndex].fordSayre) {
 		requestClasses = requestClasses.concat(c.full || [c.am, c.pm]);
-	} else if (c.am && students[studentIndex].hartfordTech == 'none' && students[studentIndex].fordSayre == true) {
+	} else if (c.am && students[studentIndex].hartfordTech === 'none' && students[studentIndex].fordSayre === true) {
 		requestClasses.push(c.am);
-	} else if (c.am && students[studentIndex].hartfordTech == 'pm' && students[studentIndex].fordSayre == false) {
+	} else if (c.am && students[studentIndex].hartfordTech === 'pm' && students[studentIndex].fordSayre === false) {
 		requestClasses.push(c.am);
-	} else if (c.pm && students[studentIndex].hartfordTech == 'am' && students[studentIndex].fordSayre == false) {
+	} else if (c.pm && students[studentIndex].hartfordTech === 'am' && students[studentIndex].fordSayre === false) {
 		requestClasses.push(c.pm);
 	} else {
 		vlog('The class data for '+getNameOfStudentID(sid)+' is not valid.');
@@ -112,14 +112,14 @@ function placeStudent(sid, c) {
 		return false;
 	}
 
-	if (requestClasses.length == 1) {
+	if (requestClasses.length === 1) {
 		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			setStudentHasClass(sid,true);
 		} else {
 			return false;
 		}
-	} else if (requestClasses.length == 2) {
+	} else if (requestClasses.length === 2) {
 		if ((classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) && (classes[requestClasses[1]].enrolled.length < classes[requestClasses[1]].max)) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			classes[requestClasses[1]].enrolled.push(sid);
@@ -133,9 +133,9 @@ function placeStudent(sid, c) {
 	return true;
 }
 
-verbose = (process.argv.indexOf('--verbose') != -1);
+verbose = (process.argv.indexOf('--verbose') !== -1);
 
-if (process.argv.indexOf('--config') != -1) {
+if (process.argv.indexOf('--config') !== -1) {
 	var config = readJSON(process.argv[process.argv.indexOf('--classes') + 1]);
 } else {
 	var config = readJSON('config.json');
@@ -159,11 +159,11 @@ var outputWebClassesFile = 'website/data/' + (config.files.output.classes || 'cl
 var outputWebStudentsNotPlaced = 'website/data/'+ (config.files.output.studentsNotPlaced || 'studentsNotPlaced');
 var outputWebStudents = 'website/data/' + (config.files.output.students || 'students');
 
-if (config.doNotAssignClassesWhenNoneAreRequested != undefined) {
+if (config.doNotAssignClassesWhenNoneAreRequested) {
 	doNotAssignClassesWhenNoneAreRequested = config.doNotAssignClassesWhenNoneAreRequested;
 }
 
-if (process.argv.indexOf('--help') != -1) {
+if (process.argv.indexOf('--help') !== -1) {
 	console.log('Show all actions\n	--verbose\nCustom Config Path\n	--config [file.json]');
 	process.kill()
 }
@@ -172,8 +172,8 @@ var classes = readJSON(classFile), students = readJSON(studentsFile);
 
 var studentRecordsForDuplicates = [];
 for (var i = 0; i < students.length; i++) {
-	if (studentRecordsForDuplicates.indexOf(students[i].name) != -1 || studentRecordsForDuplicates.indexOf(students[i].studentid) != -1) {
-		if (process.argv.indexOf('--force') != -1) {
+	if (studentRecordsForDuplicates.indexOf(students[i].name) !== -1 || studentRecordsForDuplicates.indexOf(students[i].studentid) !== -1) {
+		if (process.argv.indexOf('--force') !== -1) {
 			students.splice(i,1);
 		} else {
 			console.log('The student with name' + students[i].name + 'and student ID ' + students[i].studentid + ' was found twice; both names and student IDs must be unique. \nUse --force to remove ignore duplicates');
@@ -187,12 +187,12 @@ for (var i = 0; i < students.length; i++) {
 for (var i=0; i < students.length; i++) {
 	// Set ford sayre values
 	students[i].fordSayre = !!students[i].fordSayre;
-	if (students[i].hartfordTech != 'none' && students[i].hartfordTech != 'am' && students[i].hartfordTech != 'pm') {
+	if (students[i].hartfordTech !== 'none' && students[i].hartfordTech !== 'am' && students[i].hartfordTech !== 'pm') {
 		students[i].hartfordTech = 'none'
 		vlog(getNameOfStudentID(students[i].studentid)+' hartfordTech=false');
 	}
 	for (var x = 0; x < students[i].choices.length; x++) {
-		if (students[i].choices[x].full == undefined && students[i].choices[x].am == undefined && students[i].choices[x].pm == undefined) {
+		if (!students[i].choices[x].full && !students[i].choices[x].am && !students[i].choices[x].pm) {
 			students[i].choices.splice(x,1);
 			vlog('Spliced for '+getNameOfStudentID(students[i].studentid));
 		}
@@ -223,28 +223,28 @@ for (var x = 0; x < grades.length; x++) {
 	// go through random student array
 	for (var i = 0; i < students.length; i++) {
 		var sid = students[i].studentid;
-		if ((students[i].grade == grades[x] || !useGrades) && !getStudentHasClass(sid)) {
+		if ((students[i].grade === grades[x] || !useGrades) && !getStudentHasClass(sid)) {
 			// if the student has no class, try to assing their requests
 			// going from request 1, to last request
 			for (var n = 0; n < students[i].choices.length; n++) {
 				if (placeStudent(students[i].studentid,students[i].choices[n])) {
-					if (n != 0) {
+					if (n !== 0) {
 						// place students on waitlist
-						if (classRequestDetails('type',students[i].choices[n-1]) == 'ampm') {
-							if (students[i].choices[n-1].am != undefined) {
-								if (classes[students[i].choices[n-1].am].waitlist == undefined) {
+						if (classRequestDetails('type',students[i].choices[n-1]) === 'ampm') {
+							if (students[i].choices[n-1].am) {
+								if (classes[students[i].choices[n-1].am].waitlist === undefined) {
 									classes[students[i].choices[n-1].am].waitlist = [];
 								}
 								classes[students[i].choices[n-1].am].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].am].name+' and '+classes[students[i].choices[n-1].pm].name);
 							}
-							if (students[i].choices[n-1].pm != undefined) {
-								if (classes[students[i].choices[n-1].pm].waitlist == undefined) {
+							if (students[i].choices[n-1].pm) {
+								if (classes[students[i].choices[n-1].pm].waitlist === undefined) {
 									classes[students[i].choices[n-1].pm].waitlist = [];
 								}
 								classes[students[i].choices[n-1].pm].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].am].name+' and '+classes[students[i].choices[n-1].pm].name);
 							}
 						} else if (classRequestDetails('type',students[i].choices[n-1]) == 'full') {
-							if (classes[students[i].choices[n-1].full].waitlist == undefined) {
+							if (classes[students[i].choices[n-1].full].waitlist === undefined) {
 								classes[students[i].choices[n-1].full].waitlist = [];
 							}
 							classes[students[i].choices[n-1].full].waitlist.push(getNameOfStudentID(sid)+' placed in '+n+':'+getStudentClass(sid)+', wanted '+classes[students[i].choices[n-1].full].name);
@@ -273,13 +273,13 @@ for (var i = 0; i < studentUnplaceableIndex.length; i++) {
 // remove dupe waitlists
 for (var i = 0; i < Object.keys(classes).length; i++) {
 	var key = Object.keys(classes);
-	if (classes[key[i]].waitlist != undefined) {
+	if (classes[key[i]].waitlist) {
 		classes[key[i]].waitlist = removeDuplicatesFromArray(classes[key[i]].waitlist);
 	}
 }
 // print the success percentage to two decimal places
 var percentage = Math.round((students.length-studentUnplaceableIndex.length)/students.length*10000)/100;
-if (studentUnplaceableIndex != 0 && percentage == 100) {
+if (studentUnplaceableIndex !== 0 && percentage === 100) {
 	percentage = 99; // you liar
 }
 console.log(percentage+'% placement, where '+(students.length - studentUnplaceableIndex.length)+' student(s) of '+students.length+' were placed');
@@ -293,7 +293,7 @@ console.log("Happiness: " + Math.floor(100 * ((total / 8) / happiness.length)) +
 
 var totalZero = 0;
 for (var i = 0; i < happiness.length; i++) {
-	if (happiness[i] == 0) totalZero++;
+	if (happiness[i] === 0) totalZero++;
 }
 for (var i = 0; i < Object.keys(classes).length; i++) {
 	var classKey = Object.keys(classes)[i];
