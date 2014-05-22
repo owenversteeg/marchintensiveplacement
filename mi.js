@@ -15,10 +15,30 @@ function getNameOfStudentID(id) { var index = getIndexOfStudentID(id); if (index
 function vlog(message) { if (verbose) console.log(message); }
 
 function verifyClassRequirements(sid, cl) {
-	if (!classes[cl].requirements || classes[cl].requirements.length === 0) return true;
+	if (!classes[cl].requirements || classes[cl].requirements.length === 0) {
+		vlog('No requirements for '+cl);
+		return true;
+	}
 	for (var i = 0; i < Object.keys(classes[cl].requirements).length; i++) {
 		var key = Object.keys(classes[cl].requirements)[i];
-		return (classes[cl].requirements[key] === students[getIndexOfStudentID(sid)][key])
+		if (typeof classes[cl].requirements[key] == 'object') {
+			vlog('KeyType is object');
+			if (classes[cl].requirements[key].indexOf(students[getIndexOfStudentID(sid)][key]) != -1) {
+				vlog('Key match: '+key)
+				return true;
+			} else {
+				vlog('Key doesn\'t match: '+key)
+				return false;
+			}
+		} else {
+			if (classes[cl].requirements[key] != students[getIndexOfStudentID(sid)][key]) {
+				vlog('Key doesn\'t match: '+key)
+				return false;
+			} else {
+				vlog('Key match: '+key)
+				return true;
+			}
+		}
 	}
 }
 
@@ -63,8 +83,8 @@ function removeDuplicatesFromArray(arr) {
 	return arr;
 }
 
-function classRequestDetails(det, cl) {
-	if (det === 'type') {
+function classRequestDetails(detail, cl) {
+	if (detail === 'type') {
 		if (cl.am && cl.pm) return 'ampm'
 		else if (cl.full) return 'full'
 	}
@@ -104,13 +124,13 @@ function placeStudent(sid, c) {
 
 	if (requestClasses.length === 1) {
 		if (!classes[requestClasses[0]]) console.log('Error: class does not exist: '+classes[requestClasses[0]]);
-		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) {
+		if (classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max && verifyClassRequirements(sid,requestClasses[0])) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			setStudentHasClass(sid,true);
 		} else return false;
 	} else if (requestClasses.length === 2) {
 		if (!classes[requestClasses[0]]) console.log('Error: class does not exist: '+classes[requestClasses[0]]);
-		if ((classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max) && (classes[requestClasses[1]].enrolled.length < classes[requestClasses[1]].max)) {
+		if ((classes[requestClasses[0]].enrolled.length < classes[requestClasses[0]].max && verifyClassRequirements(sid,requestClasses[0])) && (classes[requestClasses[1]].enrolled.length < classes[requestClasses[1]].max && verifyClassRequirements(sid,requestClasses[1]))) {
 			classes[requestClasses[0]].enrolled.push(sid);
 			classes[requestClasses[1]].enrolled.push(sid);
 			setStudentHasClass(sid,true);
@@ -167,6 +187,20 @@ for (var i = 0; i < students.length; i++) {
 	} else studentRecordsForDuplicates.push(students[i].name, students[i].studentid);
 }
 
+for (var i = 0; i < students.length; i++) {
+	for (var x = 0; x < students[i].choices.length; x++) {
+		for (var z = 0; z < Object.keys(students[i].choices[x]).length; z++) {
+			var key = Object.keys(students[i].choices[x])[z];
+			if (classes[students[i].choices[x][key]] == undefined) {
+				console.log('Class '+students[i].choices[x][key]+' doesn\'t exist');
+				console.log('student: '+JSON.stringify(students[i]))
+				process.kill();
+			} else {
+				vlog('Class '+students[i].choices[x][key]+' exists');
+			}
+		}
+	}
+}
 for (var i=0; i < students.length; i++) {
 	// Set ford sayre values
 	students[i].fordSayre = !!students[i].fordSayre;
