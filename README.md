@@ -1,7 +1,10 @@
-March-Intensive-Placement
+marchintensiveplacement
 =========================
 
-Lol ezekiel you don't have a coding style. Examples:
+This repo has been moved back! No ezekiel you don't get to personally vet PRs. 
+in this repo, everyone gets write access and if you don't like a commit you make a comment
+
+also, lol ezekiel you **don't have** a coding style. Examples:
  
  - `/*comment*/`
  - `function doStuff(arg,arg1,   arg2){  functionCall()}`
